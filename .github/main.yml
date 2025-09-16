@@ -1,0 +1,61 @@
+name: utility hub
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  build:
+    runs-on: ethioqr-runner
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build UtilityHub Docker image
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        run: |
+          retries=3
+          until [ $retries -le 0 ] || docker build -t utilityhub_image .; do
+            echo "Build attempt failed. Retrying..."
+            ((retries--))
+            sleep 5
+          done
+          if [ $retries -le 0 ]; then
+            echo "Build failed after 3 attempts."
+            exit 1
+          fi
+
+  deploy:
+    needs: build
+    runs-on: ethioqr-runner
+    steps:
+      - name: Deploy UtilityHub Docker container
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        run: |
+          docker stop utilityhub_container || true
+          docker rm utilityhub_container || true
+          retries=3
+          until [ $retries -le 0 ] || docker run -d \
+          -p 8005:8005 \
+          --name utilityhub_container \
+          --restart unless-stopped \
+          utilityhub_image:latest; do
+            echo "Deploy attempt failed. Retrying..."
+            ((retries--))
+            sleep 5
+          done
+          if [ $retries -le 0 ]; then
+            echo "Deploy failed after 3 attempts."
+            exit 1
+          fi
+
+  cleanup:
+    needs: [build, deploy]
+    runs-on: ethioqr-runner
+    steps:
+      - name: Remove Dangling Docker Images
+        run: |
+          docker rmi $(docker images --quiet --filter "dangling=true") || true
