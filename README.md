@@ -116,7 +116,8 @@ Here’s what’s coming next — **contributions welcome!**
 | 📱 Responsive UI Enhancements | Mobile-first design, PWA support, dark mode toggle                |
 | 📈 Save & History             | Save recent calculations or generated passwords locally           |
 | 🌐 Multi-language Support     | i18n for global accessibility                                     |
-| ☁️ Cloud Sync (Optional)      | Save preferences/results to cloud (Firebase/Auth0)                |
+| 🌐 Mathematical Formulas      | Calculus, Trachtenberg system                                     |
+| 🌐 ASCII Character Converter  | ASCII convertor                                                   |
 
 ---
 
