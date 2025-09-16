@@ -1,69 +1,135 @@
-# React + TypeScript + Vite
+# 🧰 UtilityHub — All-in-One Calculator & Converter Suite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">
+  <img src="./public/main_image.png" alt="UtilityHub Cover" width="100%" style="max-width: 800px;"/>
+</p>
 
-Currently, two official plugins are available:
+> **Your everyday digital Swiss Army Knife** — A sleek, fast, and modern React app built with Vite that bundles essential calculators, converters, and generators for daily life, health, finance, tech, and more.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🧮 Calculations
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Tax Calculator** — Estimate income or sales tax based on region or custom rates(Currently for Ethiopian only).
+- **BMI Calculator** — Calculate Body Mass Index with health category feedback.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### 🔄 Conversions
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+#### Length
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Convert between meters, feet, inches, kilometers, miles, etc.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+#### Temperature
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Celsius ↔ Fahrenheit ↔ Kelvin
+
+#### Shoe Size
+
+- Convert men’s, women’s, and kids’ shoe sizes across US, EU, UK standards.
+
+#### Weight
+
+- Pounds ↔ Kilograms ↔ Stones ↔ Ounces
+
+#### Area
+
+- Square meters, feet, acres, hectares, square miles, etc.
+
+#### Speed
+
+- km/h, mph, knots, m/s
+
+#### Data Storage
+
+- Bits, Bytes, KB, MB, GB, TB, PB — binary & decimal standards.
+
+#### Time
+
+- Seconds ↔ Minutes ↔ Hours ↔ Days ↔ Weeks ↔ Months ↔ Years
+- Timezone-aware conversions (optional future)
+
+#### Age & Date Converters
+
+- Calculate exact age from birth date
+- Date difference calculator (days between two dates)
+- Add/subtract days from a date
+
+### 🧩 Other Tools
+
+- **Password Generator** — Create strong, customizable passwords (length, symbols, numbers, etc.)
+
+---
+
+## 🚀 Tech Stack
+
+- ⚛️ **React** — Component-based UI
+- ⚡ **Vite** — Blazing fast dev server & build tool
+- 🎨 **TypeScript**
+- 📦 **Tailwind and Shadcn**
+
+---
+
+## 🛠️ Installation & Setup
+
+1. **Clone the repo**
+
+   ```bash
+   git clone https://github.com/GutemaG/utility-hub.git
+   cd utility-hub
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Start dev server**
+
+   ```bash
+   npm run dev
+   ```
+
+4. **Build for production**
+   ```bash
+   npm run build
+   ```
+
+> App runs on `http://localhost:5173` by default.
+
+---
+
+## 🔮 Future Features (Roadmap)
+
+Here’s what’s coming next — **contributions welcome!**
+
+| Feature                       | Description                                                       |
+| ----------------------------- | ----------------------------------------------------------------- |
+| 🌍 Currency Converter         | Real-time exchange rates via API                                  |
+| 💰 Loan & Mortgage Calculator | Calculate monthly payments, interest, amortization                |
+| 📊 Unit Converter Pro         | Add volume, pressure, energy, torque, cooking units               |
+| 🎲 Random Tools               | Dice roller, random picker, coin flip, number generator           |
+| 🧭 GPS / Coordinate Tools     | DMS ↔ Decimal, distance between coordinates                      |
+| 🖥️ Developer Tools            | JSON formatter, Base64 encoder/decoder, URL encoder, color picker |
+| 📱 Responsive UI Enhancements | Mobile-first design, PWA support, dark mode toggle                |
+| 📈 Save & History             | Save recent calculations or generated passwords locally           |
+| 🌐 Multi-language Support     | i18n for global accessibility                                     |
+| ☁️ Cloud Sync (Optional)      | Save preferences/results to cloud (Firebase/Auth0)                |
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+> Made with ❤️ and ☕ — Simplify your daily calculations in one place.
