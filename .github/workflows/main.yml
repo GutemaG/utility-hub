@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: gutemag_public_runner
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -30,7 +30,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: gutemag_public_runner
+    runs-on: self-hosted
     steps:
       - name: Deploy UtilityHub Docker container
         if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
@@ -54,7 +54,7 @@ jobs:
 
   cleanup:
     needs: [build, deploy]
-    runs-on: gutemag_public_runner
+    runs-on: self-hosted
     steps:
       - name: Remove Dangling Docker Images
         run: |
