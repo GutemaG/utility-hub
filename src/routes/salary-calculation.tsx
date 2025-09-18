@@ -169,7 +169,7 @@ function RouteComponent() {
     name: "Ethiopian Tax Calculator",
     description:
       "Free online Ethiopian income tax calculator with pension calculations. Calculate tax from gross or net income with detailed breakdowns.",
-    url: "https://formulalab.com/tax-calculation",
+    url: "https://utility.ethioar.app/salary-calculation",
     applicationCategory: "FinanceApplication",
     operatingSystem: "Web Browser",
     offers: {
@@ -196,6 +196,7 @@ function RouteComponent() {
     return () => {
       document.head.removeChild(script);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -224,7 +225,7 @@ function RouteComponent() {
         <meta property="og:type" content="website" />
         <meta
           property="og:url"
-          content="https://formulalab.com/tax-calculation"
+          content="https://utility.ethioqr.app/salary-calculation"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Ethiopian Tax Calculator 2024" />
@@ -232,7 +233,10 @@ function RouteComponent() {
           name="twitter:description"
           content="Free Ethiopian tax calculator with detailed breakdowns and tax bracket information."
         />
-        <link rel="canonical" href="https://formulalab.com/tax-calculation" />
+        <link
+          rel="canonical"
+          href="https://utility.ethioqr.app/salary-calculation"
+        />
       </div>
 
       <div className="max-w-4xl mx-auto p-2 space-y-6 overflow-auto">
