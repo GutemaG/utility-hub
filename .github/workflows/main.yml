@@ -9,8 +9,7 @@ on:
 
 jobs:
   build:
-    # runs-on: ethioqr-runner
-    runs-on: self-hosted
+    runs-on: gutemag_public_runner
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -31,8 +30,7 @@ jobs:
 
   deploy:
     needs: build
-    # runs-on: ethioqr-runner
-    runs-on: self-hosted
+    runs-on: gutemag_public_runner
     steps:
       - name: Deploy UtilityHub Docker container
         if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
@@ -56,8 +54,7 @@ jobs:
 
   cleanup:
     needs: [build, deploy]
-    # runs-on: ethioqr-runner
-    runs-on: self-hosted
+    runs-on: gutemag_public_runner
     steps:
       - name: Remove Dangling Docker Images
         run: |
