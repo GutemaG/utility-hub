@@ -83,6 +83,11 @@ const data = {
           title: "Password Generator",
           url: "/password-generator",
         },
+
+        {
+          title: "UUID Generator",
+          url: "/uuid-generator",
+        },
       ],
     },
   ],

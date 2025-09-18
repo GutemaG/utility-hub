@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WeightConversionRouteImport } from './routes/weight-conversion'
+import { Route as UuidGeneratorRouteImport } from './routes/uuid-generator'
 import { Route as TimeConversionRouteImport } from './routes/time-conversion'
 import { Route as TempraturConversionRouteImport } from './routes/tempratur-conversion'
 import { Route as SpeedConversionRouteImport } from './routes/speed-conversion'
@@ -26,6 +27,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const WeightConversionRoute = WeightConversionRouteImport.update({
   id: '/weight-conversion',
   path: '/weight-conversion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UuidGeneratorRoute = UuidGeneratorRouteImport.update({
+  id: '/uuid-generator',
+  path: '/uuid-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TimeConversionRoute = TimeConversionRouteImport.update({
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/speed-conversion': typeof SpeedConversionRoute
   '/tempratur-conversion': typeof TempraturConversionRoute
   '/time-conversion': typeof TimeConversionRoute
+  '/uuid-generator': typeof UuidGeneratorRoute
   '/weight-conversion': typeof WeightConversionRoute
 }
 export interface FileRoutesByTo {
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/speed-conversion': typeof SpeedConversionRoute
   '/tempratur-conversion': typeof TempraturConversionRoute
   '/time-conversion': typeof TimeConversionRoute
+  '/uuid-generator': typeof UuidGeneratorRoute
   '/weight-conversion': typeof WeightConversionRoute
 }
 export interface FileRoutesById {
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/speed-conversion': typeof SpeedConversionRoute
   '/tempratur-conversion': typeof TempraturConversionRoute
   '/time-conversion': typeof TimeConversionRoute
+  '/uuid-generator': typeof UuidGeneratorRoute
   '/weight-conversion': typeof WeightConversionRoute
 }
 export interface FileRouteTypes {
@@ -150,6 +159,7 @@ export interface FileRouteTypes {
     | '/speed-conversion'
     | '/tempratur-conversion'
     | '/time-conversion'
+    | '/uuid-generator'
     | '/weight-conversion'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -165,6 +175,7 @@ export interface FileRouteTypes {
     | '/speed-conversion'
     | '/tempratur-conversion'
     | '/time-conversion'
+    | '/uuid-generator'
     | '/weight-conversion'
   id:
     | '__root__'
@@ -180,6 +191,7 @@ export interface FileRouteTypes {
     | '/speed-conversion'
     | '/tempratur-conversion'
     | '/time-conversion'
+    | '/uuid-generator'
     | '/weight-conversion'
   fileRoutesById: FileRoutesById
 }
@@ -196,6 +208,7 @@ export interface RootRouteChildren {
   SpeedConversionRoute: typeof SpeedConversionRoute
   TempraturConversionRoute: typeof TempraturConversionRoute
   TimeConversionRoute: typeof TimeConversionRoute
+  UuidGeneratorRoute: typeof UuidGeneratorRoute
   WeightConversionRoute: typeof WeightConversionRoute
 }
 
@@ -206,6 +219,13 @@ declare module '@tanstack/react-router' {
       path: '/weight-conversion'
       fullPath: '/weight-conversion'
       preLoaderRoute: typeof WeightConversionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/uuid-generator': {
+      id: '/uuid-generator'
+      path: '/uuid-generator'
+      fullPath: '/uuid-generator'
+      preLoaderRoute: typeof UuidGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/time-conversion': {
@@ -308,6 +328,7 @@ const rootRouteChildren: RootRouteChildren = {
   SpeedConversionRoute: SpeedConversionRoute,
   TempraturConversionRoute: TempraturConversionRoute,
   TimeConversionRoute: TimeConversionRoute,
+  UuidGeneratorRoute: UuidGeneratorRoute,
   WeightConversionRoute: WeightConversionRoute,
 }
 export const routeTree = rootRouteImport
