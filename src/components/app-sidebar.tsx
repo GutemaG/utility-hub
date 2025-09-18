@@ -23,8 +23,8 @@ const data = {
       url: "#",
       items: [
         {
-          title: "Tax Calculation",
-          url: "/tax-calculation",
+          title: "Salary Calculation",
+          url: "/salary-calculation",
         },
         {
           title: "BMI Calculation",
