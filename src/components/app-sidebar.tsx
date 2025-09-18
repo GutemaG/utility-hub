@@ -23,8 +23,8 @@ const data = {
       url: "#",
       items: [
         {
-          title: "Tax Calculation",
-          url: "/tax-calculation",
+          title: "Salary Calculation",
+          url: "/salary-calculation",
         },
         {
           title: "BMI Calculation",
@@ -83,6 +83,11 @@ const data = {
           title: "Password Generator",
           url: "/password-generator",
         },
+
+        {
+          title: "UUID Generator",
+          url: "/uuid-generator",
+        },
       ],
     },
   ],
@@ -95,7 +100,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <a href="/">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <GalleryVerticalEnd className="size-4" />
                 </div>

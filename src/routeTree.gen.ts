@@ -10,11 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WeightConversionRouteImport } from './routes/weight-conversion'
+import { Route as UuidGeneratorRouteImport } from './routes/uuid-generator'
 import { Route as TimeConversionRouteImport } from './routes/time-conversion'
 import { Route as TempraturConversionRouteImport } from './routes/tempratur-conversion'
-import { Route as TaxCalculationRouteImport } from './routes/tax-calculation'
 import { Route as SpeedConversionRouteImport } from './routes/speed-conversion'
 import { Route as ShoeSizeConversionRouteImport } from './routes/shoe-size-conversion'
+import { Route as SalaryCalculationRouteImport } from './routes/salary-calculation'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
 import { Route as LengthConversionRouteImport } from './routes/length-conversion'
 import { Route as DataStorageConversionRouteImport } from './routes/data-storage-conversion'
@@ -28,6 +29,11 @@ const WeightConversionRoute = WeightConversionRouteImport.update({
   path: '/weight-conversion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UuidGeneratorRoute = UuidGeneratorRouteImport.update({
+  id: '/uuid-generator',
+  path: '/uuid-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TimeConversionRoute = TimeConversionRouteImport.update({
   id: '/time-conversion',
   path: '/time-conversion',
@@ -38,11 +44,6 @@ const TempraturConversionRoute = TempraturConversionRouteImport.update({
   path: '/tempratur-conversion',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TaxCalculationRoute = TaxCalculationRouteImport.update({
-  id: '/tax-calculation',
-  path: '/tax-calculation',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SpeedConversionRoute = SpeedConversionRouteImport.update({
   id: '/speed-conversion',
   path: '/speed-conversion',
@@ -51,6 +52,11 @@ const SpeedConversionRoute = SpeedConversionRouteImport.update({
 const ShoeSizeConversionRoute = ShoeSizeConversionRouteImport.update({
   id: '/shoe-size-conversion',
   path: '/shoe-size-conversion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SalaryCalculationRoute = SalaryCalculationRouteImport.update({
+  id: '/salary-calculation',
+  path: '/salary-calculation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PasswordGeneratorRoute = PasswordGeneratorRouteImport.update({
@@ -97,11 +103,12 @@ export interface FileRoutesByFullPath {
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/length-conversion': typeof LengthConversionRoute
   '/password-generator': typeof PasswordGeneratorRoute
+  '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
-  '/tax-calculation': typeof TaxCalculationRoute
   '/tempratur-conversion': typeof TempraturConversionRoute
   '/time-conversion': typeof TimeConversionRoute
+  '/uuid-generator': typeof UuidGeneratorRoute
   '/weight-conversion': typeof WeightConversionRoute
 }
 export interface FileRoutesByTo {
@@ -112,11 +119,12 @@ export interface FileRoutesByTo {
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/length-conversion': typeof LengthConversionRoute
   '/password-generator': typeof PasswordGeneratorRoute
+  '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
-  '/tax-calculation': typeof TaxCalculationRoute
   '/tempratur-conversion': typeof TempraturConversionRoute
   '/time-conversion': typeof TimeConversionRoute
+  '/uuid-generator': typeof UuidGeneratorRoute
   '/weight-conversion': typeof WeightConversionRoute
 }
 export interface FileRoutesById {
@@ -128,11 +136,12 @@ export interface FileRoutesById {
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/length-conversion': typeof LengthConversionRoute
   '/password-generator': typeof PasswordGeneratorRoute
+  '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
-  '/tax-calculation': typeof TaxCalculationRoute
   '/tempratur-conversion': typeof TempraturConversionRoute
   '/time-conversion': typeof TimeConversionRoute
+  '/uuid-generator': typeof UuidGeneratorRoute
   '/weight-conversion': typeof WeightConversionRoute
 }
 export interface FileRouteTypes {
@@ -145,11 +154,12 @@ export interface FileRouteTypes {
     | '/data-storage-conversion'
     | '/length-conversion'
     | '/password-generator'
+    | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
-    | '/tax-calculation'
     | '/tempratur-conversion'
     | '/time-conversion'
+    | '/uuid-generator'
     | '/weight-conversion'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -160,11 +170,12 @@ export interface FileRouteTypes {
     | '/data-storage-conversion'
     | '/length-conversion'
     | '/password-generator'
+    | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
-    | '/tax-calculation'
     | '/tempratur-conversion'
     | '/time-conversion'
+    | '/uuid-generator'
     | '/weight-conversion'
   id:
     | '__root__'
@@ -175,11 +186,12 @@ export interface FileRouteTypes {
     | '/data-storage-conversion'
     | '/length-conversion'
     | '/password-generator'
+    | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
-    | '/tax-calculation'
     | '/tempratur-conversion'
     | '/time-conversion'
+    | '/uuid-generator'
     | '/weight-conversion'
   fileRoutesById: FileRoutesById
 }
@@ -191,11 +203,12 @@ export interface RootRouteChildren {
   DataStorageConversionRoute: typeof DataStorageConversionRoute
   LengthConversionRoute: typeof LengthConversionRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
+  SalaryCalculationRoute: typeof SalaryCalculationRoute
   ShoeSizeConversionRoute: typeof ShoeSizeConversionRoute
   SpeedConversionRoute: typeof SpeedConversionRoute
-  TaxCalculationRoute: typeof TaxCalculationRoute
   TempraturConversionRoute: typeof TempraturConversionRoute
   TimeConversionRoute: typeof TimeConversionRoute
+  UuidGeneratorRoute: typeof UuidGeneratorRoute
   WeightConversionRoute: typeof WeightConversionRoute
 }
 
@@ -206,6 +219,13 @@ declare module '@tanstack/react-router' {
       path: '/weight-conversion'
       fullPath: '/weight-conversion'
       preLoaderRoute: typeof WeightConversionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/uuid-generator': {
+      id: '/uuid-generator'
+      path: '/uuid-generator'
+      fullPath: '/uuid-generator'
+      preLoaderRoute: typeof UuidGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/time-conversion': {
@@ -222,13 +242,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TempraturConversionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tax-calculation': {
-      id: '/tax-calculation'
-      path: '/tax-calculation'
-      fullPath: '/tax-calculation'
-      preLoaderRoute: typeof TaxCalculationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/speed-conversion': {
       id: '/speed-conversion'
       path: '/speed-conversion'
@@ -241,6 +254,13 @@ declare module '@tanstack/react-router' {
       path: '/shoe-size-conversion'
       fullPath: '/shoe-size-conversion'
       preLoaderRoute: typeof ShoeSizeConversionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/salary-calculation': {
+      id: '/salary-calculation'
+      path: '/salary-calculation'
+      fullPath: '/salary-calculation'
+      preLoaderRoute: typeof SalaryCalculationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/password-generator': {
@@ -303,11 +323,12 @@ const rootRouteChildren: RootRouteChildren = {
   DataStorageConversionRoute: DataStorageConversionRoute,
   LengthConversionRoute: LengthConversionRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
+  SalaryCalculationRoute: SalaryCalculationRoute,
   ShoeSizeConversionRoute: ShoeSizeConversionRoute,
   SpeedConversionRoute: SpeedConversionRoute,
-  TaxCalculationRoute: TaxCalculationRoute,
   TempraturConversionRoute: TempraturConversionRoute,
   TimeConversionRoute: TimeConversionRoute,
+  UuidGeneratorRoute: UuidGeneratorRoute,
   WeightConversionRoute: WeightConversionRoute,
 }
 export const routeTree = rootRouteImport
