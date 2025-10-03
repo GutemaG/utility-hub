@@ -21,6 +21,7 @@ export const ethMonths = [
 ];
 
 export const shortDays = ["እ", "ሰ", "ማ", "ረ", "ሐ", "ዓ", "ቅ"];
+export const LongDays = ["እሁድ", "ሰኞ", "ማክሰኞ", "ረቡዕ", "ሐሙስ", "ዓርብ", "ቅዳሜ"];
 
 export function isLeapYearEt(y: number): boolean {
     return y % 4 === 3;
@@ -60,8 +61,11 @@ function grigorianMonthLength(index: number, year: number): number {
     return 30; // April, June, September, November
 }
 
-export function getEtDayName(day: Date): string {
+export function getEtDayName(day: Date, longDay:boolean = false): string {
     const dayOfWeek = day.getDay();
+    if(longDay) {
+        return LongDays[dayOfWeek];
+    }
     return shortDays[dayOfWeek];
 }
 
@@ -238,6 +242,7 @@ export function formatEthiopianDate(
                 }, ${etDate.Year}`;
 
         case "cccc":
+            return dateObj ? getEtDayName(dateObj,true) : "";
         case "cccccc":
             return dateObj ? getEtDayName(dateObj) : "";
 
