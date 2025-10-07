@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
-export const Route = createFileRoute("/tempratur-conversion")({
+export const Route = createFileRoute("/temperature-conversion")({
   component: RouteComponent,
 });
 

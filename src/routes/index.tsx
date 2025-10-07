@@ -43,18 +43,17 @@ function Index() {
           <span className="font-semibold">
             Your everyday digital Swiss Army Knife
           </span>{" "}
-          — A sleek, fast, and modern React app that bundles essential
-          calculators, converters, and generators for daily life, health,
-          finance, tech, and more.
+          — A sleek, fast bundles essential calculators, converters, and
+          generators for daily life, health, finance, tech, and more.
         </p>
       </div>
 
       <h2 className="text-xl font-semibold mb-4 mt-8">🧮 Calculations</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <FeatureCard
-          title="Tax Calculator"
+          title="Salary Calculator"
           description="Estimate income or sales tax based on region or custom rates (Ethiopia only)."
-          to="#"
+          to="/salary-calculation"
         />
         <FeatureCard
           title="BMI Calculator"
