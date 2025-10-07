@@ -12,12 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WeightConversionRouteImport } from './routes/weight-conversion'
 import { Route as UuidGeneratorRouteImport } from './routes/uuid-generator'
 import { Route as TimeConversionRouteImport } from './routes/time-conversion'
-import { Route as TempraturConversionRouteImport } from './routes/tempratur-conversion'
+import { Route as TemperatureConversionRouteImport } from './routes/temperature-conversion'
 import { Route as SpeedConversionRouteImport } from './routes/speed-conversion'
 import { Route as ShoeSizeConversionRouteImport } from './routes/shoe-size-conversion'
 import { Route as SalaryCalculationRouteImport } from './routes/salary-calculation'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
 import { Route as LengthConversionRouteImport } from './routes/length-conversion'
+import { Route as EthiopianCalendarRouteImport } from './routes/ethiopian-calendar'
 import { Route as DataStorageConversionRouteImport } from './routes/data-storage-conversion'
 import { Route as BmiCalculationRouteImport } from './routes/bmi-calculation'
 import { Route as AreaConversionRouteImport } from './routes/area-conversion'
@@ -39,9 +40,9 @@ const TimeConversionRoute = TimeConversionRouteImport.update({
   path: '/time-conversion',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TempraturConversionRoute = TempraturConversionRouteImport.update({
-  id: '/tempratur-conversion',
-  path: '/tempratur-conversion',
+const TemperatureConversionRoute = TemperatureConversionRouteImport.update({
+  id: '/temperature-conversion',
+  path: '/temperature-conversion',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SpeedConversionRoute = SpeedConversionRouteImport.update({
@@ -67,6 +68,11 @@ const PasswordGeneratorRoute = PasswordGeneratorRouteImport.update({
 const LengthConversionRoute = LengthConversionRouteImport.update({
   id: '/length-conversion',
   path: '/length-conversion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EthiopianCalendarRoute = EthiopianCalendarRouteImport.update({
+  id: '/ethiopian-calendar',
+  path: '/ethiopian-calendar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DataStorageConversionRoute = DataStorageConversionRouteImport.update({
@@ -101,12 +107,13 @@ export interface FileRoutesByFullPath {
   '/area-conversion': typeof AreaConversionRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
+  '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/length-conversion': typeof LengthConversionRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
-  '/tempratur-conversion': typeof TempraturConversionRoute
+  '/temperature-conversion': typeof TemperatureConversionRoute
   '/time-conversion': typeof TimeConversionRoute
   '/uuid-generator': typeof UuidGeneratorRoute
   '/weight-conversion': typeof WeightConversionRoute
@@ -117,12 +124,13 @@ export interface FileRoutesByTo {
   '/area-conversion': typeof AreaConversionRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
+  '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/length-conversion': typeof LengthConversionRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
-  '/tempratur-conversion': typeof TempraturConversionRoute
+  '/temperature-conversion': typeof TemperatureConversionRoute
   '/time-conversion': typeof TimeConversionRoute
   '/uuid-generator': typeof UuidGeneratorRoute
   '/weight-conversion': typeof WeightConversionRoute
@@ -134,12 +142,13 @@ export interface FileRoutesById {
   '/area-conversion': typeof AreaConversionRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
+  '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/length-conversion': typeof LengthConversionRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
-  '/tempratur-conversion': typeof TempraturConversionRoute
+  '/temperature-conversion': typeof TemperatureConversionRoute
   '/time-conversion': typeof TimeConversionRoute
   '/uuid-generator': typeof UuidGeneratorRoute
   '/weight-conversion': typeof WeightConversionRoute
@@ -152,12 +161,13 @@ export interface FileRouteTypes {
     | '/area-conversion'
     | '/bmi-calculation'
     | '/data-storage-conversion'
+    | '/ethiopian-calendar'
     | '/length-conversion'
     | '/password-generator'
     | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
-    | '/tempratur-conversion'
+    | '/temperature-conversion'
     | '/time-conversion'
     | '/uuid-generator'
     | '/weight-conversion'
@@ -168,12 +178,13 @@ export interface FileRouteTypes {
     | '/area-conversion'
     | '/bmi-calculation'
     | '/data-storage-conversion'
+    | '/ethiopian-calendar'
     | '/length-conversion'
     | '/password-generator'
     | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
-    | '/tempratur-conversion'
+    | '/temperature-conversion'
     | '/time-conversion'
     | '/uuid-generator'
     | '/weight-conversion'
@@ -184,12 +195,13 @@ export interface FileRouteTypes {
     | '/area-conversion'
     | '/bmi-calculation'
     | '/data-storage-conversion'
+    | '/ethiopian-calendar'
     | '/length-conversion'
     | '/password-generator'
     | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
-    | '/tempratur-conversion'
+    | '/temperature-conversion'
     | '/time-conversion'
     | '/uuid-generator'
     | '/weight-conversion'
@@ -201,12 +213,13 @@ export interface RootRouteChildren {
   AreaConversionRoute: typeof AreaConversionRoute
   BmiCalculationRoute: typeof BmiCalculationRoute
   DataStorageConversionRoute: typeof DataStorageConversionRoute
+  EthiopianCalendarRoute: typeof EthiopianCalendarRoute
   LengthConversionRoute: typeof LengthConversionRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   SalaryCalculationRoute: typeof SalaryCalculationRoute
   ShoeSizeConversionRoute: typeof ShoeSizeConversionRoute
   SpeedConversionRoute: typeof SpeedConversionRoute
-  TempraturConversionRoute: typeof TempraturConversionRoute
+  TemperatureConversionRoute: typeof TemperatureConversionRoute
   TimeConversionRoute: typeof TimeConversionRoute
   UuidGeneratorRoute: typeof UuidGeneratorRoute
   WeightConversionRoute: typeof WeightConversionRoute
@@ -235,11 +248,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TimeConversionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tempratur-conversion': {
-      id: '/tempratur-conversion'
-      path: '/tempratur-conversion'
-      fullPath: '/tempratur-conversion'
-      preLoaderRoute: typeof TempraturConversionRouteImport
+    '/temperature-conversion': {
+      id: '/temperature-conversion'
+      path: '/temperature-conversion'
+      fullPath: '/temperature-conversion'
+      preLoaderRoute: typeof TemperatureConversionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/speed-conversion': {
@@ -275,6 +288,13 @@ declare module '@tanstack/react-router' {
       path: '/length-conversion'
       fullPath: '/length-conversion'
       preLoaderRoute: typeof LengthConversionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ethiopian-calendar': {
+      id: '/ethiopian-calendar'
+      path: '/ethiopian-calendar'
+      fullPath: '/ethiopian-calendar'
+      preLoaderRoute: typeof EthiopianCalendarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/data-storage-conversion': {
@@ -321,12 +341,13 @@ const rootRouteChildren: RootRouteChildren = {
   AreaConversionRoute: AreaConversionRoute,
   BmiCalculationRoute: BmiCalculationRoute,
   DataStorageConversionRoute: DataStorageConversionRoute,
+  EthiopianCalendarRoute: EthiopianCalendarRoute,
   LengthConversionRoute: LengthConversionRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   SalaryCalculationRoute: SalaryCalculationRoute,
   ShoeSizeConversionRoute: ShoeSizeConversionRoute,
   SpeedConversionRoute: SpeedConversionRoute,
-  TempraturConversionRoute: TempraturConversionRoute,
+  TemperatureConversionRoute: TemperatureConversionRoute,
   TimeConversionRoute: TimeConversionRoute,
   UuidGeneratorRoute: UuidGeneratorRoute,
   WeightConversionRoute: WeightConversionRoute,

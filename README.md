@@ -12,7 +12,7 @@
 
 ### 🧮 Calculations
 
-- **Tax Calculator** — Estimate income or sales tax based on region or custom rates(Currently for Ethiopian only).
+- **Salary Calculator** — Estimate income or sales tax based on region or custom rates(Currently for Ethiopian only).
 - **BMI Calculator** — Calculate Body Mass Index with health category feedback.
 
 ### 🔄 Conversions

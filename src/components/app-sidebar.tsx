@@ -4,6 +4,7 @@ import { GalleryVerticalEnd } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
@@ -42,7 +43,7 @@ const data = {
         },
         {
           title: "Temperature Conversion",
-          url: "/tempratur-conversion",
+          url: "/temperature-conversion",
         },
         {
           title: "Shoe Size Conversion",
@@ -72,6 +73,10 @@ const data = {
         {
           title: "Age & Date Convertors",
           url: "/age-and-date-convertors",
+        },
+        {
+          title: "Ethiopian Calendar",
+          url: "/ethiopian-calendar",
         },
       ],
     },
@@ -142,6 +147,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <div className="w-full text-center py-3">
+          <a
+            href="https://github.com/GutemaG/utility-hub/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-blue-600 hover:underline"
+          >
+            💬 Support & Feedback (GitHub Issues)
+          </a>
+        </div>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

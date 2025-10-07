@@ -67,6 +67,7 @@ export function EthiopianGregorianDatePicker({
                 month={month}
                 defaultMonth={month}
                 onMonthChange={setMonth}
+                endMonth={new Date("2100-12-31")}
                 onSelect={(date) => {
                   if (date) {
                     setDate(date);
@@ -96,6 +97,7 @@ export function EthiopianGregorianDatePicker({
                 onMonthChange={setMonth}
                 defaultMonth={month}
                 captionLayout="dropdown"
+                endMonth={new Date("2100-12-31")}
                 onSelect={(date) => {
                   if (date) {
                     setDate(date);
