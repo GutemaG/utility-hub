@@ -118,3 +118,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* .rdp-week {
+  border: 1px solid var(--border);
+} */
+

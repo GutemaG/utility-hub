@@ -28,6 +28,10 @@ const data = {
           url: "/salary-calculation",
         },
         {
+          title: "Payroll Generator",
+          url: "/payroll-generator",
+        },
+        {
           title: "BMI Calculation",
           url: "/bmi-calculation",
         },
@@ -74,10 +78,10 @@ const data = {
           title: "Age & Date Convertors",
           url: "/age-and-date-convertors",
         },
-        {
-          title: "Ethiopian Calendar",
-          url: "/ethiopian-calendar",
-        },
+        // {
+        //   title: "Ethiopian Calendar",
+        //   url: "/ethiopian-calendar",
+        // },
       ],
     },
     {

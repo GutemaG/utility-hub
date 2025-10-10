@@ -16,6 +16,7 @@ import { Route as TemperatureConversionRouteImport } from './routes/temperature-
 import { Route as SpeedConversionRouteImport } from './routes/speed-conversion'
 import { Route as ShoeSizeConversionRouteImport } from './routes/shoe-size-conversion'
 import { Route as SalaryCalculationRouteImport } from './routes/salary-calculation'
+import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
 import { Route as LengthConversionRouteImport } from './routes/length-conversion'
 import { Route as EthiopianCalendarRouteImport } from './routes/ethiopian-calendar'
@@ -58,6 +59,11 @@ const ShoeSizeConversionRoute = ShoeSizeConversionRouteImport.update({
 const SalaryCalculationRoute = SalaryCalculationRouteImport.update({
   id: '/salary-calculation',
   path: '/salary-calculation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PayrollGeneratorRoute = PayrollGeneratorRouteImport.update({
+  id: '/payroll-generator',
+  path: '/payroll-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PasswordGeneratorRoute = PasswordGeneratorRouteImport.update({
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/length-conversion': typeof LengthConversionRoute
   '/password-generator': typeof PasswordGeneratorRoute
+  '/payroll-generator': typeof PayrollGeneratorRoute
   '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/length-conversion': typeof LengthConversionRoute
   '/password-generator': typeof PasswordGeneratorRoute
+  '/payroll-generator': typeof PayrollGeneratorRoute
   '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/length-conversion': typeof LengthConversionRoute
   '/password-generator': typeof PasswordGeneratorRoute
+  '/payroll-generator': typeof PayrollGeneratorRoute
   '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
     | '/ethiopian-calendar'
     | '/length-conversion'
     | '/password-generator'
+    | '/payroll-generator'
     | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
@@ -181,6 +191,7 @@ export interface FileRouteTypes {
     | '/ethiopian-calendar'
     | '/length-conversion'
     | '/password-generator'
+    | '/payroll-generator'
     | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/ethiopian-calendar'
     | '/length-conversion'
     | '/password-generator'
+    | '/payroll-generator'
     | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
@@ -216,6 +228,7 @@ export interface RootRouteChildren {
   EthiopianCalendarRoute: typeof EthiopianCalendarRoute
   LengthConversionRoute: typeof LengthConversionRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
+  PayrollGeneratorRoute: typeof PayrollGeneratorRoute
   SalaryCalculationRoute: typeof SalaryCalculationRoute
   ShoeSizeConversionRoute: typeof ShoeSizeConversionRoute
   SpeedConversionRoute: typeof SpeedConversionRoute
@@ -274,6 +287,13 @@ declare module '@tanstack/react-router' {
       path: '/salary-calculation'
       fullPath: '/salary-calculation'
       preLoaderRoute: typeof SalaryCalculationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payroll-generator': {
+      id: '/payroll-generator'
+      path: '/payroll-generator'
+      fullPath: '/payroll-generator'
+      preLoaderRoute: typeof PayrollGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/password-generator': {
@@ -344,6 +364,7 @@ const rootRouteChildren: RootRouteChildren = {
   EthiopianCalendarRoute: EthiopianCalendarRoute,
   LengthConversionRoute: LengthConversionRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
+  PayrollGeneratorRoute: PayrollGeneratorRoute,
   SalaryCalculationRoute: SalaryCalculationRoute,
   ShoeSizeConversionRoute: ShoeSizeConversionRoute,
   SpeedConversionRoute: SpeedConversionRoute,
