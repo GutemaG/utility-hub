@@ -28,8 +28,8 @@ const data = {
           url: "/salary-calculation",
         },
         {
-          title: "Payroll",
-          url: "/payroll",
+          title: "Payroll Generator",
+          url: "/payroll-generator",
         },
         {
           title: "BMI Calculation",

@@ -1,11 +1,26 @@
 import { FileDropzone } from "@/components/file-drop-zone";
+import { payrollColumnDef } from "@/components/payroll-column-def";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableFooter,
+} from "@/components/ui/table";
 import type { EmployeeData } from "@/lib/constants";
 import { CalculatePension, CalculateTax } from "@/lib/helpers";
 import { createFileRoute } from "@tanstack/react-router";
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import React, { useState, useCallback, useEffect } from "react";
 import * as XLSX from "xlsx";
 
-export const Route = createFileRoute("/payroll")({
+export const Route = createFileRoute("/payroll-generator")({
   component: BulkPayrollProcessor,
 });
 
@@ -164,204 +179,85 @@ const usePayrollProcessor = () => {
 };
 
 const ResultsTable: React.FC<{ data: EmployeeData[] }> = ({ data }) => {
-  const headerName = [
-    "Employee Name",
-    "Basic Salary",
-    "Taxable Allowance",
-    "Non Taxable Allowance",
-    "Gross Salary",
-    "Taxable Income",
-    "Income Tax",
-    "Employee Pension(7%)",
-    "Organization Pension(11%)",
-    "Total Deduction",
-    "Net Salary",
-  ];
+  const table = useReactTable({
+    data,
+    columns: payrollColumnDef,
+    getCoreRowModel: getCoreRowModel(),
+    initialState: {
+      columnPinning: {
+        left: ["employeeName", "basicSalary"],
+        right: ["netSalary"],
+      },
+    },
+  });
+
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            {headerName.map((header) => (
-              <th
-                key={header}
-                className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase"
-              >
-                Employee Name
-              </th>
+    <>
+      <div className="rounded-md border">
+        <Table className="">
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
             ))}
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {data.map((row, index) => (
-            <tr key={index} className={row.error ? "bg-red-50" : ""}>
-              <td className="px-4 py-3 text-sm text-gray-800">
-                {row["Employee Name"]}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-800">
-                {row["Basic Salary"]?.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-
-              <td className="px-4 py-3 text-sm text-gray-800">
-                {row["Total Taxable Allowance"]?.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-
-              <td className="px-4 py-3 text-sm text-gray-800">
-                {row["Total Non Taxable Allowance"]?.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-800">
-                {row["Gross Salary"]?.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-
-              <td className="px-4 py-3 text-sm text-gray-800">
-                {row["Taxable Income"]?.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-
-              <td className="px-4 py-3 text-sm text-gray-800">
-                {row["Income Tax"]?.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-800">
-                {row["Employee Pension"]?.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-800">
-                {row["Organization Pension"]?.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-800">
-                {row["Total Deduction"]?.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-              <td className="px-4 py-3 text-sm font-bold text-green-700">
-                {row["Net Salary"]?.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-            </tr>
-          ))}
-          {data.length > 0 && (
-            <tr className="bg-gray-100 font-bold">
-              <td className="px-4 py-3 text-sm text-gray-900">Total</td>
-              <td className="px-4 py-3 text-sm text-gray-900">
-                {data
-                  .reduce((sum, row) => sum + (row["Basic Salary"] ?? 0), 0)
-                  .toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-900">
-                {data
-                  .reduce(
-                    (sum, row) => sum + (row["Total Taxable Allowance"] ?? 0),
-                    0
-                  )
-                  .toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-900">
-                {data
-                  .reduce(
-                    (sum, row) =>
-                      sum + (row["Total Non Taxable Allowance"] ?? 0),
-                    0
-                  )
-                  .toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-900">
-                {data
-                  .reduce((sum, row) => sum + (row["Gross Salary"] ?? 0), 0)
-                  .toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-900">
-                {data
-                  .reduce((sum, row) => sum + (row["Taxable Income"] ?? 0), 0)
-                  .toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-900">
-                {data
-                  .reduce((sum, row) => sum + (row["Income Tax"] ?? 0), 0)
-                  .toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-900">
-                {data
-                  .reduce((sum, row) => sum + (row["Employee Pension"] ?? 0), 0)
-                  .toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-900">
-                {data
-                  .reduce(
-                    (sum, row) => sum + (row["Organization Pension"] ?? 0),
-                    0
-                  )
-                  .toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-900">
-                {data
-                  .reduce((sum, row) => sum + (row["Total Deduction"] ?? 0), 0)
-                  .toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-              </td>
-              <td className="px-4 py-3 text-sm text-green-800">
-                {data
-                  .reduce((sum, row) => sum + (row["Net Salary"] ?? 0), 0)
-                  .toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={payrollColumnDef.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+          <TableFooter>
+            {table.getFooterGroups().map((footerGroup) => (
+              <TableRow key={footerGroup.id}>
+                {footerGroup.headers.map((header) => (
+                  <TableCell key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.footer,
+                          header.getContext()
+                        )}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableFooter>
+        </Table>
+      </div>
+    </>
   );
 };
 
@@ -428,6 +324,36 @@ const SampleTable: React.FC<{ onDownload: () => void }> = ({ onDownload }) => {
 };
 
 // --- MAIN COMPONENT ---
+/**
+ * BulkPayrollProcessor is a React component that provides a user interface for bulk payroll calculation
+ * for Ethiopian employees. It allows users to upload an Excel payroll sheet, processes the data according
+ * to Ethiopian tax and pension rules, and displays the results with options to download both sample templates
+ * and processed results.
+ *
+ * Features:
+ * - Upload Excel payroll sheets for multiple employees.
+ * - Calculates income tax, pension (employee and employer), gross and net salary.
+ * - Displays processing results in a table.
+ * - Downloadable results and sample template.
+ * - SEO structured data for discoverability.
+ *
+ * @returns {JSX.Element} The rendered payroll processor UI.
+ *
+ * @remarks
+ * <details>
+ * <summary><strong>NB & Important: How the Payroll Sheet Works</strong></summary>
+ *
+ * - The payroll sheet must follow the provided sample template. <br/>
+ * - <strong>You cannot change the column names</strong>; only add or edit rows as needed. <br/>
+ * - The following columns are <strong>required</strong> for pension and payroll calculation:
+ *   - <code>employee name</code>
+ *   - <code>basic salary</code>
+ *   - <code>total taxable allowance</code>
+ *   - <code>total non taxable allowance</code>
+ *   - <code>other deduction</code>
+ * - Ensure all required fields are filled for each employee row to avoid errors during processing.
+ * </details>
+ */
 function BulkPayrollProcessor() {
   const {
     employeeData,
@@ -442,10 +368,10 @@ function BulkPayrollProcessor() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "Ethiopian Payroll Calculator",
+    name: "Ethiopian Payroll Generator",
     description:
-      "Free online Ethiopian payroll calculator for bulk employee processing. Instantly calculate income tax, pension, gross and net salary for multiple employees using Excel upload. Supports Ethiopian tax and pension rules for 2024.",
-    url: "https://utility.ethioqr.app/payroll",
+      "Free online Ethiopian payroll generator for bulk employee processing. Instantly calculate income tax, pension, gross and net salary for multiple employees using Excel upload. Supports Ethiopian tax and pension rules for 2024.",
+    url: "https://utility.ethioqr.app/payroll-generator",
     applicationCategory: "FinanceApplication",
     operatingSystem: "Web Browser",
     offers: {
@@ -463,6 +389,7 @@ function BulkPayrollProcessor() {
     ],
     keywords: [
       "Ethiopian payroll calculator",
+      "Ethiopian payroll generator",
       "income tax",
       "pension",
       "bulk salary processing",
@@ -488,39 +415,42 @@ function BulkPayrollProcessor() {
   return (
     <>
       <div style={{ display: "none" }}>
-        <title>Ethiopian Payroll Calculator</title>
+        <title>Ethiopian Payroll Generator</title>
         <meta
           name="description"
-          content="Free Ethiopian payroll calculator for 2024. Instantly calculate income tax, pension, gross and net salary for multiple employees using Excel upload. Supports Ethiopian tax and pension rules for bulk payroll processing."
+          content="Free Ethiopian payroll generator for 2024. Instantly calculate income tax, pension, gross and net salary for multiple employees using Excel upload. Supports Ethiopian tax and pension rules for bulk payroll processing."
         />
         <meta
           name="keywords"
-          content="Ethiopian payroll calculator, bulk payroll, income tax calculator, pension calculator, salary calculator, Ethiopia payroll 2024, Excel payroll upload, gross to net salary"
+          content="Ethiopian payroll generator, bulk payroll, income tax calculator, pension calculator, salary calculator, Ethiopia payroll 2024, Excel payroll upload, gross to net salary"
         />
         <meta name="author" content="FormulaLab" />
         <meta name="robots" content="index, follow" />
         <meta
           property="og:title"
-          content="Ethiopian Payroll Calculator 2024 - Bulk Salary & Tax Processing"
+          content="Ethiopian Payroll generator 2025 - Bulk Salary & Tax Processing"
         />
         <meta
           property="og:description"
           content="Calculate Ethiopian payroll, income tax, and pension for multiple employees with our free online bulk payroll calculator. Upload Excel sheets and get detailed results."
         />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://utility.ethioqr.app/payroll" />
-        <meta name="twitter:card" content="summary_large_image" />
         <meta
-          name="twitter:title"
-          content="Ethiopian Payroll Calculator 2024"
+          property="og:url"
+          content="https://utility.ethioqr.app/payroll-generator"
         />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Ethiopian Payroll Generator 2024" />
         <meta
           name="twitter:description"
-          content="Free Ethiopian payroll calculator for bulk salary, tax, and pension processing. Upload Excel and get instant results."
+          content="Free Ethiopian payroll Generator for bulk salary, tax, and pension processing. Upload Excel and get instant results."
         />
-        <link rel="canonical" href="https://utility.ethioqr.app/payroll" />
+        <link
+          rel="canonical"
+          href="https://utility.ethioqr.app/payroll-generator"
+        />
       </div>
-      <div className="mx-auto p-4 space-y-8">
+      <div className="space-y-8 max-w-7xl mx-auto">
         <header className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Bulk Payroll Processor
@@ -532,6 +462,44 @@ function BulkPayrollProcessor() {
 
         <div className="space-y-6">
           <SampleTable onDownload={handleDownloadSample} />
+          <div className="p-3">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                  Features
+                </h4>
+                <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                  <li>Upload Excel payroll sheets for multiple employees.</li>
+                  <li>Calculates income tax, employee and employer pension.</li>
+                  <li>Shows gross and net salary breakdown.</li>
+                  <li>Downloadable processed results and sample template.</li>
+                  <li>Built for Ethiopian tax and pension rules.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                  NB & Important: How the Payroll Sheet Works
+                </h4>
+                <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                  <li>
+                    Use the provided sample template; do not rename columns.
+                  </li>
+                  <li>Required columns:</li>
+                  <ul className="list-disc pl-6 text-sm text-gray-700 space-y-1">
+                    <li>employee name</li>
+                    <li>basic salary</li>
+                    <li>total taxable allowance</li>
+                    <li>total non taxable allowance</li>
+                    <li>other deduction</li>
+                  </ul>
+                  <li>
+                    Ensure all required fields are filled to avoid errors.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
 
           <div className="bg-white rounded-xl shadow p-6">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
@@ -547,10 +515,11 @@ function BulkPayrollProcessor() {
               </div>
             )}
           </div>
-
-          {employeeData.length > 0 && (
+        </div>
+        {employeeData.length > 0 && (
+          <div className="">
             <div className="bg-white rounded-xl shadow p-6">
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex justify-between items-center mb-4 min-w-5xl">
                 <h2 className="text-lg font-semibold text-gray-800">
                   Processing Results
                 </h2>
@@ -563,8 +532,8 @@ function BulkPayrollProcessor() {
               </div>
               <ResultsTable data={employeeData} />
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </>
   );
