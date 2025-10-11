@@ -1,6 +1,11 @@
 import { FileDropzone } from "@/components/file-drop-zone";
 import { payrollColumnDef } from "@/components/payroll-column-def";
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
   Table,
   TableBody,
   TableCell,
@@ -15,8 +20,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { ChevronDown } from "lucide-react"; // Added for the collapsible icon
 import React, { useState, useCallback, useEffect } from "react";
 import * as XLSX from "xlsx";
 
@@ -48,19 +56,12 @@ const sampleData: Omit<EmployeeData, "error">[] = [
   },
 ];
 
-/**
- * Takes a raw data row for a single employee and returns the fully calculated payroll.
- * This is the new, centralized logic hub.
- * @param row - The employee data, typically from an Excel row.
- */
 const calculatePayrollForRow = (row: Partial<EmployeeData>): EmployeeData => {
-  // 1. Sanitize and parse input values from the row
   const basicSalary = Number(row["Basic Salary"]) || 0;
   const taxableAllowance = Number(row["Total Taxable Allowance"]) || 0;
   const nonTaxableAllowance = Number(row["Total Non Taxable Allowance"]) || 0;
   const otherDeductions = Number(row["Other Deduction"]) || 0;
 
-  // Input validation
   if (isNaN(Number(row["Basic Salary"])) || basicSalary < 0) {
     return {
       ...row,
@@ -68,26 +69,19 @@ const calculatePayrollForRow = (row: Partial<EmployeeData>): EmployeeData => {
     } as EmployeeData;
   }
 
-  // 2. Perform calculations in sequence
-  // Note: Your logic specified that 70% of the taxable allowance is what's actually taxed.
   const taxablePortionOfAllowance = taxableAllowance * 0.7;
-
   const taxableIncome = basicSalary + taxablePortionOfAllowance;
   const incomeTax = CalculateTax(taxableIncome);
   const employeePension = CalculatePension(basicSalary, false);
   const organizationPension = CalculatePension(basicSalary, true);
-
-  // Your gross salary formula was specific, we replicate it here.
   const grossSalary =
     basicSalary +
     nonTaxableAllowance +
     taxableAllowance -
     taxablePortionOfAllowance;
-
   const totalDeductions = incomeTax + employeePension + otherDeductions;
   const netSalary = grossSalary - totalDeductions;
 
-  // 3. Return the complete, calculated object
   return {
     ...row,
     "Employee Name": row["Employee Name"] || "N/A",
@@ -105,7 +99,6 @@ const calculatePayrollForRow = (row: Partial<EmployeeData>): EmployeeData => {
   };
 };
 
-// --- REUSABLE LOGIC HOOK ---
 const usePayrollProcessor = () => {
   const [employeeData, setEmployeeData] = useState<EmployeeData[]>([]);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -131,7 +124,7 @@ const usePayrollProcessor = () => {
             json[0]["Basic Salary"] === undefined)
         ) {
           throw new Error(
-            'Invalid format. Ensure columns "Employee Name" and "Gross Salary" exist.'
+            'Invalid format. Ensure columns "Employee Name" and "Basic Salary" exist.'
           );
         }
 
@@ -178,86 +171,195 @@ const usePayrollProcessor = () => {
   };
 };
 
+// ## MODIFIED COMPONENT ##
+// The wrapper div now has `overflow-x-auto` to allow horizontal scrolling on small screens.
 const ResultsTable: React.FC<{ data: EmployeeData[] }> = ({ data }) => {
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+
   const table = useReactTable({
     data,
     columns: payrollColumnDef,
     getCoreRowModel: getCoreRowModel(),
+    globalFilterFn: "includesString",
+    getFilteredRowModel: getFilteredRowModel(),
     initialState: {
       columnPinning: {
         left: ["employeeName", "basicSalary"],
         right: ["netSalary"],
       },
     },
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination, //update the pagination state when internal APIs mutate the pagination state
+    state: {
+      pagination,
+      globalFilter,
+    },
+    onGlobalFilterChange: setGlobalFilter,
   });
 
   return (
-    <>
-      <div className="rounded-md border">
-        <Table className="">
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
+    <div className="rounded-md border overflow-x-auto">
+      <div className="flex items-center gap-2 p-4 bg-gray-50 border-b">
+        <label htmlFor="payroll-search" className="text-sm text-gray-700">
+          Search:
+        </label>
+        <input
+          id="payroll-search"
+          type="text"
+          placeholder="Search employee name..."
+          className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={(e) => {
+            const value = e.target.value.toLowerCase();
+            table.setGlobalFilter(value);
+          }}
+          aria-label="Search employee name"
+        />
+      </div>
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
                       )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={payrollColumnDef.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-          <TableFooter>
-            {table.getFooterGroups().map((footerGroup) => (
-              <TableRow key={footerGroup.id}>
-                {footerGroup.headers.map((header) => (
-                  <TableCell key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.footer,
-                          header.getContext()
-                        )}
+                </TableHead>
+              ))}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
               </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={payrollColumnDef.length}
+                className="h-24 text-center"
+              >
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+        <TableFooter>
+          {table.getFooterGroups().map((footerGroup) => (
+            <TableRow key={footerGroup.id}>
+              {footerGroup.headers.map((header) => (
+                <TableCell key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.footer,
+                        header.getContext()
+                      )}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableFooter>
+      </Table>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 py-3 bg-gray-50 border-t rounded-b-md">
+        <div className="flex items-center gap-2">
+          <button
+            className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => table.firstPage()}
+            disabled={!table.getCanPreviousPage()}
+            aria-label="First Page"
+          >
+            <span className="sr-only">First</span>
+            {"<<"}
+          </button>
+          <button
+            className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            aria-label="Previous Page"
+          >
+            <span className="sr-only">Previous</span>
+            {"<"}
+          </button>
+          <span className="mx-2 text-sm text-gray-700">
+            Page{" "}
+            <strong>
+              {table.getState().pagination.pageIndex + 1} of{" "}
+              {table.getPageCount().toLocaleString()}
+            </strong>
+          </span>
+          <button
+            className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            aria-label="Next Page"
+          >
+            <span className="sr-only">Next</span>
+            {">"}
+          </button>
+          <button
+            className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => table.lastPage()}
+            disabled={!table.getCanNextPage()}
+            aria-label="Last Page"
+          >
+            <span className="sr-only">Last</span>
+            {">>"}
+          </button>
+        </div>
+        <div className="flex items-center gap-2">
+          <label htmlFor="goto-page" className="text-sm text-gray-700">
+            Go to page:
+          </label>
+          <input
+            id="goto-page"
+            type="number"
+            min="1"
+            max={table.getPageCount()}
+            value={table.getState().pagination.pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              table.setPageIndex(page);
+            }}
+            className="border border-gray-300 rounded-md px-2 py-1 w-16 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <select
+            value={table.getState().pagination.pageSize}
+            onChange={(e) => {
+              table.setPageSize(Number(e.target.value));
+            }}
+            className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            {[10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Show {pageSize}
+              </option>
             ))}
-          </TableFooter>
-        </Table>
+          </select>
+        </div>
+        <div className="text-sm text-gray-600 mt-2 sm:mt-0">
+          Showing {table.getRowModel().rows.length.toLocaleString()} of{" "}
+          {table.getRowCount().toLocaleString()} rows
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -324,36 +426,6 @@ const SampleTable: React.FC<{ onDownload: () => void }> = ({ onDownload }) => {
 };
 
 // --- MAIN COMPONENT ---
-/**
- * BulkPayrollProcessor is a React component that provides a user interface for bulk payroll calculation
- * for Ethiopian employees. It allows users to upload an Excel payroll sheet, processes the data according
- * to Ethiopian tax and pension rules, and displays the results with options to download both sample templates
- * and processed results.
- *
- * Features:
- * - Upload Excel payroll sheets for multiple employees.
- * - Calculates income tax, pension (employee and employer), gross and net salary.
- * - Displays processing results in a table.
- * - Downloadable results and sample template.
- * - SEO structured data for discoverability.
- *
- * @returns {JSX.Element} The rendered payroll processor UI.
- *
- * @remarks
- * <details>
- * <summary><strong>NB & Important: How the Payroll Sheet Works</strong></summary>
- *
- * - The payroll sheet must follow the provided sample template. <br/>
- * - <strong>You cannot change the column names</strong>; only add or edit rows as needed. <br/>
- * - The following columns are <strong>required</strong> for pension and payroll calculation:
- *   - <code>employee name</code>
- *   - <code>basic salary</code>
- *   - <code>total taxable allowance</code>
- *   - <code>total non taxable allowance</code>
- *   - <code>other deduction</code>
- * - Ensure all required fields are filled for each employee row to avoid errors during processing.
- * </details>
- */
 function BulkPayrollProcessor() {
   const {
     employeeData,
@@ -409,7 +481,6 @@ function BulkPayrollProcessor() {
     return () => {
       document.head.removeChild(script);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -462,43 +533,64 @@ function BulkPayrollProcessor() {
 
         <div className="space-y-6">
           <SampleTable onDownload={handleDownloadSample} />
-          <div className="p-3">
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h4 className="text-sm font-semibold text-gray-800 mb-2">
-                  Features
-                </h4>
-                <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
-                  <li>Upload Excel payroll sheets for multiple employees.</li>
-                  <li>Calculates income tax, employee and employer pension.</li>
-                  <li>Shows gross and net salary breakdown.</li>
-                  <li>Downloadable processed results and sample template.</li>
-                  <li>Built for Ethiopian tax and pension rules.</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-semibold text-gray-800 mb-2">
-                  NB & Important: How the Payroll Sheet Works
-                </h4>
-                <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
-                  <li>
-                    Use the provided sample template; do not rename columns.
-                  </li>
-                  <li>Required columns:</li>
-                  <ul className="list-disc pl-6 text-sm text-gray-700 space-y-1">
-                    <li>employee name</li>
-                    <li>basic salary</li>
-                    <li>total taxable allowance</li>
-                    <li>total non taxable allowance</li>
-                    <li>other deduction</li>
-                  </ul>
-                  <li>
-                    Ensure all required fields are filled to avoid errors.
-                  </li>
-                </ul>
-              </div>
+          <div className="p-3 space-y-4">
+            <div>
+              <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                Features
+              </h4>
+              <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                <li>Upload Excel payroll sheets for multiple employees.</li>
+                <li>Calculates income tax, employee and employer pension.</li>
+                <li>Shows gross and net salary breakdown.</li>
+                <li>Downloadable processed results and sample template.</li>
+                <li>Built for Ethiopian tax and pension rules.</li>
+              </ul>
             </div>
+
+            {/* ## MODIFIED COMPONENT ##
+            // This section is now collapsible. */}
+            <Collapsible>
+              <CollapsibleTrigger asChild>
+                <button className="flex w-full items-center justify-between rounded-lg border bg-gray-50 p-3 text-left hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                  <h4 className="text-sm font-semibold text-gray-800">
+                    NB & Important: How the Payroll Sheet Works
+                  </h4>
+                  <ChevronDown className="h-5 w-5 transition-transform duration-200 [&[data-state=open]]:rotate-180" />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="p-4 text-sm text-gray-700">
+                <ul className="list-disc space-y-2 pl-5">
+                  <li>
+                    Use the provided sample template;{" "}
+                    <strong>do not rename columns.</strong>
+                  </li>
+                  <li>
+                    The following columns are <strong>required</strong>:
+                    <ul className="list-['-_'] mt-1 space-y-1 pl-6">
+                      <li>
+                        <code>employee name</code>
+                      </li>
+                      <li>
+                        <code>basic salary</code>
+                      </li>
+                      <li>
+                        <code>total taxable allowance</code>
+                      </li>
+                      <li>
+                        <code>total non taxable allowance</code>
+                      </li>
+                      <li>
+                        <code>other deduction</code>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    Ensure all required fields are filled for each employee to
+                    avoid errors.
+                  </li>
+                </ul>
+              </CollapsibleContent>
+            </Collapsible>
           </div>
 
           <div className="bg-white rounded-xl shadow p-6">
@@ -510,28 +602,26 @@ function BulkPayrollProcessor() {
               isProcessing={isProcessing}
             />
             {fileError && (
-              <div className="mt-4 p-3 bg-red-100 texit-red-800 rounded-lg text-sm">
+              <div className="mt-4 p-3 bg-red-100 text-red-800 rounded-lg text-sm">
                 <strong>Error:</strong> {fileError}
               </div>
             )}
           </div>
         </div>
         {employeeData.length > 0 && (
-          <div className="">
-            <div className="bg-white rounded-xl shadow p-6">
-              <div className="flex justify-between items-center mb-4 min-w-5xl">
-                <h2 className="text-lg font-semibold text-gray-800">
-                  Processing Results
-                </h2>
-                <button
-                  onClick={handleDownloadResults}
-                  className="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700"
-                >
-                  Download Results
-                </button>
-              </div>
-              <ResultsTable data={employeeData} />
+          <div className="bg-white rounded-xl shadow p-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+              <h2 className="text-lg font-semibold text-gray-800">
+                Processing Results
+              </h2>
+              <button
+                onClick={handleDownloadResults}
+                className="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 w-full sm:w-auto"
+              >
+                Download Results
+              </button>
             </div>
+            <ResultsTable data={employeeData} />
           </div>
         )}
       </div>
