@@ -16,6 +16,7 @@ import { Route as TemperatureConversionRouteImport } from './routes/temperature-
 import { Route as SpeedConversionRouteImport } from './routes/speed-conversion'
 import { Route as ShoeSizeConversionRouteImport } from './routes/shoe-size-conversion'
 import { Route as SalaryCalculationRouteImport } from './routes/salary-calculation'
+import { Route as QrCodeGeneratorRouteImport } from './routes/qr-code-generator'
 import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
 import { Route as LengthConversionRouteImport } from './routes/length-conversion'
@@ -59,6 +60,11 @@ const ShoeSizeConversionRoute = ShoeSizeConversionRouteImport.update({
 const SalaryCalculationRoute = SalaryCalculationRouteImport.update({
   id: '/salary-calculation',
   path: '/salary-calculation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QrCodeGeneratorRoute = QrCodeGeneratorRouteImport.update({
+  id: '/qr-code-generator',
+  path: '/qr-code-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PayrollGeneratorRoute = PayrollGeneratorRouteImport.update({
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/length-conversion': typeof LengthConversionRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
+  '/qr-code-generator': typeof QrCodeGeneratorRoute
   '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
@@ -135,6 +142,7 @@ export interface FileRoutesByTo {
   '/length-conversion': typeof LengthConversionRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
+  '/qr-code-generator': typeof QrCodeGeneratorRoute
   '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
@@ -154,6 +162,7 @@ export interface FileRoutesById {
   '/length-conversion': typeof LengthConversionRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
+  '/qr-code-generator': typeof QrCodeGeneratorRoute
   '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
@@ -174,6 +183,7 @@ export interface FileRouteTypes {
     | '/length-conversion'
     | '/password-generator'
     | '/payroll-generator'
+    | '/qr-code-generator'
     | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
@@ -192,6 +202,7 @@ export interface FileRouteTypes {
     | '/length-conversion'
     | '/password-generator'
     | '/payroll-generator'
+    | '/qr-code-generator'
     | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
@@ -210,6 +221,7 @@ export interface FileRouteTypes {
     | '/length-conversion'
     | '/password-generator'
     | '/payroll-generator'
+    | '/qr-code-generator'
     | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
@@ -229,6 +241,7 @@ export interface RootRouteChildren {
   LengthConversionRoute: typeof LengthConversionRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   PayrollGeneratorRoute: typeof PayrollGeneratorRoute
+  QrCodeGeneratorRoute: typeof QrCodeGeneratorRoute
   SalaryCalculationRoute: typeof SalaryCalculationRoute
   ShoeSizeConversionRoute: typeof ShoeSizeConversionRoute
   SpeedConversionRoute: typeof SpeedConversionRoute
@@ -287,6 +300,13 @@ declare module '@tanstack/react-router' {
       path: '/salary-calculation'
       fullPath: '/salary-calculation'
       preLoaderRoute: typeof SalaryCalculationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/qr-code-generator': {
+      id: '/qr-code-generator'
+      path: '/qr-code-generator'
+      fullPath: '/qr-code-generator'
+      preLoaderRoute: typeof QrCodeGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/payroll-generator': {
@@ -365,6 +385,7 @@ const rootRouteChildren: RootRouteChildren = {
   LengthConversionRoute: LengthConversionRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   PayrollGeneratorRoute: PayrollGeneratorRoute,
+  QrCodeGeneratorRoute: QrCodeGeneratorRoute,
   SalaryCalculationRoute: SalaryCalculationRoute,
   ShoeSizeConversionRoute: ShoeSizeConversionRoute,
   SpeedConversionRoute: SpeedConversionRoute,

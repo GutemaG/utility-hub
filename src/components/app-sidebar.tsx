@@ -15,6 +15,7 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { Input } from "./ui/input";
 
 // This is sample data.
 const data = {
@@ -75,7 +76,7 @@ const data = {
           url: "/time-conversion",
         },
         {
-          title: "Age & Date Convertors",
+          title: "Ethiopian Date Convertors",
           url: "/age-and-date-convertors",
         },
         // {
@@ -97,12 +98,43 @@ const data = {
           title: "UUID Generator",
           url: "/uuid-generator",
         },
+
+        {
+          title: "QR Code Generator",
+          url: "/qr-code-generator",
+        },
       ],
     },
   ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [sidebarItems, setSidebarItems] = React.useState(data.navMain);
+  const [filter, setFilter] = React.useState("");
+
+  React.useEffect(() => {
+    if (!filter) {
+      setSidebarItems(data.navMain);
+      return;
+    }
+    const lowerFilter = filter.toLowerCase();
+    const filtered = data.navMain
+      .map((group) => {
+        const matchedItems = group.items?.filter((item) =>
+          item.title.toLowerCase().includes(lowerFilter)
+        );
+        if (group.title.toLowerCase().includes(lowerFilter)) {
+          return group; // Include entire group if group title matches
+        }
+        if (matchedItems && matchedItems.length > 0) {
+          return { ...group, items: matchedItems }; // Include only matched items
+        }
+        return null; // Exclude group if no matches
+      })
+      .filter((group): group is (typeof data.navMain)[0] => group !== null); // Type guard to filter out nulls
+    setSidebarItems(filtered);
+  }, [filter]);
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -125,7 +157,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {data.navMain.map((item) => (
+            <Input
+              onClick={(e) => e.stopPropagation()}
+              placeholder="Filter..."
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            {sidebarItems.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
                   <a href={item.url} className="font-medium">
