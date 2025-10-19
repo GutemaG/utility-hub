@@ -76,7 +76,7 @@ const data = {
           url: "/time-conversion",
         },
         {
-          title: "Age & Date Convertors",
+          title: "Ethiopian Date Convertors",
           url: "/age-and-date-convertors",
         },
         // {
@@ -97,6 +97,11 @@ const data = {
         {
           title: "UUID Generator",
           url: "/uuid-generator",
+        },
+
+        {
+          title: "QR Code Generator",
+          url: "/qr-code-generator",
         },
       ],
     },
