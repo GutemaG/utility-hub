@@ -19,6 +19,7 @@ import { Route as SalaryCalculationRouteImport } from './routes/salary-calculati
 import { Route as QrCodeGeneratorRouteImport } from './routes/qr-code-generator'
 import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
+import { Route as MarkDownEditorRouteImport } from './routes/mark-down-editor'
 import { Route as LengthConversionRouteImport } from './routes/length-conversion'
 import { Route as EthiopianCalendarRouteImport } from './routes/ethiopian-calendar'
 import { Route as DataStorageConversionRouteImport } from './routes/data-storage-conversion'
@@ -77,6 +78,11 @@ const PasswordGeneratorRoute = PasswordGeneratorRouteImport.update({
   path: '/password-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarkDownEditorRoute = MarkDownEditorRouteImport.update({
+  id: '/mark-down-editor',
+  path: '/mark-down-editor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LengthConversionRoute = LengthConversionRouteImport.update({
   id: '/length-conversion',
   path: '/length-conversion',
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/length-conversion': typeof LengthConversionRoute
+  '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/length-conversion': typeof LengthConversionRoute
+  '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/length-conversion': typeof LengthConversionRoute
+  '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
     | '/length-conversion'
+    | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
     | '/qr-code-generator'
@@ -200,6 +210,7 @@ export interface FileRouteTypes {
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
     | '/length-conversion'
+    | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
     | '/qr-code-generator'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
     | '/length-conversion'
+    | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
     | '/qr-code-generator'
@@ -239,6 +251,7 @@ export interface RootRouteChildren {
   DataStorageConversionRoute: typeof DataStorageConversionRoute
   EthiopianCalendarRoute: typeof EthiopianCalendarRoute
   LengthConversionRoute: typeof LengthConversionRoute
+  MarkDownEditorRoute: typeof MarkDownEditorRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   PayrollGeneratorRoute: typeof PayrollGeneratorRoute
   QrCodeGeneratorRoute: typeof QrCodeGeneratorRoute
@@ -323,6 +336,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PasswordGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mark-down-editor': {
+      id: '/mark-down-editor'
+      path: '/mark-down-editor'
+      fullPath: '/mark-down-editor'
+      preLoaderRoute: typeof MarkDownEditorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/length-conversion': {
       id: '/length-conversion'
       path: '/length-conversion'
@@ -383,6 +403,7 @@ const rootRouteChildren: RootRouteChildren = {
   DataStorageConversionRoute: DataStorageConversionRoute,
   EthiopianCalendarRoute: EthiopianCalendarRoute,
   LengthConversionRoute: LengthConversionRoute,
+  MarkDownEditorRoute: MarkDownEditorRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   PayrollGeneratorRoute: PayrollGeneratorRoute,
   QrCodeGeneratorRoute: QrCodeGeneratorRoute,
