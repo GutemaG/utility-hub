@@ -103,6 +103,10 @@ const data = {
           title: "QR Code Generator",
           url: "/qr-code-generator",
         },
+        {
+          title: "Markdown Editor",
+          url: "/mark-down-editor",
+        },
       ],
     },
   ],
