@@ -499,7 +499,7 @@ function RouteComponent() {
            <ul className="list-disc list-inside text-sm text-blue-800 space-y-1">
              <li><strong>Basic Salary</strong> is fully taxable.</li>
              <li><strong>Allowances</strong> are non-taxable up to 25% of Basic Salary or 2,200 Birr (whichever is lower).</li>
-             <li>Any allowance amount exceeding this limit is added to the Basic Salary to form the <strong>Taxable Income</strong>.</li>
+             <li>Any allowance amount exceeding this limit(2200) is added to the Basic Salary to form the <strong>Taxable Income</strong>.</li>
              <li>Pension (7%) is calculated only on the Basic Salary.</li>
            </ul>
         </div>
