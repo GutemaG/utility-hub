@@ -8,7 +8,7 @@ export const Route = createFileRoute("/salary-calculation")({
 interface TaxBracket {
   min: number;
   max: number | null;
-  rate: number; // Stored as percentage, e.g., 15 for 15%
+  rate: number;
   deductible: number;
 }
 
@@ -21,49 +21,54 @@ const taxBrackets: TaxBracket[] = [
   { min: 14001.0, max: null, rate: 35, deductible: 2050 },
 ];
 
+const MAX_NON_TAXABLE_ALLOWANCE_AMOUNT = 2200;
+
 function RouteComponent() {
-  const [monthlyIncome, setMonthlyIncome] = useState<number>(0);
+  const [monthlyIncome, setMonthlyIncome] = useState<number>(0); // Basic Salary
+  const [monthlyAllowance, setMonthlyAllowance] = useState<number>(0); // Total Allowance
   const [monthlyNetIncome, setMonthlyNetIncome] = useState<number>(0);
   const [annualIncome, setAnnualIncome] = useState<number>(0);
   const [annualNetIncome, setAnnualNetIncome] = useState<number>(0);
-  const [calculationMode, setCalculationMode] = useState<"gross" | "net">(
-    "gross"
-  );
+  const [calculationMode, setCalculationMode] = useState<"gross" | "net">("gross");
+
+  // Helper: Calculate the non-taxable limit based on basic salary
+  const getNonTaxableLimit = (basicSalary: number) => {
+    return Math.min(basicSalary * 0.25, MAX_NON_TAXABLE_ALLOWANCE_AMOUNT);
+  };
 
   const calculateTax = (
-    income: number
+    taxableIncome: number
   ): {
     tax: number;
     taxableIncome: number;
     deductible: number;
     steps: string[];
   } => {
-    if (income <= 0)
+    if (taxableIncome <= 0)
       return { tax: 0, taxableIncome: 0, deductible: 0, steps: [] };
 
     let totalTax = 0;
     let totalDeductible = 0;
     const steps: string[] = [];
 
-    // Find the applicable tax bracket
-    // const applicableBracket = taxBrackets.find(bracket =>
-    //   bracket.max ? (income >= bracket.min && income <= bracket.max) : income >= bracket.min
-    // )
     const applicableBracket = taxBrackets.find((bracket) =>
       bracket.max
-        ? Math.ceil(income) >= bracket.min && Math.ceil(income) <= bracket.max
-        : income >= bracket.min
+        ? Math.ceil(taxableIncome) >= bracket.min &&
+          Math.ceil(taxableIncome) <= bracket.max
+        : taxableIncome >= bracket.min
     );
+
     if (applicableBracket) {
       totalDeductible = applicableBracket.deductible;
-      const grossTax = (income * applicableBracket.rate) / 100;
+      const grossTax = (taxableIncome * applicableBracket.rate) / 100;
       totalTax = Math.max(0, grossTax - totalDeductible);
 
-      // Generate calculation steps
-      steps.push(`Income: ${income.toLocaleString()} Birr`);
+      steps.push(`Taxable Income: ${taxableIncome.toLocaleString()} Birr`);
       steps.push(`Tax Rate: ${applicableBracket.rate}%`);
       steps.push(
-        `Gross Tax: ${income.toLocaleString()} × ${applicableBracket.rate / 100} = ${grossTax.toFixed(2)} Birr`
+        `Gross Tax: ${taxableIncome.toLocaleString()} × ${
+          applicableBracket.rate / 100
+        } = ${grossTax.toFixed(2)} Birr`
       );
       steps.push(`Deductible: ${totalDeductible.toLocaleString()} Birr`);
       steps.push(
@@ -73,59 +78,68 @@ function RouteComponent() {
 
     return {
       tax: totalTax,
-      taxableIncome: income,
+      taxableIncome,
       deductible: totalDeductible,
       steps,
     };
   };
 
-  const calculatePension = (income: number): number => {
-    return income * 0.07;
+  const calculatePension = (basicSalary: number): number => {
+    return basicSalary * 0.07;
   };
 
-  const calculateNetIncome = (grossIncome: number): number => {
-    if (grossIncome <= 0) return 0;
-    const tax = calculateTax(grossIncome).tax;
-    const pension = calculatePension(grossIncome);
-    return grossIncome - tax - pension;
+  // Main calculation logic integrating Allowance
+  const performFullCalculation = (basicSalary: number, allowance: number) => {
+    const nonTaxableLimit = getNonTaxableLimit(basicSalary);
+    const taxableAllowance = Math.max(0, allowance - nonTaxableLimit);
+    const totalTaxableIncome = basicSalary + taxableAllowance;
+
+    const taxDetails = calculateTax(totalTaxableIncome);
+    const pension = calculatePension(basicSalary);
+    const netIncome = basicSalary + allowance - taxDetails.tax - pension;
+
+    return {
+      basicSalary,
+      allowance,
+      nonTaxableLimit,
+      taxableAllowance,
+      totalTaxableIncome,
+      taxDetails,
+      pension,
+      netIncome,
+    };
   };
 
-  // ** NEW, ACCURATE REVERSE CALCULATION **
+  const calculateNetIncome = (basicSalary: number, allowance: number): number => {
+    if (basicSalary <= 0) return 0;
+    return performFullCalculation(basicSalary, allowance).netIncome;
+  };
+
+  // Reverse calculation (simplified to ignore dynamic allowance complexity for now)
   const calculateGrossIncome = (netIncome: number): number => {
     if (netIncome <= 0) return 0;
-
-    // The formula is: Net = Gross - Tax - Pension
-    // Net = Gross - ((Gross * Rate) - Deductible) - (Gross * 0.07)
-    // Net = Gross - (Gross * Rate) + Deductible - (Gross * 0.07)
-    // Net - Deductible = Gross * (1 - Rate - 0.07)
-    // Gross = (Net - Deductible) / (1 - Rate/100 - 0.07)
-
-    // We need to find which bracket the netIncome falls into.
-    // We do this by calculating the net income at the *start* of each gross bracket.
+    
+    // Note: This reverse formula assumes 0 allowance for stability.
+    // Reversing with variable allowance requires a numerical solver due to the circular dependency
+    // of the non-taxable limit on the Gross Basic.
+    
     for (let i = 0; i < taxBrackets.length; i++) {
       const bracket = taxBrackets[i];
       const nextBracket = taxBrackets[i + 1];
 
-      // Calculate the net income at the lower bound of the current gross bracket
-      const netAtMin = calculateNetIncome(bracket.min);
-
-      // If there's a next bracket, calculate the net income at its lower bound
-      // This gives us the net income range for the current bracket.
+      const netAtMin = calculateNetIncome(bracket.min, 0);
       const netAtNextMin = nextBracket
-        ? calculateNetIncome(nextBracket.min)
+        ? calculateNetIncome(nextBracket.min, 0)
         : Infinity;
 
       if (netIncome >= netAtMin && netIncome < netAtNextMin) {
-        const rate = bracket.rate / 100; // convert percentage to decimal
+        const rate = bracket.rate / 100;
         const deductible = bracket.deductible;
-
-        // Apply the reversed formula
         const gross = (netIncome - deductible) / (1 - rate - 0.07);
         return gross;
       }
     }
 
-    // Fallback for the highest bracket (where there is no nextBracket)
     const lastBracket = taxBrackets[taxBrackets.length - 1];
     const rate = lastBracket.rate / 100;
     const deductible = lastBracket.deductible;
@@ -139,7 +153,18 @@ function RouteComponent() {
     setAnnualIncome(income * 12);
 
     if (calculationMode === "gross") {
-      const netIncome = calculateNetIncome(income);
+      const netIncome = calculateNetIncome(income, monthlyAllowance);
+      setMonthlyNetIncome(netIncome);
+      setAnnualNetIncome(netIncome * 12);
+    }
+  };
+
+  const handleAllowanceChange = (value: string) => {
+    const allowance = parseFloat(value) || 0;
+    setMonthlyAllowance(allowance);
+
+    if (calculationMode === "gross") {
+      const netIncome = calculateNetIncome(monthlyIncome, allowance);
       setMonthlyNetIncome(netIncome);
       setAnnualNetIncome(netIncome * 12);
     }
@@ -154,45 +179,49 @@ function RouteComponent() {
       const grossIncome = calculateGrossIncome(netIncome);
       setMonthlyIncome(grossIncome);
       setAnnualIncome(grossIncome * 12);
+      // Reset allowance in net mode to avoid confusion as reverse calc assumes 0
+      setMonthlyAllowance(0); 
     }
   };
 
-  const monthlyTaxCalculation = calculateTax(monthlyIncome);
-  const monthlyPension = calculatePension(monthlyIncome);
-  const annualTaxCalculation = calculateTax(annualIncome);
-  const annualPension = calculatePension(annualIncome);
+  // Perform calculations for rendering
+  const monthlyCalc = performFullCalculation(monthlyIncome, monthlyAllowance);
+  const annualCalc = performFullCalculation(annualIncome, monthlyAllowance * 12);
 
-  // SEO structured data for tax calculator
+  // Additional steps for allowance logic
+  const allowanceSteps =
+    monthlyAllowance > 0
+      ? [
+          `Basic Salary: ${monthlyIncome.toLocaleString()} Birr`,
+          `Total Allowance: ${monthlyAllowance.toLocaleString()} Birr`,
+          `Non-Taxable Limit: min(25% of Basic, 2,200) = ${monthlyCalc.nonTaxableLimit.toLocaleString()} Birr`,
+          `Taxable Allowance: ${monthlyAllowance.toLocaleString()} - ${monthlyCalc.nonTaxableLimit.toLocaleString()} = ${monthlyCalc.taxableAllowance.toLocaleString()} Birr`,
+          `Total Taxable Income: ${monthlyIncome.toLocaleString()} (Basic) + ${monthlyCalc.taxableAllowance.toLocaleString()} (Excess Allowance) = ${monthlyCalc.totalTaxableIncome.toLocaleString()} Birr`,
+        ]
+      : [];
+
+  const combinedMonthlySteps = [
+    ...allowanceSteps,
+    ...monthlyCalc.taxDetails.steps,
+  ];
+
+  // SEO structured data
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Ethiopian Tax Calculator",
-    description:
-      "Free online Ethiopian income tax calculator with pension calculations. Calculate tax from gross or net income with detailed breakdowns.",
+    description: "Free online Ethiopian income tax calculator with pension and allowance calculations.",
     url: "https://utility.ethioar.app/salary-calculation",
     applicationCategory: "FinanceApplication",
     operatingSystem: "Web Browser",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
-    featureList: [
-      "Income tax calculation",
-      "Pension calculation",
-      "Tax bracket information",
-      "Gross to net conversion",
-      "Net to gross conversion",
-    ],
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   };
 
-  // Add structured data to page head
   useEffect(() => {
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.text = JSON.stringify(structuredData);
     document.head.appendChild(script);
-
     return () => {
       document.head.removeChild(script);
     };
@@ -201,81 +230,45 @@ function RouteComponent() {
 
   return (
     <>
-      {/* SEO Meta Tags */}
-      <div style={{ display: "none" }}>
-        <title>Ethiopian Salary Calculator</title>
-        <meta
-          name="description"
-          content="Free Ethiopian tax calculator for 2024. Calculate income tax, pension, and net salary with detailed breakdowns. Supports both gross to net and net to gross calculations."
-        />
-        <meta
-          name="keywords"
-          content="Ethiopian tax calculator, income tax calculator, tax bracket calculator, pension calculator, salary calculator, Ethiopia tax 2024, gross to net salary"
-        />
-        <meta name="author" content="FormulaLab" />
-        <meta name="robots" content="index, follow" />
-        <meta
-          property="og:title"
-          content="Ethiopian Tax Calculator 2024 - Free Income Tax & Pension Calculator"
-        />
-        <meta
-          property="og:description"
-          content="Calculate your Ethiopian income tax and pension with our free online calculator. Get detailed breakdowns and tax bracket information."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://utility.ethioqr.app/salary-calculation"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Ethiopian Tax Calculator 2024" />
-        <meta
-          name="twitter:description"
-          content="Free Ethiopian tax calculator with detailed breakdowns and tax bracket information."
-        />
-        <link
-          rel="canonical"
-          href="https://utility.ethioqr.app/salary-calculation"
-        />
-      </div>
-
-      <div className="max-w-4xl mx-auto p-2 space-y-6 overflow-auto">
+      <div className="max-w-5xl mx-auto p-2 space-y-6 overflow-auto">
         <header className="text-center">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             Ethiopian Salary Calculator
           </h1>
           <p className="text-sm sm:text-base text-gray-600">
-            Free online calculator for Ethiopian employment income tax and
-            pension calculations
+            Free online calculator for Ethiopian employment income tax and pension
           </p>
         </header>
 
-        {/* Tax Calculator */}
         <main className="bg-white rounded-xl shadow-lg overflow-hidden">
           <div className="p-4 sm:p-6">
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
-              Ethiopian Income Tax(Salary) Calculator
+              Ethiopian Income Tax (Salary) Calculator
             </h2>
 
-            {/* Calculation Mode Toggle */}
+            {/* Mode Toggle */}
             <div className="mb-6">
               <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
-                <span className="text-sm font-medium text-gray-700">
-                  Calculate from:
-                </span>
+                <span className="text-sm font-medium text-gray-700">Calculate from:</span>
                 <div className="flex bg-gray-100 rounded-lg p-1 w-full sm:w-auto">
                   <button
-                    onClick={() => setCalculationMode("gross")}
+                    onClick={() => {
+                      setCalculationMode("gross");
+                      setMonthlyAllowance(0); // Reset allowance on switch
+                    }}
                     className={`flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
                       calculationMode === "gross"
                         ? "bg-white text-gray-900 shadow-sm ring-2 ring-blue-500"
                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                     }`}
                   >
-                    Gross Income
+                    Basic Income
                   </button>
                   <button
-                    onClick={() => setCalculationMode("net")}
+                    onClick={() => {
+                      setCalculationMode("net");
+                      setMonthlyAllowance(0);
+                    }}
                     className={`flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
                       calculationMode === "net"
                         ? "bg-white text-gray-900 shadow-sm ring-2 ring-blue-500"
@@ -288,181 +281,185 @@ function RouteComponent() {
               </div>
             </div>
 
-            {/* Income Input */}
-            <div className="mb-6">
-              <label
-                htmlFor="monthlyIncome"
-                className="block text-sm font-medium text-gray-700 mb-3"
-              >
-                Monthly {calculationMode === "gross" ? "Gross" : "Net"} Income
-                (Birr)
-              </label>
-              <div className="relative">
-                <input
-                  type="number"
-                  id="monthlyIncome"
-                  value={
-                    calculationMode === "gross"
-                      ? monthlyIncome || ""
-                      : monthlyNetIncome || ""
-                  }
-                  onChange={(e) =>
-                    calculationMode === "gross"
-                      ? handleMonthlyIncomeChange(e.target.value)
-                      : handleMonthlyNetIncomeChange(e.target.value)
-                  }
-                  className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                  placeholder={`Enter monthly ${calculationMode === "gross" ? "gross" : "net"} income`}
-                  min="0"
-                  step="0.01"
-                />
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm">
-                  Birr
+            {/* Input Section */}
+            <div className="space-y-6 mb-8">
+              {/* Income Input */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Monthly {calculationMode === "gross" ? "Basic" : "Net"} Income (Birr)
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={
+                      calculationMode === "gross"
+                        ? monthlyIncome || ""
+                        : monthlyNetIncome || ""
+                    }
+                    onChange={(e) =>
+                      calculationMode === "gross"
+                        ? handleMonthlyIncomeChange(e.target.value)
+                        : handleMonthlyNetIncomeChange(e.target.value)
+                    }
+                    className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="0.00"
+                    min="0"
+                    step="0.01"
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm">
+                    Birr
+                  </div>
                 </div>
               </div>
 
-              {calculationMode == "gross" && (
-                <div className="mt-3 bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
-                  <div className="text-xs text-green-600 font-medium mb-1">
-                    Net Income
+              {/* Allowance Input (Only in Gross Mode) */}
+              {calculationMode === "gross" && (
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Monthly Non Taxable Allowance (Birr)
+                  </label>
+                  <div className="relative mb-2">
+                    <input
+                      type="number"
+                      value={monthlyAllowance || ""}
+                      onChange={(e) => handleAllowanceChange(e.target.value)}
+                      className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      placeholder="Enter total allowance"
+                      min="0"
+                      step="0.01"
+                    />
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm">
+                      Birr
+                    </div>
                   </div>
-                  <div className="text-lg font-bold text-green-900">
-                    {monthlyNetIncome.toFixed(2)}
+                  
+                  {/* Allowance Contextual Guide */}
+                  <div className="text-sm space-y-1">
+                    <div className="flex justify-between text-gray-600">
+                      <span>Max Non-Taxable Limit:</span>
+                      <span className="font-medium">{monthlyCalc.nonTaxableLimit.toLocaleString()} Birr</span>
+                    </div>
+                    <div className="flex justify-between text-gray-600">
+                      <span>Taxable Portion:</span>
+                      <span className={`${monthlyCalc.taxableAllowance > 0 ? "text-red-600 font-medium" : "text-gray-600"}`}>
+                        {monthlyCalc.taxableAllowance.toLocaleString()} Birr
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2">
+                      * Up to 25% of your Basic Salary (max 2,200 ETB) is tax-free. Anything above that is taxed.
+                    </p>
                   </div>
-                  <div className="text-xs text-green-600">Birr</div>
+                </div>
+              )}
+
+              {/* Quick Result Preview */}
+              {calculationMode === "gross" && (
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200 flex justify-between items-center">
+                  <span className="text-green-800 font-medium">Net Income</span>
+                  <span className="text-2xl font-bold text-green-700">
+                    {monthlyNetIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span className="text-sm font-normal">Birr</span>
+                  </span>
                 </div>
               )}
             </div>
 
-            {/* Monthly Results */}
+            {/* Monthly Breakdown Results */}
             <div className="mb-8">
               <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center">
-                <svg
-                  className="w-5 h-5 text-blue-500 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v16a2 2 0 002 2z"
-                  />
+                <svg className="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 Monthly Breakdown
               </h3>
 
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
-                  <div className="text-xs text-blue-600 font-medium mb-1">
-                    Gross Income
-                  </div>
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                {/* 1. Basic Salary */}
+                <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
+                  <div className="text-xs text-blue-600 font-medium mb-1">Basic Salary</div>
                   <div className="text-lg font-bold text-blue-900">
-                    {monthlyIncome.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                    {monthlyIncome.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </div>
-                  <div className="text-xs text-blue-600">Birr</div>
+                  <div className="text-xs text-blue-500">Birr</div>
                 </div>
 
-                <div className="bg-gradient-to-br from-red-50 to-red-100 p-4 rounded-lg border border-red-200">
-                  <div className="text-xs text-red-600 font-medium mb-1">
-                    Tax
+                {/* 2. Total Taxable Income */}
+                <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                  <div className="text-xs text-indigo-600 font-medium mb-1">Taxable Income</div>
+                  <div className="text-lg font-bold text-indigo-900">
+                    {monthlyCalc.totalTaxableIncome.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </div>
+                  <div className="text-xs text-indigo-500">Basic + Excess Allowance</div>
+                </div>
+
+                {/* 3. Total Allowance */}
+                <div className="bg-purple-50 p-3 rounded-lg border border-purple-100">
+                  <div className="text-xs text-purple-600 font-medium mb-1">Total Allowance</div>
+                  <div className="text-lg font-bold text-purple-900">
+                    {monthlyAllowance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  </div>
+                  <div className="text-xs text-purple-500">
+                    {monthlyCalc.taxableAllowance > 0 ? `${monthlyCalc.taxableAllowance.toLocaleString()} Taxable` : "Non-Taxable"}
+                  </div>
+                </div>
+
+                {/* 4. Tax */}
+                <div className="bg-red-50 p-3 rounded-lg border border-red-100">
+                  <div className="text-xs text-red-600 font-medium mb-1">Income Tax</div>
                   <div className="text-lg font-bold text-red-900">
-                    {monthlyTaxCalculation.tax.toFixed(2)}
+                    {monthlyCalc.taxDetails.tax.toFixed(2)}
                   </div>
-                  <div className="text-xs text-red-600">Birr</div>
+                  <div className="text-xs text-red-500">Birr</div>
                 </div>
 
-                <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-lg border border-orange-200">
-                  <div className="text-xs text-orange-600 font-medium mb-1">
-                    Pension (7%)
-                  </div>
+                {/* 5. Pension */}
+                <div className="bg-orange-50 p-3 rounded-lg border border-orange-100">
+                  <div className="text-xs text-orange-600 font-medium mb-1">Pension (7%)</div>
                   <div className="text-lg font-bold text-orange-900">
-                    {monthlyPension.toFixed(2)}
+                    {monthlyCalc.pension.toFixed(2)}
                   </div>
-                  <div className="text-xs text-orange-600">Birr</div>
+                  <div className="text-xs text-orange-500">On Basic Salary</div>
                 </div>
 
-                <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
-                  <div className="text-xs text-green-600 font-medium mb-1">
-                    Net Income
-                  </div>
+                {/* 6. Net Income */}
+                <div className="bg-green-50 p-3 rounded-lg border border-green-100 shadow-sm">
+                  <div className="text-xs text-green-600 font-medium mb-1">Net Income</div>
                   <div className="text-lg font-bold text-green-900">
-                    {monthlyNetIncome.toFixed(2)}
+                    {monthlyNetIncome.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </div>
-                  <div className="text-xs text-green-600">Birr</div>
+                  <div className="text-xs text-green-500">Birr</div>
                 </div>
               </div>
 
-              {/* Summary */}
-              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                <div className="text-sm text-gray-700 text-center">
-                  <span className="font-medium">
-                    {monthlyIncome.toFixed(2)}
-                  </span>{" "}
-                  -{" "}
-                  <span className="text-red-600 font-medium">
-                    {monthlyTaxCalculation.tax.toFixed(2)}
-                  </span>{" "}
-                  -{" "}
-                  <span className="text-orange-600 font-medium">
-                    {monthlyPension.toFixed(2)}
-                  </span>{" "}
-                  ={" "}
-                  <span className="text-green-600 font-bold">
-                    {monthlyNetIncome.toFixed(2)} Birr
-                  </span>
-                </div>
+              {/* Summary Formula */}
+              <div className="mt-4 p-3 bg-gray-50 rounded-lg text-center text-sm text-gray-600">
+                <span className="font-medium text-gray-900">
+                  ({monthlyIncome.toLocaleString()} + {monthlyAllowance.toLocaleString()})
+                </span>{" "}
+                Gross -{" "}
+                <span className="text-red-600 font-medium">{monthlyCalc.taxDetails.tax.toFixed(2)}</span> Tax -{" "}
+                <span className="text-orange-600 font-medium">{monthlyCalc.pension.toFixed(2)}</span> Pension ={" "}
+                <span className="text-green-700 font-bold">{monthlyNetIncome.toFixed(2)} Birr</span>
               </div>
 
-              {/* Calculation Steps */}
-              {monthlyTaxCalculation.steps.length > 0 && (
-                <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <h4 className="text-sm font-medium text-blue-800 mb-3 flex items-center">
-                    <svg
-                      className="w-4 h-4 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                      />
-                    </svg>
-                    Calculation Steps
-                  </h4>
-                  <div className="space-y-2">
-                    {monthlyTaxCalculation.steps.map((step, index) => (
-                      <div
-                        key={index}
-                        className="text-sm text-blue-700 flex items-start"
-                      >
-                        <span className="w-5 h-5 bg-blue-200 text-blue-800 rounded-full flex items-center justify-center text-xs font-medium mr-3 mt-0.5 flex-shrink-0">
+              {/* Detailed Steps */}
+              {combinedMonthlySteps.length > 0 && (
+                <div className="mt-6 p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+                  <h4 className="text-sm font-semibold text-gray-800 mb-4 border-b pb-2">Calculation Steps</h4>
+                  <div className="space-y-3">
+                    {combinedMonthlySteps.map((step, index) => (
+                      <div key={index} className="flex items-start text-sm">
+                        <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-xs font-bold mr-3">
                           {index + 1}
                         </span>
-                        <span className="leading-relaxed">{step}</span>
+                        <span className="text-gray-700 pt-0.5">{step}</span>
                       </div>
                     ))}
-                  </div>
-                  <div className="mt-3 pt-3 border-t border-blue-200">
-                    <div className="text-sm text-blue-700 flex items-center">
-                      <span className="w-5 h-5 bg-blue-200 text-blue-800 rounded-full flex items-center justify-center text-xs font-medium mr-3 flex-shrink-0">
-                        {monthlyTaxCalculation.steps.length + 1}
+                    <div className="flex items-center text-sm pt-2 border-t mt-2">
+                      <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-xs font-bold mr-3">
+                        {combinedMonthlySteps.length + 1}
                       </span>
-                      <span>
-                        <strong>Pension:</strong>{" "}
-                        {monthlyIncome.toLocaleString(undefined, {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}{" "}
-                        × 7% = {monthlyPension.toFixed(2)} Birr
+                      <span className="text-gray-700">
+                        <strong>Pension:</strong> {monthlyIncome.toLocaleString()} (Basic) × 7% = {monthlyCalc.pension.toFixed(2)} Birr
                       </span>
                     </div>
                   </div>
@@ -470,237 +467,41 @@ function RouteComponent() {
               )}
             </div>
 
-            {/* Annual Results */}
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center">
-                <svg
-                  className="w-5 h-5 text-green-500 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  />
-                </svg>
-                Annual Summary
-              </h3>
-
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-3 rounded-lg border border-blue-200">
-                  <div className="text-xs text-blue-600 font-medium mb-1">
-                    Gross Annual
+            {/* Annual Summary (Simplified View) */}
+            <div className="border-t pt-6">
+               <h3 className="text-lg font-medium text-gray-900 mb-4">Annual Summary</h3>
+               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="p-3 bg-gray-50 rounded border">
+                    <div className="text-xs text-gray-500">Annual Basic</div>
+                    <div className="font-semibold">{annualIncome.toLocaleString()}</div>
                   </div>
-                  <div className="text-base font-bold text-blue-900">
-                    {annualIncome.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                  <div className="p-3 bg-gray-50 rounded border">
+                    <div className="text-xs text-gray-500">Annual Tax</div>
+                    <div className="font-semibold text-red-600">{annualCalc.taxDetails.tax.toLocaleString(undefined, {maximumFractionDigits:2})}</div>
                   </div>
-                  <div className="text-xs text-blue-600">Birr</div>
-                </div>
-
-                <div className="bg-gradient-to-br from-red-50 to-red-100 p-3 rounded-lg border border-red-200">
-                  <div className="text-xs text-red-600 font-medium mb-1">
-                    Annual Tax
+                  <div className="p-3 bg-gray-50 rounded border">
+                    <div className="text-xs text-gray-500">Annual Pension</div>
+                    <div className="font-semibold text-orange-600">{annualCalc.pension.toLocaleString(undefined, {maximumFractionDigits:2})}</div>
                   </div>
-                  <div className="text-base font-bold text-red-900">
-                    {annualTaxCalculation.tax.toFixed(2)}
+                  <div className="p-3 bg-gray-50 rounded border">
+                    <div className="text-xs text-gray-500">Annual Net</div>
+                    <div className="font-semibold text-green-600">{annualNetIncome.toLocaleString(undefined, {maximumFractionDigits:2})}</div>
                   </div>
-                  <div className="text-xs text-red-600">Birr</div>
-                </div>
-
-                <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-3 rounded-lg border border-orange-200">
-                  <div className="text-xs text-orange-600 font-medium mb-1">
-                    Annual Pension
-                  </div>
-                  <div className="text-base font-bold text-orange-900">
-                    {annualPension.toFixed(2)}
-                  </div>
-                  <div className="text-xs text-orange-600">Birr</div>
-                </div>
-
-                <div className="bg-gradient-to-br from-green-50 to-green-100 p-3 rounded-lg border border-green-200">
-                  <div className="text-xs text-green-600 font-medium mb-1">
-                    Net Annual
-                  </div>
-                  <div className="text-base font-bold text-green-900">
-                    {annualNetIncome.toFixed(2)}
-                  </div>
-                  <div className="text-xs text-green-600">Birr</div>
-                </div>
-              </div>
-
-              {/* Annual Summary */}
-              <div className="p-4 bg-gray-50 rounded-lg"></div>
-
-              {/* Annual Calculation Steps */}
-              {annualTaxCalculation.steps.length > 0 && (
-                <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <h4 className="text-sm font-medium text-blue-800 mb-3 flex items-center">
-                    <svg
-                      className="w-4 h-4 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                      />
-                    </svg>
-                    Annual Calculation Steps
-                  </h4>
-                  <div className="space-y-2">
-                    {annualTaxCalculation.steps.map((step, index) => (
-                      <div
-                        key={index}
-                        className="text-sm text-blue-700 flex items-start"
-                      >
-                        <span className="w-5 h-5 bg-blue-200 text-blue-800 rounded-full flex items-center justify-center text-xs font-medium mr-3 mt-0.5 flex-shrink-0">
-                          {index + 1}
-                        </span>
-                        <span className="leading-relaxed">{step}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-3 pt-3 border-t border-blue-200">
-                    <div className="text-sm text-blue-700 flex items-center">
-                      <span className="w-5 h-5 bg-blue-200 text-blue-800 rounded-full flex items-center justify-center text-xs font-medium mr-3 flex-shrink-0">
-                        {annualTaxCalculation.steps.length + 1}
-                      </span>
-                      <span>
-                        <strong>Pension:</strong>{" "}
-                        {annualIncome.toLocaleString(undefined, {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}{" "}
-                        × 7% = {annualPension.toFixed(2)} Birr
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
+               </div>
             </div>
+
           </div>
         </main>
 
-        {/* Information Box */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 sm:p-6">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <svg
-                className="h-6 w-6 text-blue-500"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-            <div className="ml-4">
-              <h3 className="text-base font-medium text-blue-800 mb-3">
-                How the calculation works
-              </h3>
-              <div className="text-sm text-blue-700 space-y-2">
-                <p>
-                  • <strong>Tax Formula:</strong> Tax = (Gross Income × Tax
-                  Rate) - Deductible Amount
-                </p>
-                <p>
-                  • <strong>Pension Formula:</strong> Pension = Gross Income ×
-                  7%
-                </p>
-                <p>
-                  • <strong>Net Income Formula:</strong> Net = Gross Income -
-                  Tax - Pension
-                </p>
-                <div className="mt-3 p-3 bg-blue-100 rounded-lg">
-                  <p className="font-medium text-blue-800 mb-2">
-                    Example for 10,001 Birr Gross:
-                  </p>
-                  <div className="space-y-1 text-sm">
-                    <p>• Gross Tax = 10,001 × 30% = 3,000.30 Birr</p>
-                    <p>• Final Tax = 3,000.30 - 1,350 = 1,650.30 Birr</p>
-                    <p>• Pension = 10,001 × 7% = 700.07 Birr</p>
-                    <p>
-                      • Net Income = 10,001 - 1,650.30 - 700.07 = 7,650.63 Birr
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Tax Brackets Table */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          <div className="px-4 sm:px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 border-b">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
-              Tax Brackets & Deductibles
-            </h2>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Monthly Income (Birr)
-                  </th>
-                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Tax Rate
-                  </th>
-                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Deductible
-                  </th>
-                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Formula
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {taxBrackets.map((bracket, index) => (
-                  <tr
-                    key={index}
-                    className="hover:bg-gray-50 transition-colors duration-150"
-                  >
-                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {bracket.min.toLocaleString()} -{" "}
-                      {bracket.max ? bracket.max.toLocaleString() : "∞"}
-                    </td>
-                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {bracket.rate}%
-                      </span>
-                    </td>
-                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {bracket.deductible.toLocaleString()} Birr
-                    </td>
-                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {bracket.rate > 0 ? (
-                        <span className="font-mono text-xs">
-                          (Income × {bracket.rate}%) -{" "}
-                          {bracket.deductible.toLocaleString()}
-                        </span>
-                      ) : (
-                        <span className="text-green-600 font-medium">
-                          No tax
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        {/* Info Box */}
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+           <h3 className="font-semibold text-blue-900 mb-2">How Allowances work</h3>
+           <ul className="list-disc list-inside text-sm text-blue-800 space-y-1">
+             <li><strong>Basic Salary</strong> is fully taxable.</li>
+             <li><strong>Allowances</strong> are non-taxable up to 25% of Basic Salary or 2,200 Birr (whichever is lower).</li>
+             <li>Any allowance amount exceeding this limit is added to the Basic Salary to form the <strong>Taxable Income</strong>.</li>
+             <li>Pension (7%) is calculated only on the Basic Salary.</li>
+           </ul>
         </div>
       </div>
     </>
