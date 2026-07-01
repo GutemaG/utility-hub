@@ -1,3 +1,5 @@
+import { TaxBracketInfo } from "@/components/tax-bracket-info";
+import { taxBrackets } from "@/lib/constants";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
@@ -5,21 +7,6 @@ export const Route = createFileRoute("/salary-calculation")({
   component: RouteComponent,
 });
 
-interface TaxBracket {
-  min: number;
-  max: number | null;
-  rate: number;
-  deductible: number;
-}
-
-const taxBrackets: TaxBracket[] = [
-  { min: 0, max: 2000.0, rate: 0, deductible: 0 },
-  { min: 2001.0, max: 4000.0, rate: 15, deductible: 300 },
-  { min: 4001.0, max: 7000.0, rate: 20, deductible: 500 },
-  { min: 7001.0, max: 10000.0, rate: 25, deductible: 850 },
-  { min: 10001.0, max: 14000.0, rate: 30, deductible: 1350 },
-  { min: 14001.0, max: null, rate: 35, deductible: 2050 },
-];
 
 const MAX_NON_TAXABLE_ALLOWANCE_AMOUNT = 2200;
 
@@ -494,6 +481,9 @@ function RouteComponent() {
         </main>
 
         {/* Info Box */}
+      <TaxBracketInfo />  
+       
+
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
            <h3 className="font-semibold text-blue-900 mb-2">How Allowances work</h3>
            <ul className="list-disc list-inside text-sm text-blue-800 space-y-1">

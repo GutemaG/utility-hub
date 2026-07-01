@@ -16,6 +16,38 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { Input } from "./ui/input";
+import { Link } from "@tanstack/react-router";
+import { cn } from "@/lib/utils";
+
+
+interface SidebarLinkProps {
+  item: {
+    url: string
+    title: string
+  }
+  className?: string
+  // Add the size prop definition here 👇
+  size?: "sm" | "md" | "lg" 
+}
+
+export function SidebarLink({ item, className, size = "md" }: SidebarLinkProps) {
+  return (
+    <Link
+      to={item.url}
+      className={cn(
+        "text-sidebar-foreground ring-sidebar-ring flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 outline-hidden focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 transition-all",
+        size === "sm" && "text-xs",
+        size === "md" && "text-sm",
+        "group-data-[collapsible=icon]:hidden",
+        className,
+        "hover:not-.active:font-medium",
+        "[&.active]:bg-sidebar-ring [&.active]:text-sidebar-accent-foreground [&.active]:font-medium"
+      )}
+    >
+      {item.title}
+    </Link>
+  )
+}
 
 // This is sample data.
 const data = {
@@ -180,9 +212,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       <SidebarMenuSubItem key={item.title}>
                         <SidebarMenuSubButton
                           asChild
-                          isActive={item.url === window.location.pathname}
+                          // isActive={item.url === window.location.pathname}
                         >
-                          <a href={item.url}>{item.title}</a>
+                          <SidebarLink item={item} size="sm" />
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}

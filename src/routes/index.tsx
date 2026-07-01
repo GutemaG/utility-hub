@@ -60,6 +60,11 @@ function Index() {
           description="Calculate Body Mass Index with health category feedback."
           to="/bmi-calculation"
         />
+        <FeatureCard
+          title="Payroll Generator"
+          description="Generate detailed payroll reports for employees with deductions and benefits by uploading a CSV file (Ethiopia only)."
+          to="/payroll-generator"
+        />
       </div>
 
       <h2 className="text-xl font-semibold mb-4">🔄 Conversions</h2>
@@ -72,7 +77,7 @@ function Index() {
         <FeatureCard
           title="Temperature"
           description="Celsius, Fahrenheit, Kelvin."
-          to="/tempratur-conversion"
+          to="/temperature-conversion"
         />
         <FeatureCard
           title="Shoe Size"
@@ -122,6 +127,16 @@ function Index() {
           title="UUID Generator"
           description="Generate universally unique identifiers."
           to="/uuid-generator"
+        />
+        <FeatureCard
+          title="QR Code Generator"
+          description=" Create QR codes for URLs, text, and more."
+          to="/qr-code-generator"
+        />
+        <FeatureCard
+          title="Markdown Editor"
+          description="Create and preview Markdown documents."
+          to="/mark-down-editor"
         />
       </div>
 
