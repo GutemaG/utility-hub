@@ -12,20 +12,30 @@ function FeatureCard({
   title,
   description,
   to,
+  size = "default",
 }: {
   title: string;
   description: string;
   to: string;
+  size?: "default" | "compact";
 }) {
+  const isCompact = size === "compact";
+
   return (
     <Link
       to={to}
-      className="block rounded-lg border border-border bg-card p-5 shadow-md transition hover:border-blue-500 hover:shadow-xl"
+      className={`block rounded-lg border border-border bg-card shadow-sm transition hover:border-blue-500 hover:shadow-md ${
+        isCompact ? "p-3" : "p-4"
+      }`}
     >
-      <h3 className="mb-1 text-lg font-semibold text-blue-600 dark:text-blue-400">
+      <h3
+        className={`mb-1 font-semibold text-blue-600 dark:text-blue-400 ${
+          isCompact ? "text-base" : "text-[1.02rem]"
+        }`}
+      >
         {title}
       </h3>
-      <p className="text-sm text-muted-foreground">{description}</p>
+      <p className={`${isCompact ? "text-xs" : "text-sm"} text-muted-foreground`}>{description}</p>
     </Link>
   );
 }
@@ -65,7 +75,6 @@ function Index() {
           generators for daily life, health, finance, tech, and more.
         </p>
       </div>
-
       <h2 className="text-xl font-semibold mb-4 mt-8">🧮 Calculations</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <FeatureCard
