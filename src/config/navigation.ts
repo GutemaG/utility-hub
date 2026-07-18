@@ -85,6 +85,11 @@ export const navigationGroups: NavGroup[] = [
         description: "Seconds, minutes, hours, days, weeks, months, years.",
       },
       {
+        title: "Currency Conversion",
+        url: "/currency-conversion",
+        description: "Live conversion with latest exchange rates from Frankfurter API.",
+      },
+      {
         title: "Ethiopian Date Convertors",
         url: "/age-and-date-convertors",
         description: "Exact age, date difference, add/subtract days.",
