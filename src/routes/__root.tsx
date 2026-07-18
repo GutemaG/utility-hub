@@ -1,8 +1,10 @@
 import * as React from "react";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/app-sidebar";
 import { CommandPalette } from "@/components/command-palette";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { navigationGroups } from "@/config/navigation";
+import { recordToolUsage } from "@/lib/tool-preferences";
 import {
   SidebarInset,
   SidebarProvider,
@@ -17,8 +19,24 @@ const TanStackRouterDevtools = import.meta.env.DEV
     )
   : () => null;
 
-export const Route = createRootRoute({
-  component: () => (
+const knownToolUrls = new Set(
+  navigationGroups.flatMap((group) => group.items.map((item) => item.url))
+);
+
+function RootLayout() {
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  });
+
+  React.useEffect(() => {
+    if (!knownToolUrls.has(pathname)) {
+      return;
+    }
+
+    recordToolUsage(pathname);
+  }, [pathname]);
+
+  return (
     <>
       <SidebarProvider>
         <CommandPalette />
@@ -39,7 +57,11 @@ export const Route = createRootRoute({
         <TanStackRouterDevtools />
       </React.Suspense>
     </>
-  ),
+  );
+}
+
+export const Route = createRootRoute({
+  component: RootLayout,
   errorComponent: ({ error }) => (
     <div className="flex min-h-screen items-center justify-center bg-background p-8">
       <div className="max-w-md rounded-xl border border-red-200 bg-red-50 p-8 text-center shadow-sm">

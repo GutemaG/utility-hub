@@ -1,6 +1,11 @@
 import * as React from "react";
-import { GalleryVerticalEnd, Keyboard } from "lucide-react";
+import { Keyboard, Star } from "lucide-react";
 import { navigationGroups } from "@/config/navigation";
+import {
+  getToolPreferences,
+  subscribeToolPreferences,
+  toggleFavoriteTool,
+} from "@/lib/tool-preferences";
 
 import {
   Sidebar,
@@ -9,10 +14,10 @@ import {
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
-  SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
   useSidebar,
@@ -56,12 +61,30 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { isMobile, setOpenMobile } = useSidebar();
   const [sidebarItems, setSidebarItems] = React.useState(navigationGroups);
   const [filter, setFilter] = React.useState("");
+  const [preferences, setPreferences] = React.useState(getToolPreferences);
+
+  const toolsByUrl = React.useMemo(
+    () =>
+      new Map(
+        navigationGroups.flatMap((group) =>
+          group.items.map((item) => [item.url, item] as const)
+        )
+      ),
+    []
+  );
 
   const closeMobileSidebar = React.useCallback(() => {
     if (isMobile) {
       setOpenMobile(false);
     }
   }, [isMobile, setOpenMobile]);
+
+  React.useEffect(() => {
+    setPreferences(getToolPreferences());
+    return subscribeToolPreferences(() => {
+      setPreferences(getToolPreferences());
+    });
+  }, []);
 
   React.useEffect(() => {
     if (!filter) {
@@ -86,6 +109,67 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     setSidebarItems(filtered);
   }, [filter]);
 
+  const quickSections = React.useMemo(() => {
+    const toItems = (urls: string[]) =>
+      urls
+        .map((url) => toolsByUrl.get(url))
+        .filter((item): item is NonNullable<(typeof navigationGroups)[number]["items"][number]> => Boolean(item));
+
+    const favorites = toItems(preferences.favorites);
+    const sections = [{ title: "Favorites", items: favorites }];
+
+    const normalizedFilter = filter.trim().toLowerCase();
+    if (!normalizedFilter) {
+      return sections.filter((section) => section.items.length > 0);
+    }
+
+    return sections
+      .map((section) => ({
+        ...section,
+        items: section.items.filter((item) => item.title.toLowerCase().includes(normalizedFilter)),
+      }))
+      .filter((section) => section.items.length > 0);
+  }, [filter, preferences.favorites, toolsByUrl]);
+
+  const toggleFavorite = React.useCallback((url: string) => {
+    toggleFavoriteTool(url);
+  }, []);
+
+  const isFavorite = React.useCallback(
+    (url: string) => preferences.favorites.includes(url),
+    [preferences.favorites]
+  );
+
+  const renderToolItem = React.useCallback(
+    (item: { url: string; title: string }) => (
+      <SidebarMenuSubItem key={item.url}>
+        <div className="group relative">
+          <SidebarLink item={item} size="sm" onSelect={closeMobileSidebar} className="pr-8" />
+          <SidebarMenuAction
+            aria-label={isFavorite(item.url) ? `Remove ${item.title} from favorites` : `Add ${item.title} to favorites`}
+            title={isFavorite(item.url) ? "Remove from favorites" : "Add to favorites"}
+            className={cn(
+              "top-1 h-5 w-5",
+              isFavorite(item.url)
+                ? "text-amber-500 opacity-100"
+                : isMobile
+                  ? "text-sidebar-foreground/70 opacity-100"
+                  : "text-sidebar-foreground/60 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
+            )}
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              toggleFavorite(item.url);
+            }}
+          >
+            <Star className={cn("h-3.5 w-3.5", isFavorite(item.url) && "fill-current")} />
+          </SidebarMenuAction>
+        </div>
+      </SidebarMenuSubItem>
+    ),
+    [closeMobileSidebar, isFavorite, toggleFavorite]
+  );
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -93,12 +177,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link to="/" onClick={closeMobileSidebar}>
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <GalleryVerticalEnd className="size-4" />
+                <div className="bg-sidebar-primary/15 flex aspect-square size-8 items-center justify-center rounded-lg border border-sidebar-border">
+                  <img
+                    src="/logo.png"
+                    alt="Utility Hub logo"
+                    className="size-6 rounded-sm object-contain"
+                  />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-medium">Utility Hub</span>
-                  <span className="">v1.0.0</span>
+                  <span className="">v1.0.1</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -118,6 +206,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
             />
+            {quickSections.map((section) => (
+              <SidebarMenuItem key={section.title}>
+                <SidebarMenuButton asChild>
+                  <span className="font-medium">{section.title}</span>
+                </SidebarMenuButton>
+                <SidebarMenuSub>
+                  {section.items.map((item) => renderToolItem(item))}
+                </SidebarMenuSub>
+              </SidebarMenuItem>
+            ))}
             {sidebarItems.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
@@ -127,16 +225,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </SidebarMenuButton>
                 {item.items?.length ? (
                   <SidebarMenuSub>
-                    {item.items.map((item) => (
-                      <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton
-                          asChild
-                          // isActive={item.url === window.location.pathname}
-                        >
-                          <SidebarLink item={item} size="sm" onSelect={closeMobileSidebar} />
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
+                    {item.items.map((subItem) => renderToolItem(subItem))}
                   </SidebarMenuSub>
                 ) : null}
               </SidebarMenuItem>
