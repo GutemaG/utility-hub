@@ -11,19 +11,26 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WeightConversionRouteImport } from './routes/weight-conversion'
 import { Route as UuidGeneratorRouteImport } from './routes/uuid-generator'
+import { Route as UrlEncoderRouteImport } from './routes/url-encoder'
+import { Route as UnixTimestampRouteImport } from './routes/unix-timestamp'
 import { Route as TimeConversionRouteImport } from './routes/time-conversion'
 import { Route as TemperatureConversionRouteImport } from './routes/temperature-conversion'
 import { Route as SpeedConversionRouteImport } from './routes/speed-conversion'
 import { Route as ShoeSizeConversionRouteImport } from './routes/shoe-size-conversion'
 import { Route as SalaryCalculationRouteImport } from './routes/salary-calculation'
+import { Route as RegexTesterRouteImport } from './routes/regex-tester'
 import { Route as QrCodeGeneratorRouteImport } from './routes/qr-code-generator'
 import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
 import { Route as MarkDownEditorRouteImport } from './routes/mark-down-editor'
 import { Route as LengthConversionRouteImport } from './routes/length-conversion'
+import { Route as JwtDecoderRouteImport } from './routes/jwt-decoder'
+import { Route as JsonValidatorRouteImport } from './routes/json-validator'
 import { Route as EthiopianCalendarRouteImport } from './routes/ethiopian-calendar'
 import { Route as DataStorageConversionRouteImport } from './routes/data-storage-conversion'
+import { Route as CharacterCounterRouteImport } from './routes/character-counter'
 import { Route as BmiCalculationRouteImport } from './routes/bmi-calculation'
+import { Route as Base64ToolRouteImport } from './routes/base64-tool'
 import { Route as AreaConversionRouteImport } from './routes/area-conversion'
 import { Route as AgeAndDateConvertorsRouteImport } from './routes/age-and-date-convertors'
 import { Route as IndexRouteImport } from './routes/index'
@@ -36,6 +43,16 @@ const WeightConversionRoute = WeightConversionRouteImport.update({
 const UuidGeneratorRoute = UuidGeneratorRouteImport.update({
   id: '/uuid-generator',
   path: '/uuid-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UrlEncoderRoute = UrlEncoderRouteImport.update({
+  id: '/url-encoder',
+  path: '/url-encoder',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnixTimestampRoute = UnixTimestampRouteImport.update({
+  id: '/unix-timestamp',
+  path: '/unix-timestamp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TimeConversionRoute = TimeConversionRouteImport.update({
@@ -63,6 +80,11 @@ const SalaryCalculationRoute = SalaryCalculationRouteImport.update({
   path: '/salary-calculation',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegexTesterRoute = RegexTesterRouteImport.update({
+  id: '/regex-tester',
+  path: '/regex-tester',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QrCodeGeneratorRoute = QrCodeGeneratorRouteImport.update({
   id: '/qr-code-generator',
   path: '/qr-code-generator',
@@ -88,6 +110,16 @@ const LengthConversionRoute = LengthConversionRouteImport.update({
   path: '/length-conversion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JwtDecoderRoute = JwtDecoderRouteImport.update({
+  id: '/jwt-decoder',
+  path: '/jwt-decoder',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JsonValidatorRoute = JsonValidatorRouteImport.update({
+  id: '/json-validator',
+  path: '/json-validator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EthiopianCalendarRoute = EthiopianCalendarRouteImport.update({
   id: '/ethiopian-calendar',
   path: '/ethiopian-calendar',
@@ -98,9 +130,19 @@ const DataStorageConversionRoute = DataStorageConversionRouteImport.update({
   path: '/data-storage-conversion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CharacterCounterRoute = CharacterCounterRouteImport.update({
+  id: '/character-counter',
+  path: '/character-counter',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BmiCalculationRoute = BmiCalculationRouteImport.update({
   id: '/bmi-calculation',
   path: '/bmi-calculation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Base64ToolRoute = Base64ToolRouteImport.update({
+  id: '/base64-tool',
+  path: '/base64-tool',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AreaConversionRoute = AreaConversionRouteImport.update({
@@ -123,19 +165,26 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/age-and-date-convertors': typeof AgeAndDateConvertorsRoute
   '/area-conversion': typeof AreaConversionRoute
+  '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
+  '/character-counter': typeof CharacterCounterRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
+  '/json-validator': typeof JsonValidatorRoute
+  '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
+  '/regex-tester': typeof RegexTesterRoute
   '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
   '/temperature-conversion': typeof TemperatureConversionRoute
   '/time-conversion': typeof TimeConversionRoute
+  '/unix-timestamp': typeof UnixTimestampRoute
+  '/url-encoder': typeof UrlEncoderRoute
   '/uuid-generator': typeof UuidGeneratorRoute
   '/weight-conversion': typeof WeightConversionRoute
 }
@@ -143,19 +192,26 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/age-and-date-convertors': typeof AgeAndDateConvertorsRoute
   '/area-conversion': typeof AreaConversionRoute
+  '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
+  '/character-counter': typeof CharacterCounterRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
+  '/json-validator': typeof JsonValidatorRoute
+  '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
+  '/regex-tester': typeof RegexTesterRoute
   '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
   '/temperature-conversion': typeof TemperatureConversionRoute
   '/time-conversion': typeof TimeConversionRoute
+  '/unix-timestamp': typeof UnixTimestampRoute
+  '/url-encoder': typeof UrlEncoderRoute
   '/uuid-generator': typeof UuidGeneratorRoute
   '/weight-conversion': typeof WeightConversionRoute
 }
@@ -164,19 +220,26 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/age-and-date-convertors': typeof AgeAndDateConvertorsRoute
   '/area-conversion': typeof AreaConversionRoute
+  '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
+  '/character-counter': typeof CharacterCounterRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
+  '/json-validator': typeof JsonValidatorRoute
+  '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
+  '/regex-tester': typeof RegexTesterRoute
   '/salary-calculation': typeof SalaryCalculationRoute
   '/shoe-size-conversion': typeof ShoeSizeConversionRoute
   '/speed-conversion': typeof SpeedConversionRoute
   '/temperature-conversion': typeof TemperatureConversionRoute
   '/time-conversion': typeof TimeConversionRoute
+  '/unix-timestamp': typeof UnixTimestampRoute
+  '/url-encoder': typeof UrlEncoderRoute
   '/uuid-generator': typeof UuidGeneratorRoute
   '/weight-conversion': typeof WeightConversionRoute
 }
@@ -186,19 +249,26 @@ export interface FileRouteTypes {
     | '/'
     | '/age-and-date-convertors'
     | '/area-conversion'
+    | '/base64-tool'
     | '/bmi-calculation'
+    | '/character-counter'
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
+    | '/json-validator'
+    | '/jwt-decoder'
     | '/length-conversion'
     | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
     | '/qr-code-generator'
+    | '/regex-tester'
     | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
     | '/temperature-conversion'
     | '/time-conversion'
+    | '/unix-timestamp'
+    | '/url-encoder'
     | '/uuid-generator'
     | '/weight-conversion'
   fileRoutesByTo: FileRoutesByTo
@@ -206,19 +276,26 @@ export interface FileRouteTypes {
     | '/'
     | '/age-and-date-convertors'
     | '/area-conversion'
+    | '/base64-tool'
     | '/bmi-calculation'
+    | '/character-counter'
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
+    | '/json-validator'
+    | '/jwt-decoder'
     | '/length-conversion'
     | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
     | '/qr-code-generator'
+    | '/regex-tester'
     | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
     | '/temperature-conversion'
     | '/time-conversion'
+    | '/unix-timestamp'
+    | '/url-encoder'
     | '/uuid-generator'
     | '/weight-conversion'
   id:
@@ -226,19 +303,26 @@ export interface FileRouteTypes {
     | '/'
     | '/age-and-date-convertors'
     | '/area-conversion'
+    | '/base64-tool'
     | '/bmi-calculation'
+    | '/character-counter'
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
+    | '/json-validator'
+    | '/jwt-decoder'
     | '/length-conversion'
     | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
     | '/qr-code-generator'
+    | '/regex-tester'
     | '/salary-calculation'
     | '/shoe-size-conversion'
     | '/speed-conversion'
     | '/temperature-conversion'
     | '/time-conversion'
+    | '/unix-timestamp'
+    | '/url-encoder'
     | '/uuid-generator'
     | '/weight-conversion'
   fileRoutesById: FileRoutesById
@@ -247,19 +331,26 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AgeAndDateConvertorsRoute: typeof AgeAndDateConvertorsRoute
   AreaConversionRoute: typeof AreaConversionRoute
+  Base64ToolRoute: typeof Base64ToolRoute
   BmiCalculationRoute: typeof BmiCalculationRoute
+  CharacterCounterRoute: typeof CharacterCounterRoute
   DataStorageConversionRoute: typeof DataStorageConversionRoute
   EthiopianCalendarRoute: typeof EthiopianCalendarRoute
+  JsonValidatorRoute: typeof JsonValidatorRoute
+  JwtDecoderRoute: typeof JwtDecoderRoute
   LengthConversionRoute: typeof LengthConversionRoute
   MarkDownEditorRoute: typeof MarkDownEditorRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   PayrollGeneratorRoute: typeof PayrollGeneratorRoute
   QrCodeGeneratorRoute: typeof QrCodeGeneratorRoute
+  RegexTesterRoute: typeof RegexTesterRoute
   SalaryCalculationRoute: typeof SalaryCalculationRoute
   ShoeSizeConversionRoute: typeof ShoeSizeConversionRoute
   SpeedConversionRoute: typeof SpeedConversionRoute
   TemperatureConversionRoute: typeof TemperatureConversionRoute
   TimeConversionRoute: typeof TimeConversionRoute
+  UnixTimestampRoute: typeof UnixTimestampRoute
+  UrlEncoderRoute: typeof UrlEncoderRoute
   UuidGeneratorRoute: typeof UuidGeneratorRoute
   WeightConversionRoute: typeof WeightConversionRoute
 }
@@ -278,6 +369,20 @@ declare module '@tanstack/react-router' {
       path: '/uuid-generator'
       fullPath: '/uuid-generator'
       preLoaderRoute: typeof UuidGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/url-encoder': {
+      id: '/url-encoder'
+      path: '/url-encoder'
+      fullPath: '/url-encoder'
+      preLoaderRoute: typeof UrlEncoderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unix-timestamp': {
+      id: '/unix-timestamp'
+      path: '/unix-timestamp'
+      fullPath: '/unix-timestamp'
+      preLoaderRoute: typeof UnixTimestampRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/time-conversion': {
@@ -315,6 +420,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SalaryCalculationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/regex-tester': {
+      id: '/regex-tester'
+      path: '/regex-tester'
+      fullPath: '/regex-tester'
+      preLoaderRoute: typeof RegexTesterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/qr-code-generator': {
       id: '/qr-code-generator'
       path: '/qr-code-generator'
@@ -350,6 +462,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LengthConversionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/jwt-decoder': {
+      id: '/jwt-decoder'
+      path: '/jwt-decoder'
+      fullPath: '/jwt-decoder'
+      preLoaderRoute: typeof JwtDecoderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/json-validator': {
+      id: '/json-validator'
+      path: '/json-validator'
+      fullPath: '/json-validator'
+      preLoaderRoute: typeof JsonValidatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ethiopian-calendar': {
       id: '/ethiopian-calendar'
       path: '/ethiopian-calendar'
@@ -364,11 +490,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DataStorageConversionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/character-counter': {
+      id: '/character-counter'
+      path: '/character-counter'
+      fullPath: '/character-counter'
+      preLoaderRoute: typeof CharacterCounterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/bmi-calculation': {
       id: '/bmi-calculation'
       path: '/bmi-calculation'
       fullPath: '/bmi-calculation'
       preLoaderRoute: typeof BmiCalculationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/base64-tool': {
+      id: '/base64-tool'
+      path: '/base64-tool'
+      fullPath: '/base64-tool'
+      preLoaderRoute: typeof Base64ToolRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/area-conversion': {
@@ -399,19 +539,26 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgeAndDateConvertorsRoute: AgeAndDateConvertorsRoute,
   AreaConversionRoute: AreaConversionRoute,
+  Base64ToolRoute: Base64ToolRoute,
   BmiCalculationRoute: BmiCalculationRoute,
+  CharacterCounterRoute: CharacterCounterRoute,
   DataStorageConversionRoute: DataStorageConversionRoute,
   EthiopianCalendarRoute: EthiopianCalendarRoute,
+  JsonValidatorRoute: JsonValidatorRoute,
+  JwtDecoderRoute: JwtDecoderRoute,
   LengthConversionRoute: LengthConversionRoute,
   MarkDownEditorRoute: MarkDownEditorRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   PayrollGeneratorRoute: PayrollGeneratorRoute,
   QrCodeGeneratorRoute: QrCodeGeneratorRoute,
+  RegexTesterRoute: RegexTesterRoute,
   SalaryCalculationRoute: SalaryCalculationRoute,
   ShoeSizeConversionRoute: ShoeSizeConversionRoute,
   SpeedConversionRoute: SpeedConversionRoute,
   TemperatureConversionRoute: TemperatureConversionRoute,
   TimeConversionRoute: TimeConversionRoute,
+  UnixTimestampRoute: UnixTimestampRoute,
+  UrlEncoderRoute: UrlEncoderRoute,
   UuidGeneratorRoute: UuidGeneratorRoute,
   WeightConversionRoute: WeightConversionRoute,
 }
