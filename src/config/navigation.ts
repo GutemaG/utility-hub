@@ -32,6 +32,12 @@ export const navigationGroups: NavGroup[] = [
         url: "/bmi-calculation",
         description: "Calculate Body Mass Index with health category feedback.",
       },
+      {
+        title: "Loan Calculator",
+        url: "/loan-calculator",
+        description:
+          "Calculate monthly payment, total interest, and amortization schedule.",
+      },
     ],
   },
   {

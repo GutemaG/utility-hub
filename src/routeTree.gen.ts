@@ -23,6 +23,7 @@ import { Route as QrCodeGeneratorRouteImport } from './routes/qr-code-generator'
 import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
 import { Route as MarkDownEditorRouteImport } from './routes/mark-down-editor'
+import { Route as LoanCalculatorRouteImport } from './routes/loan-calculator'
 import { Route as LengthConversionRouteImport } from './routes/length-conversion'
 import { Route as JwtDecoderRouteImport } from './routes/jwt-decoder'
 import { Route as JsonValidatorRouteImport } from './routes/json-validator'
@@ -105,6 +106,11 @@ const MarkDownEditorRoute = MarkDownEditorRouteImport.update({
   path: '/mark-down-editor',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoanCalculatorRoute = LoanCalculatorRouteImport.update({
+  id: '/loan-calculator',
+  path: '/loan-calculator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LengthConversionRoute = LengthConversionRouteImport.update({
   id: '/length-conversion',
   path: '/length-conversion',
@@ -173,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
+  '/loan-calculator': typeof LoanCalculatorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
@@ -200,6 +207,7 @@ export interface FileRoutesByTo {
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
+  '/loan-calculator': typeof LoanCalculatorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
@@ -228,6 +236,7 @@ export interface FileRoutesById {
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
+  '/loan-calculator': typeof LoanCalculatorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
@@ -257,6 +266,7 @@ export interface FileRouteTypes {
     | '/json-validator'
     | '/jwt-decoder'
     | '/length-conversion'
+    | '/loan-calculator'
     | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
@@ -284,6 +294,7 @@ export interface FileRouteTypes {
     | '/json-validator'
     | '/jwt-decoder'
     | '/length-conversion'
+    | '/loan-calculator'
     | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
@@ -311,6 +322,7 @@ export interface FileRouteTypes {
     | '/json-validator'
     | '/jwt-decoder'
     | '/length-conversion'
+    | '/loan-calculator'
     | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
@@ -339,6 +351,7 @@ export interface RootRouteChildren {
   JsonValidatorRoute: typeof JsonValidatorRoute
   JwtDecoderRoute: typeof JwtDecoderRoute
   LengthConversionRoute: typeof LengthConversionRoute
+  LoanCalculatorRoute: typeof LoanCalculatorRoute
   MarkDownEditorRoute: typeof MarkDownEditorRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   PayrollGeneratorRoute: typeof PayrollGeneratorRoute
@@ -455,6 +468,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarkDownEditorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/loan-calculator': {
+      id: '/loan-calculator'
+      path: '/loan-calculator'
+      fullPath: '/loan-calculator'
+      preLoaderRoute: typeof LoanCalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/length-conversion': {
       id: '/length-conversion'
       path: '/length-conversion'
@@ -547,6 +567,7 @@ const rootRouteChildren: RootRouteChildren = {
   JsonValidatorRoute: JsonValidatorRoute,
   JwtDecoderRoute: JwtDecoderRoute,
   LengthConversionRoute: LengthConversionRoute,
+  LoanCalculatorRoute: LoanCalculatorRoute,
   MarkDownEditorRoute: MarkDownEditorRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   PayrollGeneratorRoute: PayrollGeneratorRoute,

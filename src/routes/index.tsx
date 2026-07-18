@@ -92,6 +92,11 @@ function Index() {
           description="Generate detailed payroll reports for employees with deductions and benefits by uploading a CSV file (Ethiopia only)."
           to="/payroll-generator"
         />
+        <FeatureCard
+          title="Loan Calculator"
+          description="Calculate monthly payment, total interest, and amortization schedule."
+          to="/loan-calculator"
+        />
       </div>
 
       <h2 className="text-xl font-semibold mb-4">🔄 Conversions</h2>
