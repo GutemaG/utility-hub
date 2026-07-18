@@ -1,3 +1,4 @@
+import { useSEO } from "@/hooks/use-seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { v1, v3, v4, v5 } from "uuid";
@@ -15,6 +16,23 @@ function RouteComponent() {
   const [isNamespaceValid, setIsNamespaceValid] = useState<boolean>(true);
   const [count, setCount] = useState<number>(1);
   const [copiedAll, setCopiedAll] = useState<boolean>(false);
+
+  useSEO({
+    title: "UUID Generator | Utility Hub",
+    description:
+      "Generate UUIDs in nil, v1, v3, v4, and v5 formats with namespace support and bulk generation.",
+    path: "/uuid-generator",
+    keywords:
+      "uuid generator, guid generator, uuid v4, unique identifier, namespace uuid",
+    applicationCategory: "Tool",
+    featureList: [
+      "UUID generation",
+      "Version selection",
+      "Namespace support",
+      "Bulk generation",
+      "Clipboard copy",
+    ],
+  });
 
   // Predefined namespaces for quick selection
   const predefinedNamespaces = [
@@ -163,54 +181,8 @@ function RouteComponent() {
     generateUUIDs();
   }, []);
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "UUID Generator - Utility Hub",
-    description:
-      "Generate universally unique identifiers (UUID/GUID) in various versions (nil, v1, v3, v4, v5). Create multiple UUIDs at once with a simple, compact interface.",
-    url: "https://utility.ethioar.app/uuid-generator",
-    applicationCategory: "Tool",
-    operatingSystem: "Web Browser",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
-  };
-
-  // Add structured data to page head
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
-
   return (
     <>
-      <div style={{ display: "none" }}>
-        <title>UUID Generator - Utility Hub</title>
-        <meta
-          name="description"
-          content="Simple UUID Generator: Create universally unique identifiers in various versions. Generate and copy multiple UUIDs with a clean, compact interface."
-        />
-        <meta
-          name="keywords"
-          content="uuid generator, guid generator, uuid, guid, unique identifier, uuid v4, generate uuid, copy uuid"
-        />
-        <meta name="author" content="FormulaLab" />
-        <meta name="robots" content="index, follow" />
-        <link
-          rel="canonical"
-          href="https://utility.ethioqr.app/uuid-generator"
-        />
-      </div>
-
       <div className="max-w-3xl mx-auto p-4">
         {/* Header */}
         <div className="text-center mb-6">

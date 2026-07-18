@@ -1,91 +1,8 @@
-import { useState, useEffect } from "react";
+import { Suspense, lazy, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import MDEditor from "@uiw/react-md-editor";
+import { useSEO } from "@/hooks/use-seo";
 
-// Lightweight SEO injector for this page
-function Seo({ title, description, keywords }: { title: string; description: string; keywords?: string }) {
-  useEffect(() => {
-    const ensureMetaName = (name: string, content: string) => {
-      let el = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
-      if (!el) {
-        el = document.createElement("meta");
-        el.setAttribute("name", name);
-        document.head.appendChild(el);
-      }
-      el.setAttribute("content", content);
-    };
-    const ensureMetaProp = (property: string, content: string) => {
-      let el = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement | null;
-      if (!el) {
-        el = document.createElement("meta");
-        el.setAttribute("property", property);
-        document.head.appendChild(el);
-      }
-      el.setAttribute("content", content);
-    };
-    const ensureLink = (rel: string, href: string) => {
-      let el = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement | null;
-      if (!el) {
-        el = document.createElement("link");
-        el.setAttribute("rel", rel);
-        document.head.appendChild(el);
-      }
-      el.setAttribute("href", href);
-    };
-
-    // Title
-    document.title = title;
-
-    // Basic
-    ensureMetaName("description", description);
-    if (keywords) ensureMetaName("keywords", keywords);
-    ensureMetaName("robots", "index,follow");
-
-    // Open Graph
-    const url = window.location.href;
-    ensureMetaProp("og:title", title);
-    ensureMetaProp("og:description", description);
-    ensureMetaProp("og:type", "website");
-    ensureMetaProp("og:url", url);
-
-    // Twitter
-    ensureMetaName("twitter:card", "summary_large_image");
-    ensureMetaName("twitter:title", title);
-    ensureMetaName("twitter:description", description);
-
-    // Canonical
-    ensureLink("canonical", url);
-
-    // JSON-LD
-    const ld = {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      name: title,
-      applicationCategory: "DeveloperApplication",
-      operatingSystem: "Web",
-      description,
-      url,
-      featureList: [
-        "Live preview",
-        "Scroll sync",
-        "GitHub-Flavored Markdown",
-        "Code syntax highlighting",
-        "Copy and download .md",
-      ],
-    };
-    const scriptId = "markdown-editor-jsonld";
-    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
-    if (!script) {
-      script = document.createElement("script");
-      script.id = scriptId;
-      script.type = "application/ld+json";
-      document.head.appendChild(script);
-    }
-    script.text = JSON.stringify(ld);
-  }, [title, description, keywords]);
-
-  return null;
-}
+const MDEditor = lazy(() => import("@uiw/react-md-editor"));
 
 export const Route = createFileRoute("/mark-down-editor")({
   component: RouteComponent,
@@ -93,6 +10,21 @@ export const Route = createFileRoute("/mark-down-editor")({
 
 function RouteComponent() {
   const [markdown, setMarkdown] = useState("**Hello**");
+
+  useSEO({
+    title: "Markdown Editor | Utility Hub",
+    description:
+      "Write Markdown with live preview, scroll sync, and quick copy/download. Supports GitHub-Flavored Markdown.",
+    path: "/mark-down-editor",
+    keywords: "markdown editor, live preview, GFM, scroll sync, utility-hub",
+    applicationCategory: "DeveloperApplication",
+    featureList: [
+      "Live preview",
+      "Scroll sync",
+      "GitHub-Flavored Markdown",
+      "Copy and download .md",
+    ],
+  });
 
   const copy = async () => {
     try {
@@ -113,13 +45,6 @@ function RouteComponent() {
 
   return (
     <div className=" mx-auto p-4 sm:p-6 space-y-4">
-      {/* SEO for this page */}
-      <Seo
-        title="Markdown Editor | UtilityHub"
-        description="Write Markdown with live preview, scroll sync, and quick copy/download. Supports GitHub-Flavored Markdown."
-        keywords="markdown editor, live preview, GFM, scroll sync, utility-hub"
-      />
-
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <h1 className="text-2xl font-semibold">Markdown Editor</h1>
         <div className="flex items-center gap-2">
@@ -147,17 +72,17 @@ function RouteComponent() {
         </div>
       </div>
 
-      <MDEditor
-        value={markdown}
-        onChange={(value) => setMarkdown(value ?? "")}
-        enableScroll={true}
-        height={600}
-        textareaProps={
-          {
+      <Suspense fallback={<div className="rounded-lg border border-dashed p-6 text-center text-sm text-gray-500">Loading editor…</div>}>
+        <MDEditor
+          value={markdown}
+          onChange={(value) => setMarkdown(value ?? "")}
+          enableScroll={true}
+          height={600}
+          textareaProps={{
             placeholder: "Please write your markdown here",
-          }
-        }
-      />
+          }}
+        />
+      </Suspense>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { useSEO } from "@/hooks/use-seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
@@ -41,6 +42,23 @@ function RouteComponent() {
   });
   const [copied, setCopied] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(true);
+
+  useSEO({
+    title: "Password Generator | Utility Hub",
+    description:
+      "Generate strong, secure passwords with customizable length, character options, and exclusions.",
+    path: "/password-generator",
+    keywords:
+      "password generator, secure password, strong password, password strength, customizable password",
+    applicationCategory: "Tool",
+    featureList: [
+      "Customizable length",
+      "Uppercase and lowercase support",
+      "Numbers and symbols",
+      "Similar and ambiguous character exclusions",
+      "Password strength feedback",
+    ],
+  });
 
   const generatePassword = () => {
     let charset = "";
@@ -262,81 +280,8 @@ function RouteComponent() {
     }
   }, [options]);
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Password Generator - Utility Hub",
-    description:
-      "Generate strong, secure passwords with customizable options including length, character types, and exclusions. Ideal for enhancing your online security.",
-    url: "https://utility.ethioar.app/password-generator",
-    applicationCategory: "Tool",
-    operatingSystem: "Web Browser",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
-    featureList: [
-      "Customizable password length (8-64 characters)",
-      "Options to include/exclude uppercase, lowercase, numbers, and symbols",
-      "Exclude similar characters (i, l, 1, L, o, 0, O)",
-      "Exclude ambiguous characters ({ } [ ] ( ) / \\ ' \" ` ~ , ; : . < >)",
-      "Real-time password strength assessment",
-      "Generate memorable passphrases",
-      "One-click copy to clipboard",
-      "Password security tips and best practices",
-    ],
-  };
-
-  // Add structured data to page head
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
-      <div style={{ display: "none" }}>
-        <title>Password Generator- Utility Hub</title>
-        <meta
-          name="description"
-          content="Password Generator: Generate strong, secure passwords with customizable options including length, character types, and exclusions. Ideal for enhancing your online security."
-        />
-        <meta
-          name="keywords"
-          content="password generator, secure password, strong password, password strength, password options, customizable password, password creation, password tool, online password generator"
-        />
-        <meta name="author" content="FormulaLab" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="Password Generator" />
-        <meta
-          property="og:description"
-          content="Password Generator: Generate strong, secure passwords with customizable options including length, character types, and exclusions. Ideal for enhancing your online security."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://utility.ethioqr.app/password-generator"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Password Generator" />
-        <meta
-          name="twitter:description"
-          content="Password Generator: Generate strong, secure passwords with customizable options including length, character types, and exclusions. Ideal for enhancing your online security."
-        />
-        <link
-          rel="canonical"
-          href="https://utility.ethioqr.app/password-generator"
-        />
-      </div>
-
       <div className="max-w-4xl mx-auto p-4 space-y-6">
         {/* Header */}
         <div className="text-center">

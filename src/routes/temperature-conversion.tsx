@@ -1,3 +1,4 @@
+import { useSEO } from "@/hooks/use-seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
@@ -63,6 +64,17 @@ function RouteComponent() {
   const [activeInput, setActiveInput] = useState<string>("°C");
   const [fromUnit, setFromUnit] = useState<string>("°C");
   const [toUnit, setToUnit] = useState<string>("°F");
+
+  useSEO({
+    title: "Temperature Converter | Utility Hub",
+    description:
+      "Convert between Celsius, Fahrenheit, Kelvin, Rankine, and more with an instant temperature converter.",
+    path: "/temperature-conversion",
+    keywords:
+      "temperature converter, celsius to fahrenheit, fahrenheit to celsius, convert temperature units",
+    applicationCategory: "Tool",
+    featureList: ["Real-time conversion", "Multiple temperature scales", "Quick reference"],
+  });
 
   // Initialize with 0°C
   useEffect(() => {
@@ -148,76 +160,8 @@ function RouteComponent() {
     }
     return "text-gray-900";
   };
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Temperature Convertor - Utility Hub",
-    description:
-      "Temperature Converter: Convert between Celsius, Fahrenheit, Kelvin, and more. Perfect for students, engineers, and travelers.",
-    url: "https://utility.ethioqr.app/tempratur-conversion",
-    applicationCategory: "Tool",
-    operatingSystem: "Web Browser",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
-    featureList: [
-      "Real-time conversion as you type",
-      "Supports 6 different temperature scales",
-      "Temperature context indicators",
-      "Responsive design for all devices",
-    ],
-  };
-
-  // Add structured data to page head
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
-      <div style={{ display: "none" }}>
-        <title>Temperature Convertor - Utility Hub</title>
-        <meta
-          name="description"
-          content="Temperature Converter: Convert between Celsius, Fahrenheit, Kelvin, and more. Perfect for students, engineers, and travelers."
-        />
-        <meta
-          name="keywords"
-          content="temperature converter, celsius to fahrenheit, fahrenheit to celsius, kelvin to celsius, temperature units, convert temperature units, measurement conversion"
-        />
-        <meta name="author" content="FormulaLab" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="Length Convertor" />
-        <meta
-          property="og:description"
-          content="Temperature Converter: Convert between Celsius, Fahrenheit, Kelvin, and more. Perfect for students, engineers, and travelers."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://utility.ethioqr.app/tempratur-conversion"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Temperature Convertor" />
-        <meta
-          name="twitter:description"
-          content="Temperature Converter: Convert between Celsius, Fahrenheit, Kelvin, and more. Perfect for students, engineers, and travelers."
-        />
-        <link
-          rel="canonical"
-          href="https://utility.ethioqr.app/tempratur-conversion"
-        />
-      </div>
       <div className="max-w-6xl mx-auto p-4 space-y-6">
         {/* Header */}
         <div className="text-center">

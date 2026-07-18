@@ -1,3 +1,4 @@
+import { useSEO } from "@/hooks/use-seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
@@ -60,6 +61,17 @@ function RouteComponent() {
   const [activeInput, setActiveInput] = useState<string>("g");
   const [fromUnit, setFromUnit] = useState<string>("g");
   const [toUnit, setToUnit] = useState<string>("kg");
+
+  useSEO({
+    title: "Weight Converter | Utility Hub",
+    description:
+      "Convert between grams, kilograms, pounds, ounces, tons, carats, and more with a simple weight calculator.",
+    path: "/weight-conversion",
+    keywords:
+      "weight converter, grams to kilograms, pounds to kilograms, ounces to grams, convert weight units",
+    applicationCategory: "Tool",
+    featureList: ["Instant conversion", "Many weight units", "Clear results"],
+  });
 
   // Initialize with 1000 grams (1 kg)
   useEffect(() => {
@@ -149,77 +161,8 @@ function RouteComponent() {
     if (grams < 1000000) return "Very Heavy";
     return "Extremely Heavy";
   };
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Weight Convertor - Utility Hub",
-    description:
-      "Weight Converter: Convert between grams, kilograms, pounds, ounces, tons, carats, and more. Perfect for students, engineers, and shoppers.",
-    url: "https://utility.ethioqr.app/weight-conversion",
-    applicationCategory: "Tool",
-    operatingSystem: "Web Browser",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
-    featureList: [
-      "Real-time conversion as you type",
-      "Supports 15 different weight units",
-      "Weight context indicators",
-      "Responsive design for all devices",
-    ],
-  };
-
-  // Add structured data to page head
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
-      <div style={{ display: "none" }}>
-        <title>Weight Convertor - Utility Hub</title>
-        <meta
-          name="description"
-          content="Weight Converter: Convert between grams, kilograms, pounds, ounces, tons, carats, and more. Perfect for students, engineers, and shoppers."
-        />
-        <meta
-          name="keywords"
-          content="weight converter, weight conversion, grams to kilograms, pounds to kilograms, ounces to grams, tons to pounds, carats to grams, metric weight units, imperial weight units, convert weight units, measurement conversion"
-        />
-        <meta name="author" content="FormulaLab" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="Weight Convertor" />
-        <meta
-          property="og:description"
-          content="Weight Converter: Convert between grams, kilograms, pounds, ounces, tons, carats, and more. Perfect for students, engineers, and shoppers."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://utility.ethioqr.app/weight-conversion"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="weight Convertor" />
-        <meta
-          name="twitter:description"
-          content="Weight Converter: Convert between grams, kilograms, pounds, ounces, tons, carats, and more. Perfect for students, engineers, and shoppers."
-        />
-        <link
-          rel="canonical"
-          href="https://utility.ethioqr.app/weight-conversion"
-        />
-      </div>
-
       <div className="max-w-6xl mx-auto p-4 space-y-6">
         {/* Header */}
         <div className="text-center">

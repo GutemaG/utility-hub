@@ -1,3 +1,4 @@
+import { useSEO } from "@/hooks/use-seo";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
@@ -30,6 +31,23 @@ function FeatureCard({
 }
 
 function Index() {
+  useSEO({
+    title: "UtilityHub | Free calculators, converters, and generators",
+    description:
+      "UtilityHub delivers fast, free calculators, converters, and generators for everyday life, health, finance, and tech.",
+    path: "/",
+    keywords:
+      "utility hub, calculator, converter, generator, salary calculator, bmi calculator, qr code generator",
+    applicationCategory: "Application",
+    featureList: [
+      "Salary and payroll tools",
+      "Health and BMI calculators",
+      "Unit converters",
+      "Password and UUID generators",
+      "QR code and markdown tools",
+    ],
+  });
+
   return (
     <div className="max-w-4xl mx-auto py-10 px-4">
       <div className="flex flex-col items-center mb-8">

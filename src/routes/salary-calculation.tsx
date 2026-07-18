@@ -1,7 +1,8 @@
 import { TaxBracketInfo } from "@/components/tax-bracket-info";
 import { taxBrackets } from "@/lib/constants";
+import { useSEO } from "@/hooks/use-seo";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useDeferredValue, useState } from "react";
 
 export const Route = createFileRoute("/salary-calculation")({
   component: RouteComponent,
@@ -17,6 +18,8 @@ function RouteComponent() {
   const [annualIncome, setAnnualIncome] = useState<number>(0);
   const [annualNetIncome, setAnnualNetIncome] = useState<number>(0);
   const [calculationMode, setCalculationMode] = useState<"gross" | "net">("gross");
+  const deferredMonthlyIncome = useDeferredValue(monthlyIncome);
+  const deferredMonthlyAllowance = useDeferredValue(monthlyAllowance);
 
   // Helper: Calculate the non-taxable limit based on basic salary
   const getNonTaxableLimit = (basicSalary: number) => {
@@ -172,8 +175,14 @@ function RouteComponent() {
   };
 
   // Perform calculations for rendering
-  const monthlyCalc = performFullCalculation(monthlyIncome, monthlyAllowance);
-  const annualCalc = performFullCalculation(annualIncome, monthlyAllowance * 12);
+  const monthlyCalc = performFullCalculation(
+    deferredMonthlyIncome,
+    deferredMonthlyAllowance
+  );
+  const annualCalc = performFullCalculation(
+    annualIncome,
+    deferredMonthlyAllowance * 12
+  );
 
   // Additional steps for allowance logic
   const allowanceSteps =
@@ -192,28 +201,19 @@ function RouteComponent() {
     ...monthlyCalc.taxDetails.steps,
   ];
 
-  // SEO structured data
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Ethiopian Tax Calculator",
-    description: "Free online Ethiopian income tax calculator with pension and allowance calculations.",
-    url: "https://utility.ethioar.app/salary-calculation",
+  useSEO({
+    title: "Ethiopian Salary Calculator | Utility Hub",
+    description:
+      "Free online Ethiopian income tax calculator with pension and allowance calculations.",
+    path: "/salary-calculation",
     applicationCategory: "FinanceApplication",
-    operatingSystem: "Web Browser",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  };
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-    return () => {
-      document.head.removeChild(script);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    featureList: [
+      "Income tax calculation",
+      "Pension calculation",
+      "Allowance handling",
+      "Monthly and annual summaries",
+    ],
+  });
 
   return (
     <>

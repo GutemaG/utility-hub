@@ -1,5 +1,6 @@
 import * as React from "react";
 import { GalleryVerticalEnd } from "lucide-react";
+import { navigationGroups } from "@/config/navigation";
 
 import {
   Sidebar,
@@ -49,112 +50,17 @@ export function SidebarLink({ item, className, size = "md" }: SidebarLinkProps) 
   )
 }
 
-// This is sample data.
-const data = {
-  navMain: [
-    {
-      title: "Calculation",
-      url: "#",
-      items: [
-        {
-          title: "Salary Calculation",
-          url: "/salary-calculation",
-        },
-        {
-          title: "Payroll Generator",
-          url: "/payroll-generator",
-        },
-        {
-          title: "BMI Calculation",
-          url: "/bmi-calculation",
-        },
-      ],
-    },
-    {
-      title: "Conversion",
-      url: "#",
-      items: [
-        {
-          title: "Length Conversion",
-          url: "/length-conversion",
-        },
-        {
-          title: "Temperature Conversion",
-          url: "/temperature-conversion",
-        },
-        {
-          title: "Shoe Size Conversion",
-          url: "/shoe-size-conversion",
-        },
-        {
-          title: "Weight Conversion",
-          url: "/weight-conversion",
-        },
-
-        {
-          title: "Area Conversion",
-          url: "/area-conversion",
-        },
-        {
-          title: "Speed Conversion",
-          url: "/speed-conversion",
-        },
-        {
-          title: "Data Storage Conversion",
-          url: "/data-storage-conversion",
-        },
-        {
-          title: "Time Conversion",
-          url: "/time-conversion",
-        },
-        {
-          title: "Ethiopian Date Convertors",
-          url: "/age-and-date-convertors",
-        },
-        // {
-        //   title: "Ethiopian Calendar",
-        //   url: "/ethiopian-calendar",
-        // },
-      ],
-    },
-    {
-      title: "Other",
-      url: "#",
-      items: [
-        {
-          title: "Password Generator",
-          url: "/password-generator",
-        },
-
-        {
-          title: "UUID Generator",
-          url: "/uuid-generator",
-        },
-
-        {
-          title: "QR Code Generator",
-          url: "/qr-code-generator",
-        },
-        {
-          title: "Markdown Editor",
-          url: "/mark-down-editor",
-        },
-      ],
-    },
-  ],
-};
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [sidebarItems, setSidebarItems] = React.useState(data.navMain);
+  const [sidebarItems, setSidebarItems] = React.useState(navigationGroups);
   const [filter, setFilter] = React.useState("");
 
   React.useEffect(() => {
     if (!filter) {
-      setSidebarItems(data.navMain);
+      setSidebarItems(navigationGroups);
       return;
     }
     const lowerFilter = filter.toLowerCase();
-    const filtered = data.navMain
+    const filtered = navigationGroups
       .map((group) => {
         const matchedItems = group.items?.filter((item) =>
           item.title.toLowerCase().includes(lowerFilter)
@@ -167,7 +73,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         }
         return null; // Exclude group if no matches
       })
-      .filter((group): group is (typeof data.navMain)[0] => group !== null); // Type guard to filter out nulls
+      .filter((group): group is (typeof navigationGroups)[0] => group !== null); // Type guard to filter out nulls
     setSidebarItems(filtered);
   }, [filter]);
 
