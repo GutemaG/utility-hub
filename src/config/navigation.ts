@@ -109,6 +109,41 @@ export const navigationGroups: NavGroup[] = [
         url: "/mark-down-editor",
         description: "Create and preview Markdown documents.",
       },
+      {
+        title: "URL Encoder",
+        url: "/url-encoder",
+        description: "Encode and decode URLs and query-safe strings.",
+      },
+      {
+        title: "Character Counter",
+        url: "/character-counter",
+        description: "Count characters, words, lines, and reading time.",
+      },
+      {
+        title: "JSON Validator",
+        url: "/json-validator",
+        description: "Validate JSON syntax with line and column hints.",
+      },
+      {
+        title: "Base64 Tool",
+        url: "/base64-tool",
+        description: "Encode and decode Base64 text with Unicode support.",
+      },
+      {
+        title: "JWT Decoder",
+        url: "/jwt-decoder",
+        description: "Decode JWT header, payload, expiration, and issued time.",
+      },
+      {
+        title: "Unix Timestamp",
+        url: "/unix-timestamp",
+        description: "Convert between Unix timestamp, ISO, UTC, and local time.",
+      },
+      {
+        title: "Regex Tester",
+        url: "/regex-tester",
+        description: "Test regex patterns with flags and highlighted matches.",
+      },
     ],
   },
 ];

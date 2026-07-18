@@ -165,6 +165,41 @@ function Index() {
           description="Create and preview Markdown documents."
           to="/mark-down-editor"
         />
+        <FeatureCard
+          title="URL Encoder"
+          description="Encode and decode URLs and query-safe strings."
+          to="/url-encoder"
+        />
+        <FeatureCard
+          title="Character Counter"
+          description="Count characters, words, lines, and reading time."
+          to="/character-counter"
+        />
+        <FeatureCard
+          title="JSON Validator"
+          description="Validate JSON syntax with line and column hints."
+          to="/json-validator"
+        />
+        <FeatureCard
+          title="Base64 Tool"
+          description="Encode and decode Base64 text with Unicode support."
+          to="/base64-tool"
+        />
+        <FeatureCard
+          title="JWT Decoder"
+          description="Decode JWT header, payload, expiration, and issued time."
+          to="/jwt-decoder"
+        />
+        <FeatureCard
+          title="Unix Timestamp"
+          description="Convert between Unix timestamp, ISO, UTC, and local time."
+          to="/unix-timestamp"
+        />
+        <FeatureCard
+          title="Regex Tester"
+          description="Test regex patterns with flags and highlighted matches."
+          to="/regex-tester"
+        />
       </div>
 
       <div className="mt-10 text-center text-zinc-500 dark:text-zinc-400 text-xs">
