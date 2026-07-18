@@ -313,7 +313,7 @@ function RouteComponent() {
             </h3>
             <p>
               The monthly payment is calculated using the standard mortgage
-              formula: M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1], where:
+              formula: M = P [ i(1 + i)^n ] / [ (1 + i)^n - 1], where:
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1 ml-2">
               <li>M = Monthly payment</li>
