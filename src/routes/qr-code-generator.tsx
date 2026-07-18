@@ -253,17 +253,17 @@ function RouteComponent() {
   return (
     <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
       <div className="text-center">
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+        <h1 className="mb-2 text-3xl font-bold text-foreground sm:text-4xl">
           QR Code Generator
         </h1>
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           Create dynamic QR codes for text, links, Wi‑Fi, contacts (vCard), email, SMS, phone, Facebook, and PDF. Add a logo and customize styles.
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
         {/* Left: Builder */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 space-y-6">
+        <div className="space-y-6 rounded-xl border border-border bg-card p-6 shadow-sm">
           {/* Content type cards */}
           <div className="space-y-3">
             <Label className="text-sm">QR Content Type</Label>
@@ -279,19 +279,19 @@ function RouteComponent() {
                       "group h-full rounded-lg border p-3 text-left shadow-sm transition",
                       active
                         ? "border-blue-600 ring-2 ring-blue-200"
-                        : "hover:shadow-md hover:border-gray-300"
+                        : "border-border hover:border-ring hover:bg-accent/40 hover:shadow-md"
                     )}
                   >
                     <div className="flex items-center gap-2">
                       <Icon
                         className={cn(
                           "h-5 w-5",
-                          active ? "text-blue-600" : "text-gray-600"
+                          active ? "text-blue-600" : "text-muted-foreground"
                         )}
                       />
                       <div className="text-sm font-medium">{c.label}</div>
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">{c.desc}</div>
+                    <div className="mt-1 text-xs text-muted-foreground">{c.desc}</div>
                   </button>
                 );
               })}
@@ -449,7 +449,7 @@ function RouteComponent() {
               </Field>
               <Field label="Or Upload PDF coming soong...">
                 <Input type="file" accept="application/pdf" onChange={(e) => handlePdfFile(e.target.files?.[0])} disabled />
-                {pdf.file && <p className="text-xs text-gray-500 mt-1">Selected: {pdf.file.name}</p>}
+                {pdf.file && <p className="mt-1 text-xs text-muted-foreground">Selected: {pdf.file.name}</p>}
               </Field>
             </div>
           )}
@@ -480,7 +480,7 @@ function RouteComponent() {
                     onChange={(e) => setQrOptions((p) => ({ ...p, size: Number(e.target.value) }))}
                     className="w-full"
                 />
-                <div className="text-xs text-gray-500">{qrOptions.size}px</div>
+                <div className="text-xs text-muted-foreground">{qrOptions.size}px</div>
                 </Field>
 
                 <Field label="Error Correction">
@@ -536,12 +536,12 @@ function RouteComponent() {
             <hr />
           {/* Logo options */}
             <details className="space-y-3 mt-1">
-                <summary className="flex items-center justify-between cursor-pointer rounded-md px-3 py-2 border hover:bg-gray-50">
+                <summary className="flex cursor-pointer items-center justify-between rounded-md border border-border px-3 py-2 hover:bg-accent/50">
                     <div className="flex items-center gap-2">
-                        <ImageIcon className="h-4 w-4 text-gray-600" />
+                    <ImageIcon className="h-4 w-4 text-muted-foreground" />
                         <Label className="text-sm">Add Logo</Label>
                     </div>
-                    <svg className="h-4 w-4 text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <svg className="h-4 w-4 text-muted-foreground" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clipRule="evenodd" />
                     </svg>
                 </summary>
@@ -558,7 +558,7 @@ function RouteComponent() {
                             title={l.name}
                         >
                             <img src={l.src} alt={l.name} className="h-8 w-8 object-contain" />
-                            <span className="text-[11px] text-gray-700">{l.name}</span>
+                            <span className="text-[11px] text-foreground">{l.name}</span>
                         </button>
                     ))}
                 </div>
@@ -599,7 +599,7 @@ function RouteComponent() {
         </div>
 
         {/* Right: Preview / Download */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 flex flex-col items-center justify-between">
+        <div className="flex flex-col items-center justify-between rounded-xl border border-border bg-card p-6 shadow-sm">
             <QRPreview
                 qrValue={qrValue}
                 qrOptions={qrOptions}
@@ -688,8 +688,8 @@ function QRPreview(
     return<>
 
           <div className="w-full text-center mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Preview</h2>
-            <p className="text-xs text-gray-500 mt-1 break-all line-clamp-2">
+            <h2 className="text-lg font-semibold text-card-foreground">Preview</h2>
+            <p className="mt-1 line-clamp-2 break-all text-xs text-muted-foreground">
               { "Enter content to generate a QR code"}
             </p>
           </div>
@@ -712,7 +712,7 @@ function QRPreview(
                   />
                   {logoUrl ? (
                     <div
-                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 p-1 bg-white"
+                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background p-1"
                       style={{ borderRadius: logoRadius }}
                     >
                       <img
@@ -741,7 +741,7 @@ function QRPreview(
                   </div>
                 </>
               ) : (
-                <div className="flex h-full w-full items-center justify-center rounded-xl border border-dashed border-gray-300 bg-gray-50 text-center text-sm text-gray-500">
+                <div className="flex h-full w-full items-center justify-center rounded-xl border border-dashed border-border bg-muted/40 text-center text-sm text-muted-foreground">
                   Enter content to generate a QR code
                 </div>
               )}
@@ -760,7 +760,7 @@ function QRPreview(
             </div>
           </div>
 
-          <div className="w-full mt-6 bg-gradient-to-r from-indigo-50 to-sky-50 border border-indigo-100 rounded-lg p-4 text-sm text-indigo-800">
+          <div className="mt-6 w-full rounded-lg border border-indigo-500/20 bg-gradient-to-r from-indigo-500/10 to-sky-500/10 p-4 text-sm text-indigo-700 dark:text-indigo-200">
             • Choose a content card above. • Add a logo via URL or quick presets.
           </div>
     </>

@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react";
 
 export function TaxBracketInfo() {
   return (
-<Collapsible className="rounded-lg border bg-white">
+<Collapsible className="rounded-lg border border-border bg-card text-card-foreground">
         <CollapsibleTrigger className="flex w-full items-center justify-between p-4 font-medium hover:bg-muted/50">
           <span>Ethiopian Tax Brackets</span>
 

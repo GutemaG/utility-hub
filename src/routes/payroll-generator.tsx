@@ -206,15 +206,15 @@ const ResultsTable: React.FC<{ data: EmployeeData[] }> = ({ data }) => {
 
   return (
     <div className="rounded-md border overflow-x-auto">
-      <div className="flex items-center gap-2 p-4 bg-gray-50 border-b">
-        <label htmlFor="payroll-search" className="text-sm text-gray-700">
+      <div className="flex items-center gap-2 border-b bg-muted/40 p-4">
+        <label htmlFor="payroll-search" className="text-sm text-foreground">
           Search:
         </label>
         <input
           id="payroll-search"
           type="text"
           placeholder="Search employee name..."
-          className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="rounded-md border border-input bg-background px-2 py-1 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           onChange={(e) => {
             const value = e.target.value.toLowerCase();
             table.setGlobalFilter(value);
@@ -281,10 +281,10 @@ const ResultsTable: React.FC<{ data: EmployeeData[] }> = ({ data }) => {
           ))}
         </TableFooter>
       </Table>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 py-3 bg-gray-50 border-t rounded-b-md">
+      <div className="flex flex-col gap-3 rounded-b-md border-t bg-muted/40 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">
           <button
-            className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => table.firstPage()}
             disabled={!table.getCanPreviousPage()}
             aria-label="First Page"
@@ -293,7 +293,7 @@ const ResultsTable: React.FC<{ data: EmployeeData[] }> = ({ data }) => {
             {"<<"}
           </button>
           <button
-            className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
             aria-label="Previous Page"
@@ -301,7 +301,7 @@ const ResultsTable: React.FC<{ data: EmployeeData[] }> = ({ data }) => {
             <span className="sr-only">Previous</span>
             {"<"}
           </button>
-          <span className="mx-2 text-sm text-gray-700">
+          <span className="mx-2 text-sm text-foreground">
             Page{" "}
             <strong>
               {table.getState().pagination.pageIndex + 1} of{" "}
@@ -309,7 +309,7 @@ const ResultsTable: React.FC<{ data: EmployeeData[] }> = ({ data }) => {
             </strong>
           </span>
           <button
-            className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
             aria-label="Next Page"
@@ -318,7 +318,7 @@ const ResultsTable: React.FC<{ data: EmployeeData[] }> = ({ data }) => {
             {">"}
           </button>
           <button
-            className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => table.lastPage()}
             disabled={!table.getCanNextPage()}
             aria-label="Last Page"
@@ -328,7 +328,7 @@ const ResultsTable: React.FC<{ data: EmployeeData[] }> = ({ data }) => {
           </button>
         </div>
         <div className="flex items-center gap-2">
-          <label htmlFor="goto-page" className="text-sm text-gray-700">
+          <label htmlFor="goto-page" className="text-sm text-foreground">
             Go to page:
           </label>
           <input
@@ -341,14 +341,14 @@ const ResultsTable: React.FC<{ data: EmployeeData[] }> = ({ data }) => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
               table.setPageIndex(page);
             }}
-            className="border border-gray-300 rounded-md px-2 py-1 w-16 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-16 rounded-md border border-input bg-background px-2 py-1 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
           <select
             value={table.getState().pagination.pageSize}
             onChange={(e) => {
               table.setPageSize(Number(e.target.value));
             }}
-            className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="rounded-md border border-input bg-background px-2 py-1 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           >
             {[10, 20, 30, 40, 50].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
@@ -357,7 +357,7 @@ const ResultsTable: React.FC<{ data: EmployeeData[] }> = ({ data }) => {
             ))}
           </select>
         </div>
-        <div className="text-sm text-gray-600 mt-2 sm:mt-0">
+        <div className="mt-2 text-sm text-muted-foreground sm:mt-0">
           Showing {table.getRowModel().rows.length.toLocaleString()} of{" "}
           {table.getRowCount().toLocaleString()} rows
         </div>
@@ -375,9 +375,9 @@ const SampleTable: React.FC<{ onDownload: () => void }> = ({ onDownload }) => {
     "Other Deduction",
   ];
   return (
-    <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+    <div className="rounded-lg border border-border bg-card p-4">
       <div className="flex justify-between items-center mb-3">
-        <h3 className="text-sm font-semibold text-gray-800">
+        <h3 className="text-sm font-semibold text-card-foreground">
           Sample Payroll Sheet
         </h3>
         <button
@@ -388,13 +388,13 @@ const SampleTable: React.FC<{ onDownload: () => void }> = ({ onDownload }) => {
         </button>
       </div>
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border rounded-md">
+        <table className="min-w-full rounded-md border border-border bg-background">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-muted/60">
               {headerName.map((header) => (
                 <th
                   key={header}
-                  className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase"
+                  className="px-4 py-2 text-left text-xs font-medium uppercase text-muted-foreground"
                 >
                   {header}
                 </th>
@@ -404,19 +404,19 @@ const SampleTable: React.FC<{ onDownload: () => void }> = ({ onDownload }) => {
           <tbody>
             {sampleData.map((row, index) => (
               <tr key={index} className="border-t">
-                <td className="px-4 py-2 text-sm text-gray-700">
+                <td className="px-4 py-2 text-sm text-foreground">
                   {row["Employee Name"]}
                 </td>
-                <td className="px-4 py-2 text-sm text-gray-700">
+                <td className="px-4 py-2 text-sm text-foreground">
                   {row["Basic Salary"].toLocaleString()}
                 </td>
-                <td className="px-4 py-2 text-sm text-gray-700">
+                <td className="px-4 py-2 text-sm text-foreground">
                   {(row["Total Taxable Allowance"] ?? 0).toLocaleString()}
                 </td>
-                <td className="px-4 py-2 text-sm text-gray-700">
+                <td className="px-4 py-2 text-sm text-foreground">
                   {(row["Total Non Taxable Allowance"] ?? 0).toLocaleString()}
                 </td>
-                <td className="px-4 py-2 text-sm text-gray-700">
+                <td className="px-4 py-2 text-sm text-foreground">
                   {(row["Other Deduction"] ?? 0).toLocaleString()}
                 </td>
               </tr>
@@ -460,10 +460,10 @@ function BulkPayrollProcessor() {
     <>
       <div className="space-y-8 max-w-7xl mx-auto">
         <header className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="mb-2 text-3xl font-bold text-foreground">
             Bulk Payroll Processor
           </h1>
-          <p className="text-base text-gray-600">
+          <p className="text-base text-muted-foreground">
             Upload an Excel file to calculate payroll for multiple employees.
           </p>
         </header>
@@ -472,10 +472,10 @@ function BulkPayrollProcessor() {
           <SampleTable onDownload={handleDownloadSample} />
           <div className="p-3 space-y-4">
             <div>
-              <h4 className="text-sm font-semibold text-gray-800 mb-2">
+              <h4 className="mb-2 text-sm font-semibold text-foreground">
                 Features
               </h4>
-              <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
+              <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
                 <li>Upload Excel payroll sheets for multiple employees.</li>
                 <li>Calculates income tax, employee and employer pension.</li>
                 <li>Shows gross and net salary breakdown.</li>
@@ -488,14 +488,14 @@ function BulkPayrollProcessor() {
             // This section is now collapsible. */}
             <Collapsible>
               <CollapsibleTrigger asChild>
-                <button className="flex w-full items-center justify-between rounded-lg border bg-gray-50 p-3 text-left hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
-                  <h4 className="text-sm font-semibold text-gray-800">
+                <button className="flex w-full items-center justify-between rounded-lg border border-border bg-card p-3 text-left hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                  <h4 className="text-sm font-semibold text-card-foreground">
                     NB & Important: How the Payroll Sheet Works
                   </h4>
                   <ChevronDown className="h-5 w-5 transition-transform duration-200 [&[data-state=open]]:rotate-180" />
                 </button>
               </CollapsibleTrigger>
-              <CollapsibleContent className="p-4 text-sm text-gray-700">
+              <CollapsibleContent className="p-4 text-sm text-muted-foreground">
                 <ul className="list-disc space-y-2 pl-5">
                   <li>
                     Use the provided sample template;{" "}
@@ -530,8 +530,8 @@ function BulkPayrollProcessor() {
             </Collapsible>
           </div>
 
-          <div className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+          <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <h2 className="mb-4 text-lg font-semibold text-card-foreground">
               Upload Your Payroll Sheet
             </h2>
             <FileDropzone
@@ -539,16 +539,16 @@ function BulkPayrollProcessor() {
               isProcessing={isProcessing}
             />
             {fileError && (
-              <div className="mt-4 p-3 bg-red-100 text-red-800 rounded-lg text-sm">
+              <div className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-300">
                 <strong>Error:</strong> {fileError}
               </div>
             )}
           </div>
         </div>
         {employeeData.length > 0 && (
-          <div className="bg-white rounded-xl shadow p-6">
+          <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-              <h2 className="text-lg font-semibold text-gray-800">
+              <h2 className="text-lg font-semibold text-card-foreground">
                 Processing Results
               </h2>
               <button

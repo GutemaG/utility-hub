@@ -20,12 +20,12 @@ function FeatureCard({
   return (
     <Link
       to={to}
-      className="block bg-white dark:bg-zinc-900 rounded-lg shadow-md hover:shadow-xl transition p-5 border border-zinc-200 dark:border-zinc-800 hover:border-blue-500"
+      className="block rounded-lg border border-border bg-card p-5 shadow-md transition hover:border-blue-500 hover:shadow-xl"
     >
-      <h3 className="text-lg font-semibold mb-1 text-blue-600 dark:text-blue-400">
+      <h3 className="mb-1 text-lg font-semibold text-blue-600 dark:text-blue-400">
         {title}
       </h3>
-      <p className="text-zinc-600 dark:text-zinc-300 text-sm">{description}</p>
+      <p className="text-sm text-muted-foreground">{description}</p>
     </Link>
   );
 }
@@ -56,8 +56,8 @@ function Index() {
           alt="UtilityHub"
           className="w-32 h-32 mb-4 rounded-xl shadow"
         />
-        <h1 className="text-3xl font-bold mb-2 text-center">UtilityHub</h1>
-        <p className="text-zinc-700 dark:text-zinc-300 text-center max-w-2xl">
+        <h1 className="mb-2 text-center text-3xl font-bold text-foreground">UtilityHub</h1>
+        <p className="max-w-2xl text-center text-muted-foreground">
           <span className="font-semibold">
             Your everyday digital Swiss Army Knife
           </span>{" "}

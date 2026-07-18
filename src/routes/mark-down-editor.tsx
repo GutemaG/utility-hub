@@ -1,6 +1,7 @@
 import { Suspense, lazy, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useSEO } from "@/hooks/use-seo";
+import { useTheme } from "@/components/theme-provider";
 
 const MDEditor = lazy(() => import("@uiw/react-md-editor"));
 
@@ -10,6 +11,7 @@ export const Route = createFileRoute("/mark-down-editor")({
 
 function RouteComponent() {
   const [markdown, setMarkdown] = useState("**Hello**");
+  const { resolvedTheme } = useTheme();
 
   useSEO({
     title: "Markdown Editor | Utility Hub",
@@ -50,21 +52,21 @@ function RouteComponent() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setMarkdown("")}
-            className="px-3 py-1.5 rounded-md border text-sm hover:bg-gray-50"
+            className="rounded-md border border-input px-3 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
             title="Reset to sample"
           >
             Clear
           </button>
           <button
             onClick={copy}
-            className="px-3 py-1.5 rounded-md border text-sm hover:bg-gray-50"
+            className="rounded-md border border-input px-3 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
             title="Copy markdown"
           >
             Copy
           </button>
           <button
             onClick={download}
-            className="px-3 py-1.5 rounded-md border text-sm hover:bg-gray-50"
+            className="rounded-md border border-input px-3 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
             title="Download .md"
           >
             Download
@@ -72,16 +74,18 @@ function RouteComponent() {
         </div>
       </div>
 
-      <Suspense fallback={<div className="rounded-lg border border-dashed p-6 text-center text-sm text-gray-500">Loading editor…</div>}>
-        <MDEditor
-          value={markdown}
-          onChange={(value) => setMarkdown(value ?? "")}
-          enableScroll={true}
-          height={600}
-          textareaProps={{
-            placeholder: "Please write your markdown here",
-          }}
-        />
+      <Suspense fallback={<div className="rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">Loading editor…</div>}>
+        <div data-color-mode={resolvedTheme}>
+          <MDEditor
+            value={markdown}
+            onChange={(value) => setMarkdown(value ?? "")}
+            enableScroll={true}
+            height={600}
+            textareaProps={{
+              placeholder: "Please write your markdown here",
+            }}
+          />
+        </div>
       </Suspense>
     </div>
   );

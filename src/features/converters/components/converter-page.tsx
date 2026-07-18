@@ -7,7 +7,7 @@ import type { ConverterConfig, ConverterUnit } from "../types";
 function ArrowIcon() {
   return (
     <svg
-      className="w-8 h-8 text-gray-400"
+      className="h-8 w-8 text-muted-foreground"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -56,21 +56,21 @@ export function ConverterPage({ config }: ConverterPageProps) {
   return (
     <div className="max-w-6xl mx-auto p-4 space-y-6">
       <div className="text-center">
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+        <h1 className="mb-2 text-3xl font-bold text-foreground sm:text-4xl">
           {config.title}
         </h1>
-        <p className="text-gray-600">{config.subtitle}</p>
+        <p className="text-muted-foreground">{config.subtitle}</p>
       </div>
 
-      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4 text-center">
+      <div className="rounded-xl border border-border bg-card p-6 shadow-lg">
+        <h2 className="mb-4 text-center text-lg font-semibold text-card-foreground">
           {config.convertLabel}
         </h2>
         <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
           <div className="flex-1 max-w-xs">
             <label
               htmlFor="mainFromInput"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="mb-2 block text-sm font-medium text-foreground"
             >
               {findUnit(fromUnit)?.name} ({fromUnit})
             </label>
@@ -79,12 +79,12 @@ export function ConverterPage({ config }: ConverterPageProps) {
               type="text"
               value={values[fromUnit] || ""}
               onChange={(e) => handleInputChange(e.target.value, fromUnit)}
-              className="w-full px-3 py-2 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mb-3"
+              className="mb-3 w-full rounded-lg border border-input bg-background px-3 py-2 text-lg text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
               placeholder={config.inputPlaceholder ?? "Enter value"}
             />
             <label
               htmlFor="fromUnit"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="mb-2 block text-sm font-medium text-foreground"
             >
               From Unit
             </label>
@@ -92,7 +92,7 @@ export function ConverterPage({ config }: ConverterPageProps) {
               id="fromUnit"
               value={fromUnit}
               onChange={(e) => handleFromUnitChange(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
             >
               {config.units.map((unit) => (
                 <option key={unit.symbol} value={unit.symbol}>
@@ -107,15 +107,15 @@ export function ConverterPage({ config }: ConverterPageProps) {
           </div>
 
           <div className="flex-1 max-w-xs">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-foreground">
               {findUnit(toUnit)?.name} ({toUnit})
             </label>
-            <div className="w-full px-3 py-2 text-lg bg-gray-50 border border-gray-300 rounded-lg text-gray-900 font-mono mb-3 overflow-auto">
+            <div className="mb-3 w-full overflow-auto rounded-lg border border-input bg-muted px-3 py-2 font-mono text-lg text-foreground">
               {values[toUnit] || "0"}
             </div>
             <label
               htmlFor="toUnit"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="mb-2 block text-sm font-medium text-foreground"
             >
               To Unit
             </label>
@@ -123,7 +123,7 @@ export function ConverterPage({ config }: ConverterPageProps) {
               id="toUnit"
               value={toUnit}
               onChange={(e) => setToUnit(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
             >
               {config.units.map((unit) => (
                 <option key={unit.symbol} value={unit.symbol}>
@@ -137,8 +137,8 @@ export function ConverterPage({ config }: ConverterPageProps) {
         {config.renderPanelExtra?.(baseValue)}
       </div>
 
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">
+      <div className="rounded-xl border border-border bg-gradient-to-r from-muted to-muted/40 p-4">
+        <h3 className="mb-3 text-lg font-semibold text-foreground">
           Quick Examples
         </h3>
         <div className="flex flex-wrap gap-2">
@@ -147,7 +147,7 @@ export function ConverterPage({ config }: ConverterPageProps) {
               key={value}
               type="button"
               onClick={() => setExample(value)}
-              className="px-3 py-2 bg-white border border-blue-200 rounded-lg text-sm font-medium text-blue-700 hover:bg-blue-50 hover:border-blue-300 transition-colors"
+              className="rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               {value} {fromUnit}
             </button>
@@ -176,7 +176,7 @@ export function ConverterPage({ config }: ConverterPageProps) {
         <button
           type="button"
           onClick={clearAll}
-          className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+          className="rounded-lg bg-secondary px-6 py-3 font-medium text-secondary-foreground transition-colors hover:bg-secondary/80"
         >
           Clear All
         </button>
@@ -189,11 +189,11 @@ export function ConverterPage({ config }: ConverterPageProps) {
         </button>
       </div>
 
-      <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">How it works</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+      <div className="rounded-xl border border-border bg-gradient-to-r from-muted/80 to-muted p-6">
+        <h3 className="mb-3 text-lg font-semibold text-foreground">How it works</h3>
+        <div className="grid grid-cols-1 gap-4 text-sm text-muted-foreground md:grid-cols-2">
           <div>
-            <h4 className="font-medium text-gray-900 mb-2">Features:</h4>
+            <h4 className="mb-2 font-medium text-foreground">Features:</h4>
             <ul className="space-y-1">
               {config.features.map((feature) => (
                 <li key={feature}>• {feature}</li>
@@ -201,13 +201,13 @@ export function ConverterPage({ config }: ConverterPageProps) {
             </ul>
           </div>
           <div>
-            <h4 className="font-medium text-gray-900 mb-2">Categories:</h4>
+            <h4 className="mb-2 font-medium text-foreground">Categories:</h4>
             <ul className="space-y-1">
               {config.categories.map((category) => (
                 <li key={category.label}>
                   •{" "}
                   <span
-                    className={`font-medium ${CATEGORY_LABEL_COLORS[category.label.toLowerCase()] ?? "text-gray-700"}`}
+                    className={`font-medium ${CATEGORY_LABEL_COLORS[category.label.toLowerCase()] ?? "text-foreground"}`}
                   >
                     {category.label}:
                   </span>{" "}
@@ -237,16 +237,16 @@ function UnitCard({
 }) {
   return (
     <div
-      className={`bg-white rounded-xl shadow-lg border-2 transition-all duration-200 ${
+      className={`rounded-xl border-2 bg-card shadow-lg transition-all duration-200 ${
         isActive
           ? "border-blue-500 shadow-blue-100"
-          : "border-gray-200 hover:border-gray-300"
+          : "border-border hover:border-ring/40"
       }`}
     >
       <div className="p-4">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="font-semibold text-gray-900">{unit.name}</h3>
-          <span className="text-sm text-gray-500 font-mono">{unit.symbol}</span>
+          <h3 className="font-semibold text-card-foreground">{unit.name}</h3>
+          <span className="font-mono text-sm text-muted-foreground">{unit.symbol}</span>
         </div>
 
         <div className="relative">
@@ -254,14 +254,14 @@ function UnitCard({
             type="text"
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className={`w-full px-3 py-2 text-lg border rounded-lg focus:outline-none focus:ring-2 transition-all ${
+            className={`w-full rounded-lg border bg-background px-3 py-2 text-lg text-foreground transition-all focus:outline-none focus:ring-2 ${
               isActive
                 ? "border-blue-500 focus:ring-blue-500 focus:border-blue-500"
-                : "border-gray-300 focus:ring-gray-500 focus:border-gray-500"
+                : "border-input focus:border-ring focus:ring-ring"
             }`}
             placeholder="0"
           />
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm font-medium">
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 transform text-sm font-medium text-muted-foreground">
             {unit.symbol}
           </div>
         </div>

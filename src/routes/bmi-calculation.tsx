@@ -20,42 +20,42 @@ const bmiCategories: BMICategory[] = [
     category: "Underweight",
     risk: "Low",
     color: "text-blue-600",
-    bgColor: "bg-blue-100",
+    bgColor: "bg-blue-500/10",
   },
   {
     range: "18.5 - 24.9",
     category: "Normal Weight",
     risk: "Low",
     color: "text-green-600",
-    bgColor: "bg-green-100",
+    bgColor: "bg-green-500/10",
   },
   {
     range: "25.0 - 29.9",
     category: "Overweight",
     risk: "Moderate",
     color: "text-yellow-600",
-    bgColor: "bg-yellow-100",
+    bgColor: "bg-yellow-500/10",
   },
   {
     range: "30.0 - 34.9",
     category: "Obesity Class I",
     risk: "High",
     color: "text-orange-600",
-    bgColor: "bg-orange-100",
+    bgColor: "bg-orange-500/10",
   },
   {
     range: "35.0 - 39.9",
     category: "Obesity Class II",
     risk: "Very High",
     color: "text-red-600",
-    bgColor: "bg-red-100",
+    bgColor: "bg-red-500/10",
   },
   {
     range: "≥ 40.0",
     category: "Obesity Class III",
     risk: "Extremely High",
     color: "text-purple-600",
-    bgColor: "bg-purple-100",
+    bgColor: "bg-purple-500/10",
   },
 ];
 
@@ -278,15 +278,15 @@ function RouteComponent() {
     onToggle: () => void;
     children: React.ReactNode;
   }) => (
-    <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-lg">
       <button
         onClick={onToggle}
-        className="w-full px-6 py-4 text-left bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 transition-all duration-200"
+        className="w-full bg-gradient-to-r from-muted/80 to-muted px-6 py-4 text-left transition-all duration-200 hover:from-muted hover:to-muted/90"
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+          <h2 className="text-xl font-semibold text-card-foreground">{title}</h2>
           <svg
-            className={`w-6 h-6 text-gray-500 transform transition-transform duration-200 ${
+            className={`h-6 w-6 transform text-muted-foreground transition-transform duration-200 ${
               isActive ? "rotate-180" : ""
             }`}
             fill="none"
@@ -303,7 +303,7 @@ function RouteComponent() {
         </div>
       </button>
       {isActive && (
-        <div className="p-6 border-t border-gray-200">{children}</div>
+        <div className="border-t border-border p-6">{children}</div>
       )}
     </div>
   );
@@ -313,29 +313,29 @@ function RouteComponent() {
       <div className="max-w-4xl mx-auto p-4 space-y-6">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="mb-2 text-3xl font-bold text-foreground sm:text-4xl">
             Body Health Calculator
           </h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             Calculate BMI, Body Fat, and Ideal Weight
           </p>
         </div>
 
         {/* Input Section */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        <div className="rounded-xl border border-border bg-card p-6 shadow-lg">
+          <h2 className="mb-4 text-xl font-semibold text-card-foreground">
             Personal Information
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Gender */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-foreground">
                 Gender
               </label>
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value as "male" | "female")}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -344,14 +344,14 @@ function RouteComponent() {
 
             {/* Age */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-foreground">
                 Age (years)
               </label>
               <input
                 type="number"
                 value={age}
                 onChange={(e) => setAge(Number(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
                 min="1"
                 max="120"
               />
@@ -359,14 +359,14 @@ function RouteComponent() {
 
             {/* Height */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-foreground">
                 Height (cm)
               </label>
               <input
                 type="number"
                 value={height}
                 onChange={(e) => setHeight(Number(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
                 min="50"
                 max="300"
               />
@@ -374,14 +374,14 @@ function RouteComponent() {
 
             {/* Weight */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-foreground">
                 Weight (kg)
               </label>
               <input
                 type="number"
                 value={weight}
                 onChange={(e) => setWeight(Number(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
                 min="20"
                 max="500"
               />
@@ -389,14 +389,14 @@ function RouteComponent() {
 
             {/* Waist */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-foreground">
                 Waist (cm)
               </label>
               <input
                 type="number"
                 value={waist}
                 onChange={(e) => setWaist(Number(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
                 min="40"
                 max="200"
               />
@@ -404,14 +404,14 @@ function RouteComponent() {
 
             {/* Hip */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-foreground">
                 Hip (cm)
               </label>
               <input
                 type="number"
                 value={hip}
                 onChange={(e) => setHip(Number(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
                 min="40"
                 max="200"
               />
@@ -419,14 +419,14 @@ function RouteComponent() {
 
             {/* Neck */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-foreground">
                 Neck (cm)
               </label>
               <input
                 type="number"
                 value={neck}
                 onChange={(e) => setNeck(Number(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
                 min="20"
                 max="60"
               />
@@ -434,10 +434,10 @@ function RouteComponent() {
 
             {/* Body Surface Area Display */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-foreground">
                 Body Surface Area
               </label>
-              <div className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 font-mono">
+              <div className="w-full rounded-lg border border-input bg-muted px-3 py-2 font-mono text-foreground">
                 {bodySurfaceArea.toFixed(2)} m²
               </div>
             </div>
@@ -455,46 +455,46 @@ function RouteComponent() {
           <div className="space-y-6">
             {/* BMI Result */}
             <div className="text-center">
-              <div className="text-4xl font-bold text-gray-900 mb-2">
+              <div className="mb-2 text-4xl font-bold text-foreground">
                 {bmi.toFixed(1)}
               </div>
               <div className={`text-lg font-medium ${bmiCategory.color} mb-2`}>
                 {bmiCategory.category}
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-muted-foreground">
                 Risk Level: {bmiCategory.risk}
               </div>
             </div>
 
             {/* BMI Categories Table */}
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-border">
+                <thead className="bg-muted/60">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
                       BMI Range
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
                       Category
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
                       Risk Level
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="divide-y divide-border bg-card">
                   {bmiCategories.map((category, index) => (
                     <tr
                       key={index}
                       className={`${category.bgColor} ${bmiCategory.category === category.category ? "ring-2 ring-blue-500" : ""}`}
                     >
-                      <td className="px-4 py-3 text-sm font-medium text-gray-900">
+                      <td className="px-4 py-3 text-sm font-medium text-foreground">
                         {category.range}
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-900">
+                      <td className="px-4 py-3 text-sm text-foreground">
                         {category.category}
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-900">
+                      <td className="px-4 py-3 text-sm text-foreground">
                         {category.risk}
                       </td>
                     </tr>
@@ -518,7 +518,7 @@ function RouteComponent() {
           <div className="space-y-6">
             {/* Body Fat Result */}
             <div className="text-center">
-              <div className="text-4xl font-bold text-gray-900 mb-2">
+              <div className="mb-2 text-4xl font-bold text-foreground">
                 {bodyFat.toFixed(1)}%
               </div>
               <div
@@ -526,7 +526,7 @@ function RouteComponent() {
               >
                 {bodyFatCategory.category}
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-muted-foreground">
                 {bodyFatCategory.description}
               </div>
             </div>
@@ -538,24 +538,24 @@ function RouteComponent() {
                   key={index}
                   className={`p-4 rounded-lg border-2 ${
                     bodyFatCategory.category === category.category
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 bg-gray-50"
+                      ? "border-blue-500 bg-blue-500/10"
+                      : "border-border bg-muted/50"
                   }`}
                 >
                   <div className={`text-lg font-semibold ${category.color}`}>
                     {category.range}
                   </div>
-                  <div className="text-sm font-medium text-gray-900">
+                  <div className="text-sm font-medium text-foreground">
                     {category.category}
                   </div>
-                  <div className="text-xs text-gray-600">
+                  <div className="text-xs text-muted-foreground">
                     {category.description}
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="text-sm text-gray-600 bg-blue-50 p-4 rounded-lg">
+            <div className="rounded-lg bg-blue-500/10 p-4 text-sm text-muted-foreground">
               <strong>Note:</strong> Body fat calculation uses the U.S. Navy
               method, which requires measurements of waist, hip, neck, and
               height. This method provides a reasonable estimate but may not be
@@ -577,48 +577,48 @@ function RouteComponent() {
           <div className="space-y-6">
             {/* Ideal Weight Result */}
             <div className="text-center">
-              <div className="text-4xl font-bold text-gray-900 mb-2">
+              <div className="mb-2 text-4xl font-bold text-foreground">
                 {idealWeight.toFixed(1)} kg
               </div>
-              <div className="text-lg text-gray-600 mb-4">
+              <div className="mb-4 text-lg text-muted-foreground">
                 ≈ {(idealWeight * 2.20462).toFixed(1)} lbs
               </div>
             </div>
 
             {/* Weight Analysis */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <div className="text-2xl font-bold text-blue-600">
+              <div className="rounded-lg border border-blue-500/20 bg-blue-500/10 p-4 text-center">
+                <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
                   {Math.abs(weight - idealWeight).toFixed(1)} kg
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-muted-foreground">
                   {weight > idealWeight ? "Over" : "Under"} Ideal Weight
                 </div>
               </div>
 
-              <div className="text-center p-4 bg-green-50 rounded-lg">
-                <div className="text-2xl font-bold text-green-600">
+              <div className="rounded-lg border border-green-500/20 bg-green-500/10 p-4 text-center">
+                <div className="text-2xl font-bold text-green-700 dark:text-green-300">
                   {((weight / idealWeight) * 100).toFixed(1)}%
                 </div>
-                <div className="text-sm text-gray-600">of Ideal Weight</div>
+                <div className="text-sm text-muted-foreground">of Ideal Weight</div>
               </div>
 
-              <div className="text-center p-4 bg-purple-50 rounded-lg">
-                <div className="text-2xl font-bold text-purple-600">
+              <div className="rounded-lg border border-purple-500/20 bg-purple-500/10 p-4 text-center">
+                <div className="text-2xl font-bold text-purple-700 dark:text-purple-300">
                   {(((weight - idealWeight) / idealWeight) * 100).toFixed(1)}%
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-muted-foreground">
                   Deviation from Ideal
                 </div>
               </div>
             </div>
 
             {/* Weight Recommendations */}
-            <div className="bg-yellow-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-yellow-800 mb-2">
+            <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/10 p-4">
+              <h4 className="mb-2 font-semibold text-yellow-700 dark:text-yellow-300">
                 Weight Recommendations
               </h4>
-              <div className="text-sm text-yellow-700 space-y-1">
+              <div className="space-y-1 text-sm text-yellow-700 dark:text-yellow-200">
                 {weight > idealWeight * 1.1 ? (
                   <p>
                     • Consider gradual weight loss through balanced diet and
@@ -642,11 +642,11 @@ function RouteComponent() {
         </CollapsibleSection>
 
         {/* Information Box */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6">
+        <div className="rounded-xl border border-blue-500/20 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 p-6">
           <div className="flex">
             <div className="flex-shrink-0">
               <svg
-                className="h-6 w-6 text-blue-500"
+                className="h-6 w-6 text-blue-600 dark:text-blue-300"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -658,10 +658,10 @@ function RouteComponent() {
               </svg>
             </div>
             <div className="ml-4">
-              <h3 className="text-base font-medium text-blue-800 mb-3">
+              <h3 className="mb-3 text-base font-medium text-blue-700 dark:text-blue-300">
                 Important Notes
               </h3>
-              <div className="text-sm text-blue-700 space-y-2">
+              <div className="space-y-2 text-sm text-blue-700 dark:text-blue-200">
                 <p>
                   • <strong>BMI:</strong> Body Mass Index is a screening tool,
                   not a diagnostic measure

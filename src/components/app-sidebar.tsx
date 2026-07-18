@@ -1,5 +1,5 @@
 import * as React from "react";
-import { GalleryVerticalEnd } from "lucide-react";
+import { GalleryVerticalEnd, Keyboard } from "lucide-react";
 import { navigationGroups } from "@/config/navigation";
 
 import {
@@ -99,6 +99,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
+            <div className="flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm text-muted-foreground">
+              <Keyboard className="h-4 w-4" />
+              <span>Ctrl/Cmd + K</span>
+            </div>
             <Input
               onClick={(e) => e.stopPropagation()}
               placeholder="Filter..."
