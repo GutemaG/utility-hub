@@ -2,6 +2,7 @@ import * as React from "react";
 import { createRootRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/app-sidebar";
 import { CommandPalette } from "@/components/command-palette";
+import { InstallPwaButton } from "@/components/install-pwa-button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { navigationGroups } from "@/config/navigation";
 import { recordToolUsage } from "@/lib/tool-preferences";
@@ -44,7 +45,8 @@ function RootLayout() {
         <SidebarInset>
           <header className="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4 ">
             <SidebarTrigger className="-ml-1" />
-            <div className="ml-auto">
+            <div className="ml-auto flex items-center gap-2">
+              <InstallPwaButton />
               <ThemeToggle />
             </div>
           </header>
