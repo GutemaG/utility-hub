@@ -29,6 +29,7 @@ import { Route as JwtDecoderRouteImport } from './routes/jwt-decoder'
 import { Route as JsonValidatorRouteImport } from './routes/json-validator'
 import { Route as EthiopianCalendarRouteImport } from './routes/ethiopian-calendar'
 import { Route as DataStorageConversionRouteImport } from './routes/data-storage-conversion'
+import { Route as CurrencyConversionRouteImport } from './routes/currency-conversion'
 import { Route as CharacterCounterRouteImport } from './routes/character-counter'
 import { Route as BmiCalculationRouteImport } from './routes/bmi-calculation'
 import { Route as Base64ToolRouteImport } from './routes/base64-tool'
@@ -136,6 +137,11 @@ const DataStorageConversionRoute = DataStorageConversionRouteImport.update({
   path: '/data-storage-conversion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CurrencyConversionRoute = CurrencyConversionRouteImport.update({
+  id: '/currency-conversion',
+  path: '/currency-conversion',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CharacterCounterRoute = CharacterCounterRouteImport.update({
   id: '/character-counter',
   path: '/character-counter',
@@ -174,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
+  '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/json-validator': typeof JsonValidatorRoute
@@ -202,6 +209,7 @@ export interface FileRoutesByTo {
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
+  '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/json-validator': typeof JsonValidatorRoute
@@ -231,6 +239,7 @@ export interface FileRoutesById {
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
+  '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/json-validator': typeof JsonValidatorRoute
@@ -261,6 +270,7 @@ export interface FileRouteTypes {
     | '/base64-tool'
     | '/bmi-calculation'
     | '/character-counter'
+    | '/currency-conversion'
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
     | '/json-validator'
@@ -289,6 +299,7 @@ export interface FileRouteTypes {
     | '/base64-tool'
     | '/bmi-calculation'
     | '/character-counter'
+    | '/currency-conversion'
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
     | '/json-validator'
@@ -317,6 +328,7 @@ export interface FileRouteTypes {
     | '/base64-tool'
     | '/bmi-calculation'
     | '/character-counter'
+    | '/currency-conversion'
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
     | '/json-validator'
@@ -346,6 +358,7 @@ export interface RootRouteChildren {
   Base64ToolRoute: typeof Base64ToolRoute
   BmiCalculationRoute: typeof BmiCalculationRoute
   CharacterCounterRoute: typeof CharacterCounterRoute
+  CurrencyConversionRoute: typeof CurrencyConversionRoute
   DataStorageConversionRoute: typeof DataStorageConversionRoute
   EthiopianCalendarRoute: typeof EthiopianCalendarRoute
   JsonValidatorRoute: typeof JsonValidatorRoute
@@ -510,6 +523,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DataStorageConversionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/currency-conversion': {
+      id: '/currency-conversion'
+      path: '/currency-conversion'
+      fullPath: '/currency-conversion'
+      preLoaderRoute: typeof CurrencyConversionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/character-counter': {
       id: '/character-counter'
       path: '/character-counter'
@@ -562,6 +582,7 @@ const rootRouteChildren: RootRouteChildren = {
   Base64ToolRoute: Base64ToolRoute,
   BmiCalculationRoute: BmiCalculationRoute,
   CharacterCounterRoute: CharacterCounterRoute,
+  CurrencyConversionRoute: CurrencyConversionRoute,
   DataStorageConversionRoute: DataStorageConversionRoute,
   EthiopianCalendarRoute: EthiopianCalendarRoute,
   JsonValidatorRoute: JsonValidatorRoute,
