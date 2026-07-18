@@ -285,17 +285,17 @@ function RouteComponent() {
       <div className="max-w-4xl mx-auto p-4 space-y-6">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="mb-2 text-3xl font-bold text-foreground sm:text-4xl">
             Password Generator
           </h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             Generate strong, secure passwords with customizable options
           </p>
         </div>
 
         {/* Generated Password Display */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="rounded-xl border border-border bg-card p-6 shadow-lg">
+          <h2 className="mb-4 text-lg font-semibold text-card-foreground">
             Generated Password
           </h2>
           <div className="flex items-center space-x-3">
@@ -304,11 +304,11 @@ function RouteComponent() {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 readOnly
-                className="w-full px-4 py-3 text-lg font-mono border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full rounded-lg border border-input bg-muted px-4 py-3 font-mono text-lg text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
               />
               <button
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 transform text-muted-foreground hover:text-foreground"
               >
                 {showPassword ? (
                   <svg
@@ -362,14 +362,14 @@ function RouteComponent() {
           {/* Password Strength Indicator */}
           <div className="mt-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700">
+              <span className="text-sm font-medium text-foreground">
                 Password Strength:
               </span>
               <span className={`text-sm font-medium ${strength.color}`}>
                 {strength.label}
               </span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="h-2 w-full rounded-full bg-muted">
               <div
                 className={`h-2 rounded-full transition-all duration-300 ${
                   strength.score <= 2
@@ -385,23 +385,23 @@ function RouteComponent() {
                 style={{ width: `${(strength.score / 10) * 100}%` }}
               ></div>
             </div>
-            <p className="text-xs text-gray-600 mt-1">{strength.description}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{strength.description}</p>
           </div>
         </div>
 
         {/* Password Options */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="rounded-xl border border-border bg-card p-6 shadow-lg">
+          <h2 className="mb-4 text-lg font-semibold text-card-foreground">
             Password Options
           </h2>
 
           {/* Length Slider */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-foreground">
                 Password Length: {options.length}
               </label>
-              <span className="text-sm text-gray-500 font-mono">
+              <span className="font-mono text-sm text-muted-foreground">
                 {options.length} characters
               </span>
             </div>
@@ -416,9 +416,9 @@ function RouteComponent() {
                   length: Number(e.target.value),
                 }))
               }
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+              className="slider h-2 w-full cursor-pointer appearance-none rounded-lg bg-muted"
             />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
               <span>8</span>
               <span>16</span>
               <span>24</span>
@@ -441,9 +441,9 @@ function RouteComponent() {
                       includeUppercase: e.target.checked,
                     }))
                   }
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-input bg-background text-primary focus:ring-ring"
                 />
-                <span className="ml-2 text-sm text-gray-700">
+                <span className="ml-2 text-sm text-foreground">
                   Uppercase Letters (A-Z)
                 </span>
               </label>
@@ -457,9 +457,9 @@ function RouteComponent() {
                       includeLowercase: e.target.checked,
                     }))
                   }
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-input bg-background text-primary focus:ring-ring"
                 />
-                <span className="ml-2 text-sm text-gray-700">
+                <span className="ml-2 text-sm text-foreground">
                   Lowercase Letters (a-z)
                 </span>
               </label>
@@ -473,9 +473,9 @@ function RouteComponent() {
                       includeNumbers: e.target.checked,
                     }))
                   }
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-input bg-background text-primary focus:ring-ring"
                 />
-                <span className="ml-2 text-sm text-gray-700">
+                <span className="ml-2 text-sm text-foreground">
                   Numbers (0-9)
                 </span>
               </label>
@@ -489,9 +489,9 @@ function RouteComponent() {
                       includeSymbols: e.target.checked,
                     }))
                   }
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-input bg-background text-primary focus:ring-ring"
                 />
-                <span className="ml-2 text-sm text-gray-700">
+                <span className="ml-2 text-sm text-foreground">
                   Symbols (!@#$%^&*)
                 </span>
               </label>
@@ -507,9 +507,9 @@ function RouteComponent() {
                       excludeSimilar: e.target.checked,
                     }))
                   }
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-input bg-background text-primary focus:ring-ring"
                 />
-                <span className="ml-2 text-sm text-gray-700">
+                <span className="ml-2 text-sm text-foreground">
                   Exclude Similar (i, l, 1, L, o, 0, O)
                 </span>
               </label>
@@ -523,9 +523,9 @@ function RouteComponent() {
                       excludeAmbiguous: e.target.checked,
                     }))
                   }
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-input bg-background text-primary focus:ring-ring"
                 />
-                <span className="ml-2 text-sm text-gray-700">
+                <span className="ml-2 text-sm text-foreground">
                   Exclude Ambiguous (&#123; &#125; &#91; &#93; &#40; &#41; / \
                   &#39; &quot; ` ~ , ; : . &lt; &gt;)
                 </span>
@@ -551,13 +551,13 @@ function RouteComponent() {
         </div>
 
         {/* Password Security Tips */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-blue-800 mb-3">
+        <div className="rounded-xl border border-blue-500/20 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 p-6">
+          <h3 className="mb-3 text-lg font-semibold text-blue-700 dark:text-blue-300">
             Password Security Tips
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-700">
+          <div className="grid grid-cols-1 gap-4 text-sm text-blue-700 dark:text-blue-200 md:grid-cols-2">
             <div>
-              <h4 className="font-medium text-blue-800 mb-2">
+              <h4 className="mb-2 font-medium text-blue-800 dark:text-blue-100">
                 Strong Password Features:
               </h4>
               <ul className="space-y-1">
@@ -568,7 +568,7 @@ function RouteComponent() {
               </ul>
             </div>
             <div>
-              <h4 className="font-medium text-blue-800 mb-2">
+              <h4 className="mb-2 font-medium text-blue-800 dark:text-blue-100">
                 Security Best Practices:
               </h4>
               <ul className="space-y-1">
@@ -582,11 +582,11 @@ function RouteComponent() {
         </div>
 
         {/* Information Box */}
-        <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-3">
+        <div className="rounded-xl border border-border bg-gradient-to-r from-muted/60 to-muted/30 p-6">
+          <h3 className="mb-3 text-lg font-semibold text-card-foreground">
             How it works
           </h3>
-          <div className="text-sm text-gray-700 space-y-2">
+          <div className="space-y-2 text-sm text-muted-foreground">
             <p>
               • <strong>Length Control:</strong> Adjust password length from 8
               to 64 characters

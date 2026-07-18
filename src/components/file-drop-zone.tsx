@@ -47,8 +47,8 @@ export const FileDropzone: React.FC<{
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors duration-300
-        ${isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300 bg-gray-50"}
-        ${isProcessing ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:border-gray-400"}`}
+        ${isDragging ? "border-blue-500 bg-blue-500/10" : "border-border bg-muted/40"}
+        ${isProcessing ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:border-ring"}`}
     >
       <input
         type="file"
@@ -75,19 +75,19 @@ export const FileDropzone: React.FC<{
             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
           />
         </svg>
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           {isProcessing ? (
             "Processing..."
           ) : (
             <>
-              <span className="font-semibold text-blue-600">
+              <span className="font-semibold text-primary">
                 Click to upload
               </span>{" "}
               or drag and drop
             </>
           )}
         </p>
-        <p className="text-xs text-gray-500">Excel files only (.xlsx, .xls)</p>
+            <p className="text-xs text-muted-foreground">Excel files only (.xlsx, .xls)</p>
       </label>
     </div>
   );

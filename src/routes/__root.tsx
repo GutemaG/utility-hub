@@ -1,6 +1,8 @@
 import * as React from "react";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/app-sidebar";
+import { CommandPalette } from "@/components/command-palette";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   SidebarInset,
   SidebarProvider,
@@ -19,10 +21,14 @@ export const Route = createRootRoute({
   component: () => (
     <>
       <SidebarProvider>
+        <CommandPalette />
         <AppSidebar />
         <SidebarInset>
           <header className="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4 ">
             <SidebarTrigger className="-ml-1" />
+            <div className="ml-auto">
+              <ThemeToggle />
+            </div>
           </header>
           <div className="">
             <Outlet />

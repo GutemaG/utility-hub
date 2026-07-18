@@ -187,6 +187,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
+          onOpenAutoFocus={(event) => event.preventDefault()}
           className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
           style={
             {
@@ -699,6 +700,7 @@ function SidebarMenuSubButton({
 }
 
 export {
+  useSidebar,
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -722,5 +724,4 @@ export {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
-  useSidebar,
 }

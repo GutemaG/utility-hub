@@ -99,13 +99,13 @@ function RouteComponent() {
     title: string;
     items: { label: string; value: string }[];
   }) => (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-      <h3 className="font-semibold text-lg text-gray-800 mb-3">{title}</h3>
+    <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+      <h3 className="mb-3 text-lg font-semibold text-card-foreground">{title}</h3>
       <div className="space-y-2">
         {items.map((item, i) => (
           <div key={i} className="flex justify-between items-center">
-            <span className="text-gray-600 text-sm">{item.label}</span>
-            <span className="font-mono text-gray-900 bg-gray-50 px-2.5 py-1 rounded text-sm">
+            <span className="text-sm text-muted-foreground">{item.label}</span>
+            <span className="rounded bg-muted px-2.5 py-1 font-mono text-sm text-foreground">
               {item.value}
             </span>
           </div>
@@ -119,10 +119,10 @@ function RouteComponent() {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+          <h1 className="mb-3 text-3xl font-bold text-foreground md:text-4xl">
             Age & Date Convertors
           </h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-muted-foreground">
             Convert between Gregorian and Ethiopian calendars, calculate ages,
             and perform date operations
           </p>
@@ -141,7 +141,7 @@ function RouteComponent() {
               className={`px-5 py-2.5 rounded-full font-medium transition-all duration-200 ${
                 activeTab === tab.id
                   ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               }`}
             >
               {tab.label}
@@ -153,18 +153,18 @@ function RouteComponent() {
         <div className="space-y-8">
           {/* Age Calculator */}
           {activeTab === "age-calculator" && (
-            <div className="bg-gray-50 rounded-2xl p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-center text-gray-800 mb-2">
+            <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
+              <h2 className="mb-2 text-center text-2xl font-bold text-card-foreground">
                 Age Calculator
               </h2>
-              <p className="text-gray-600 text-center mb-6">
+              <p className="mb-6 text-center text-muted-foreground">
                 Calculate age between two dates in both Gregorian and Ethiopian
                 calendars
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="mb-2 block text-sm font-medium text-foreground">
                     Birth Date
                   </label>
                   <EthiopianGregorianDatePicker
@@ -173,7 +173,7 @@ function RouteComponent() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="mb-2 block text-sm font-medium text-foreground">
                     Target Date
                   </label>
                   <EthiopianGregorianDatePicker
@@ -218,16 +218,16 @@ function RouteComponent() {
 
           {/* Date Converter */}
           {activeTab === "date-converter" && (
-            <div className="bg-gray-50 rounded-2xl p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-center text-gray-800 mb-2">
+            <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
+              <h2 className="mb-2 text-center text-2xl font-bold text-card-foreground">
                 Date Converter
               </h2>
-              <p className="text-gray-600 text-center mb-6">
+              <p className="mb-6 text-center text-muted-foreground">
                 Convert dates between Gregorian and Ethiopian calendars
               </p>
 
               <div className="max-w-md mx-auto mb-8">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-foreground">
                   Select Date
                 </label>
                 <EthiopianGregorianDatePicker
@@ -268,17 +268,17 @@ function RouteComponent() {
 
           {/* Date Calculator */}
           {activeTab === "date-calculator" && (
-            <div className="bg-gray-50 rounded-2xl p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-center text-gray-800 mb-2">
+            <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
+              <h2 className="mb-2 text-center text-2xl font-bold text-card-foreground">
                 Date Calculator
               </h2>
-              <p className="text-gray-600 text-center mb-8">
+              <p className="mb-8 text-center text-muted-foreground">
                 Add or subtract time from a date
               </p>
 
               {/* Base Date */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-foreground">
                   Base Date
                 </label>
                 <EthiopianGregorianDatePicker
@@ -291,7 +291,7 @@ function RouteComponent() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
                 {/* Operation */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="mb-2 block text-sm font-medium text-foreground">
                     Operation
                   </label>
                   <select
@@ -299,7 +299,7 @@ function RouteComponent() {
                     onChange={(e) =>
                       setOperation(e.target.value as "add" | "subtract")
                     }
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    className="w-full rounded-lg border border-input bg-background px-4 py-2.5 text-foreground outline-none transition focus:border-ring focus:ring-2 focus:ring-ring"
                   >
                     <option value="add">Add</option>
                     <option value="subtract">Subtract</option>
@@ -308,7 +308,7 @@ function RouteComponent() {
 
                 {/* Value */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="mb-2 block text-sm font-medium text-foreground">
                     Value
                   </label>
                   <input
@@ -318,13 +318,13 @@ function RouteComponent() {
                     onChange={(e) =>
                       setOperationValue(parseInt(e.target.value) || 0)
                     }
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    className="w-full rounded-lg border border-input bg-background px-4 py-2.5 text-foreground outline-none transition focus:border-ring focus:ring-2 focus:ring-ring"
                   />
                 </div>
 
                 {/* Unit */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="mb-2 block text-sm font-medium text-foreground">
                     Unit
                   </label>
                   <select
@@ -334,7 +334,7 @@ function RouteComponent() {
                         e.target.value as "years" | "months" | "days"
                       )
                     }
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    className="w-full rounded-lg border border-input bg-background px-4 py-2.5 text-foreground outline-none transition focus:border-ring focus:ring-2 focus:ring-ring"
                   >
                     <option value="years">Years</option>
                     <option value="months">Months</option>

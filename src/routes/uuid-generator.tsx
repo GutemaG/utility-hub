@@ -185,21 +185,21 @@ function RouteComponent() {
     <>
       <div className="max-w-3xl mx-auto p-4">
         {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <div className="mb-6 text-center">
+          <h1 className="mb-2 text-2xl font-bold text-foreground">
             UUID Generator
           </h1>
-          <p className="text-gray-600 text-sm">
+          <p className="text-sm text-muted-foreground">
             Generate unique identifiers in different versions
           </p>
         </div>
 
         {/* Compact Control Panel */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div className="mb-6 rounded-lg border border-border bg-card p-4 shadow-sm">
           <div className="flex flex-col gap-4">
             {/* Version Buttons */}
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">
+              <label className="mb-1 block text-xs font-medium text-muted-foreground">
                 UUID Version:
               </label>
               <div className="flex flex-wrap gap-1">
@@ -216,7 +216,7 @@ function RouteComponent() {
                     className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
                       version === v.value
                         ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     }`}
                   >
                     {v.label}
@@ -227,8 +227,8 @@ function RouteComponent() {
 
             {/* Namespace Selector (only show for v3 and v5) */}
             {(version === "v3" || version === "v5") && (
-              <div className="pt-2 border-t border-gray-100">
-                <div className="text-xs font-medium text-gray-700 mb-2">
+              <div className="border-t border-border pt-2">
+                <div className="mb-2 text-xs font-medium text-foreground">
                   Namespace for {version.toUpperCase()}
                 </div>
                 <div className="flex flex-wrap gap-2 mb-3">
@@ -239,7 +239,7 @@ function RouteComponent() {
                       className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${
                         namespace === ns.value
                           ? "bg-indigo-600 text-white"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                       }`}
                     >
                       {ns.label}
@@ -249,7 +249,7 @@ function RouteComponent() {
 
                 {/* Editable Namespace Input for all namespace types */}
                 <div>
-                  <div className="text-xs text-gray-600 mb-1">
+                  <div className="mb-1 text-xs text-muted-foreground">
                     Namespace UUID (editable):
                   </div>
                   <input
@@ -259,7 +259,7 @@ function RouteComponent() {
                     onChange={handleNamespaceChange}
                     className={`w-full px-3 py-1.5 text-xs border rounded-md focus:outline-none focus:ring-1 ${
                       isNamespaceValid
-                        ? "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                        ? "border-input bg-background text-foreground focus:border-indigo-500 focus:ring-indigo-500"
                         : "border-red-500 focus:ring-red-500 focus:border-red-500 bg-red-50"
                     }`}
                   />
@@ -276,9 +276,9 @@ function RouteComponent() {
 
             {/* Full-width Quantity Input & Generate Button */}
             <div>
-              <div className="flex flex-col sm:flex-row gap-3 pt-2 border-t border-gray-100 sm:pt-0 sm:border-t-0">
+              <div className="flex flex-col gap-3 border-t border-border pt-2 sm:flex-row sm:border-t-0 sm:pt-0">
                 <div className="flex-1">
-                  <label className="block text-xs text-gray-600 mb-1">
+                  <label className="mb-1 block text-xs text-muted-foreground">
                     Quantity:
                   </label>
                   <div className="flex gap-2">
@@ -293,7 +293,7 @@ function RouteComponent() {
                           setCount(Math.max(1, Math.min(100, val)));
                         }
                       }}
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       placeholder="Enter number of UUIDs (1-100)"
                     />
                     <button
@@ -305,7 +305,7 @@ function RouteComponent() {
                       className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                         (version === "v3" || version === "v5") &&
                         !isNamespaceValid
-                          ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                            ? "cursor-not-allowed bg-muted text-muted-foreground"
                           : "bg-blue-600 text-white hover:bg-blue-700"
                       }`}
                     >
@@ -321,10 +321,10 @@ function RouteComponent() {
 
         {/* Results Area */}
         {uuids.length > 0 && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <div className="rounded-lg border border-border bg-card p-4 shadow-sm">
             {/* Action Buttons */}
             <div className="flex justify-between items-center mb-3">
-              <h3 className="text-sm font-medium text-gray-700">
+              <h3 className="text-sm font-medium text-card-foreground">
                 {uuids.length} UUID{uuids.length !== 1 ? "s" : ""} Generated
               </h3>
               <button
@@ -344,7 +344,7 @@ function RouteComponent() {
               value={uuids.join("\n")}
               readOnly
               rows={Math.min(10, Math.max(5, uuids.length))}
-              className="w-full text-xs sm:text-sm font-mono p-3 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full rounded-md border border-input bg-muted/40 p-3 font-mono text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring sm:text-sm"
               placeholder="Generated UUIDs will appear here..."
             />
           </div>
@@ -352,7 +352,7 @@ function RouteComponent() {
 
         {/* Mini Info */}
         <div className="mt-4 text-center">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-muted-foreground">
             Click a version button to instantly refresh. Use "Generate" to
             create UUIDs with your current settings.
           </p>

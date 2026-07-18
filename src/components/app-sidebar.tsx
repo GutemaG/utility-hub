@@ -1,5 +1,5 @@
 import * as React from "react";
-import { GalleryVerticalEnd } from "lucide-react";
+import { GalleryVerticalEnd, Keyboard } from "lucide-react";
 import { navigationGroups } from "@/config/navigation";
 
 import {
@@ -15,6 +15,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Input } from "./ui/input";
 import { Link } from "@tanstack/react-router";
@@ -27,14 +28,15 @@ interface SidebarLinkProps {
     title: string
   }
   className?: string
-  // Add the size prop definition here 👇
   size?: "sm" | "md" | "lg" 
+  onSelect?: () => void
 }
 
-export function SidebarLink({ item, className, size = "md" }: SidebarLinkProps) {
+export function SidebarLink({ item, className, size = "md", onSelect }: SidebarLinkProps) {
   return (
     <Link
       to={item.url}
+      onClick={onSelect}
       className={cn(
         "text-sidebar-foreground ring-sidebar-ring flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 outline-hidden focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 transition-all",
         size === "sm" && "text-xs",
@@ -51,8 +53,15 @@ export function SidebarLink({ item, className, size = "md" }: SidebarLinkProps) 
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { isMobile, setOpenMobile } = useSidebar();
   const [sidebarItems, setSidebarItems] = React.useState(navigationGroups);
   const [filter, setFilter] = React.useState("");
+
+  const closeMobileSidebar = React.useCallback(() => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  }, [isMobile, setOpenMobile]);
 
   React.useEffect(() => {
     if (!filter) {
@@ -83,7 +92,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/">
+              <Link to="/" onClick={closeMobileSidebar}>
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <GalleryVerticalEnd className="size-4" />
                 </div>
@@ -91,7 +100,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <span className="font-medium">Utility Hub</span>
                   <span className="">v1.0.0</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -99,6 +108,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
+            <div className="flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm text-muted-foreground">
+              <Keyboard className="h-4 w-4" />
+              <span>Ctrl/Cmd + K</span>
+            </div>
             <Input
               onClick={(e) => e.stopPropagation()}
               placeholder="Filter..."
@@ -120,7 +133,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                           asChild
                           // isActive={item.url === window.location.pathname}
                         >
-                          <SidebarLink item={item} size="sm" />
+                          <SidebarLink item={item} size="sm" onSelect={closeMobileSidebar} />
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}

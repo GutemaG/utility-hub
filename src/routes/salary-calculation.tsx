@@ -219,25 +219,25 @@ function RouteComponent() {
     <>
       <div className="max-w-5xl mx-auto p-2 space-y-6 overflow-auto">
         <header className="text-center">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="mb-2 text-2xl font-bold text-foreground sm:text-3xl">
             Ethiopian Salary Calculator
           </h1>
-          <p className="text-sm sm:text-base text-gray-600">
+          <p className="text-sm text-muted-foreground sm:text-base">
             Free online calculator for Ethiopian employment income tax and pension
           </p>
         </header>
 
-        <main className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <main className="overflow-hidden rounded-xl border border-border bg-card shadow-lg">
           <div className="p-4 sm:p-6">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
+            <h2 className="mb-4 text-lg font-semibold text-card-foreground sm:text-xl">
               Ethiopian Income Tax (Salary) Calculator
             </h2>
 
             {/* Mode Toggle */}
             <div className="mb-6">
               <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
-                <span className="text-sm font-medium text-gray-700">Calculate from:</span>
-                <div className="flex bg-gray-100 rounded-lg p-1 w-full sm:w-auto">
+                <span className="text-sm font-medium text-foreground">Calculate from:</span>
+                <div className="flex w-full rounded-lg bg-muted p-1 sm:w-auto">
                   <button
                     onClick={() => {
                       setCalculationMode("gross");
@@ -245,8 +245,8 @@ function RouteComponent() {
                     }}
                     className={`flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
                       calculationMode === "gross"
-                        ? "bg-white text-gray-900 shadow-sm ring-2 ring-blue-500"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                        ? "bg-card text-card-foreground shadow-sm ring-2 ring-blue-500"
+                        : "text-muted-foreground hover:bg-background hover:text-foreground"
                     }`}
                   >
                     Basic Income
@@ -258,8 +258,8 @@ function RouteComponent() {
                     }}
                     className={`flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
                       calculationMode === "net"
-                        ? "bg-white text-gray-900 shadow-sm ring-2 ring-blue-500"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                        ? "bg-card text-card-foreground shadow-sm ring-2 ring-blue-500"
+                        : "text-muted-foreground hover:bg-background hover:text-foreground"
                     }`}
                   >
                     Net Income
@@ -272,7 +272,7 @@ function RouteComponent() {
             <div className="space-y-6 mb-8">
               {/* Income Input */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-foreground">
                   Monthly {calculationMode === "gross" ? "Basic" : "Net"} Income (Birr)
                 </label>
                 <div className="relative">
@@ -288,12 +288,12 @@ function RouteComponent() {
                         ? handleMonthlyIncomeChange(e.target.value)
                         : handleMonthlyNetIncomeChange(e.target.value)
                     }
-                    className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    className="w-full rounded-lg border border-input bg-background px-4 py-3 text-lg text-foreground shadow-sm transition-all focus:border-ring focus:ring-2 focus:ring-ring"
                     placeholder="0.00"
                     min="0"
                     step="0.01"
                   />
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm">
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 transform text-sm text-muted-foreground">
                     Birr
                   </div>
                 </div>
@@ -301,8 +301,8 @@ function RouteComponent() {
 
               {/* Allowance Input (Only in Gross Mode) */}
               {calculationMode === "gross" && (
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="rounded-lg border border-border bg-muted/50 p-4">
+                  <label className="mb-2 block text-sm font-medium text-foreground">
                     Monthly Non Taxable Allowance (Birr)
                   </label>
                   <div className="relative mb-2">
@@ -310,29 +310,29 @@ function RouteComponent() {
                       type="number"
                       value={monthlyAllowance || ""}
                       onChange={(e) => handleAllowanceChange(e.target.value)}
-                      className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      className="w-full rounded-lg border border-input bg-background px-4 py-3 text-lg text-foreground shadow-sm transition-all focus:border-ring focus:ring-2 focus:ring-ring"
                       placeholder="Enter total allowance"
                       min="0"
                       step="0.01"
                     />
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm">
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 transform text-sm text-muted-foreground">
                       Birr
                     </div>
                   </div>
                   
                   {/* Allowance Contextual Guide */}
                   <div className="text-sm space-y-1">
-                    <div className="flex justify-between text-gray-600">
+                    <div className="flex justify-between text-muted-foreground">
                       <span>Max Non-Taxable Limit:</span>
                       <span className="font-medium">{monthlyCalc.nonTaxableLimit.toLocaleString()} Birr</span>
                     </div>
-                    <div className="flex justify-between text-gray-600">
+                    <div className="flex justify-between text-muted-foreground">
                       <span>Taxable Portion:</span>
-                      <span className={`${monthlyCalc.taxableAllowance > 0 ? "text-red-600 font-medium" : "text-gray-600"}`}>
+                      <span className={`${monthlyCalc.taxableAllowance > 0 ? "font-medium text-red-600" : "text-muted-foreground"}`}>
                         {monthlyCalc.taxableAllowance.toLocaleString()} Birr
                       </span>
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">
+                    <p className="mt-2 text-xs text-muted-foreground">
                       * Up to 25% of your Basic Salary (max 2,200 ETB) is tax-free. Anything above that is taxed.
                     </p>
                   </div>
@@ -341,9 +341,9 @@ function RouteComponent() {
 
               {/* Quick Result Preview */}
               {calculationMode === "gross" && (
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200 flex justify-between items-center">
-                  <span className="text-green-800 font-medium">Net Income</span>
-                  <span className="text-2xl font-bold text-green-700">
+                <div className="flex items-center justify-between rounded-lg border border-green-500/20 bg-green-500/10 p-4">
+                  <span className="font-medium text-green-700 dark:text-green-300">Net Income</span>
+                  <span className="text-2xl font-bold text-green-700 dark:text-green-300">
                     {monthlyNetIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span className="text-sm font-normal">Birr</span>
                   </span>
                 </div>
@@ -352,7 +352,7 @@ function RouteComponent() {
 
             {/* Monthly Breakdown Results */}
             <div className="mb-8">
-              <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center">
+              <h3 className="mb-4 flex items-center text-lg font-medium text-foreground">
                 <svg className="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
@@ -361,65 +361,65 @@ function RouteComponent() {
 
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
                 {/* 1. Basic Salary */}
-                <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
-                  <div className="text-xs text-blue-600 font-medium mb-1">Basic Salary</div>
-                  <div className="text-lg font-bold text-blue-900">
+                <div className="rounded-lg border border-blue-500/20 bg-blue-500/10 p-3">
+                  <div className="mb-1 text-xs font-medium text-blue-700 dark:text-blue-300">Basic Salary</div>
+                  <div className="text-lg font-bold text-blue-900 dark:text-blue-100">
                     {monthlyIncome.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </div>
-                  <div className="text-xs text-blue-500">Birr</div>
+                  <div className="text-xs text-blue-700/80 dark:text-blue-300/80">Birr</div>
                 </div>
 
                 {/* 2. Total Taxable Income */}
-                <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
-                  <div className="text-xs text-indigo-600 font-medium mb-1">Taxable Income</div>
-                  <div className="text-lg font-bold text-indigo-900">
+                <div className="rounded-lg border border-indigo-500/20 bg-indigo-500/10 p-3">
+                  <div className="mb-1 text-xs font-medium text-indigo-700 dark:text-indigo-300">Taxable Income</div>
+                  <div className="text-lg font-bold text-indigo-900 dark:text-indigo-100">
                     {monthlyCalc.totalTaxableIncome.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </div>
-                  <div className="text-xs text-indigo-500">Basic + Excess Allowance</div>
+                  <div className="text-xs text-indigo-700/80 dark:text-indigo-300/80">Basic + Excess Allowance</div>
                 </div>
 
                 {/* 3. Total Allowance */}
-                <div className="bg-purple-50 p-3 rounded-lg border border-purple-100">
-                  <div className="text-xs text-purple-600 font-medium mb-1">Total Allowance</div>
-                  <div className="text-lg font-bold text-purple-900">
+                <div className="rounded-lg border border-purple-500/20 bg-purple-500/10 p-3">
+                  <div className="mb-1 text-xs font-medium text-purple-700 dark:text-purple-300">Total Allowance</div>
+                  <div className="text-lg font-bold text-purple-900 dark:text-purple-100">
                     {monthlyAllowance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </div>
-                  <div className="text-xs text-purple-500">
+                  <div className="text-xs text-purple-700/80 dark:text-purple-300/80">
                     {monthlyCalc.taxableAllowance > 0 ? `${monthlyCalc.taxableAllowance.toLocaleString()} Taxable` : "Non-Taxable"}
                   </div>
                 </div>
 
                 {/* 4. Tax */}
-                <div className="bg-red-50 p-3 rounded-lg border border-red-100">
-                  <div className="text-xs text-red-600 font-medium mb-1">Income Tax</div>
-                  <div className="text-lg font-bold text-red-900">
+                <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-3">
+                  <div className="mb-1 text-xs font-medium text-red-700 dark:text-red-300">Income Tax</div>
+                  <div className="text-lg font-bold text-red-900 dark:text-red-100">
                     {monthlyCalc.taxDetails.tax.toFixed(2)}
                   </div>
-                  <div className="text-xs text-red-500">Birr</div>
+                  <div className="text-xs text-red-700/80 dark:text-red-300/80">Birr</div>
                 </div>
 
                 {/* 5. Pension */}
-                <div className="bg-orange-50 p-3 rounded-lg border border-orange-100">
-                  <div className="text-xs text-orange-600 font-medium mb-1">Pension (7%)</div>
-                  <div className="text-lg font-bold text-orange-900">
+                <div className="rounded-lg border border-orange-500/20 bg-orange-500/10 p-3">
+                  <div className="mb-1 text-xs font-medium text-orange-700 dark:text-orange-300">Pension (7%)</div>
+                  <div className="text-lg font-bold text-orange-900 dark:text-orange-100">
                     {monthlyCalc.pension.toFixed(2)}
                   </div>
-                  <div className="text-xs text-orange-500">On Basic Salary</div>
+                  <div className="text-xs text-orange-700/80 dark:text-orange-300/80">On Basic Salary</div>
                 </div>
 
                 {/* 6. Net Income */}
-                <div className="bg-green-50 p-3 rounded-lg border border-green-100 shadow-sm">
-                  <div className="text-xs text-green-600 font-medium mb-1">Net Income</div>
-                  <div className="text-lg font-bold text-green-900">
+                <div className="rounded-lg border border-green-500/20 bg-green-500/10 p-3 shadow-sm">
+                  <div className="mb-1 text-xs font-medium text-green-700 dark:text-green-300">Net Income</div>
+                  <div className="text-lg font-bold text-green-900 dark:text-green-100">
                     {monthlyNetIncome.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </div>
-                  <div className="text-xs text-green-500">Birr</div>
+                  <div className="text-xs text-green-700/80 dark:text-green-300/80">Birr</div>
                 </div>
               </div>
 
               {/* Summary Formula */}
-              <div className="mt-4 p-3 bg-gray-50 rounded-lg text-center text-sm text-gray-600">
-                <span className="font-medium text-gray-900">
+              <div className="mt-4 rounded-lg bg-muted/50 p-3 text-center text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">
                   ({monthlyIncome.toLocaleString()} + {monthlyAllowance.toLocaleString()})
                 </span>{" "}
                 Gross -{" "}
@@ -430,22 +430,22 @@ function RouteComponent() {
 
               {/* Detailed Steps */}
               {combinedMonthlySteps.length > 0 && (
-                <div className="mt-6 p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
-                  <h4 className="text-sm font-semibold text-gray-800 mb-4 border-b pb-2">Calculation Steps</h4>
+                <div className="mt-6 rounded-lg border border-border bg-card p-4 shadow-sm">
+                  <h4 className="mb-4 border-b border-border pb-2 text-sm font-semibold text-card-foreground">Calculation Steps</h4>
                   <div className="space-y-3">
                     {combinedMonthlySteps.map((step, index) => (
                       <div key={index} className="flex items-start text-sm">
                         <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-xs font-bold mr-3">
                           {index + 1}
                         </span>
-                        <span className="text-gray-700 pt-0.5">{step}</span>
+                        <span className="pt-0.5 text-muted-foreground">{step}</span>
                       </div>
                     ))}
-                    <div className="flex items-center text-sm pt-2 border-t mt-2">
+                    <div className="mt-2 flex items-center border-t border-border pt-2 text-sm">
                       <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-xs font-bold mr-3">
                         {combinedMonthlySteps.length + 1}
                       </span>
-                      <span className="text-gray-700">
+                      <span className="text-muted-foreground">
                         <strong>Pension:</strong> {monthlyIncome.toLocaleString()} (Basic) × 7% = {monthlyCalc.pension.toFixed(2)} Birr
                       </span>
                     </div>
@@ -456,22 +456,22 @@ function RouteComponent() {
 
             {/* Annual Summary (Simplified View) */}
             <div className="border-t pt-6">
-               <h3 className="text-lg font-medium text-gray-900 mb-4">Annual Summary</h3>
+               <h3 className="mb-4 text-lg font-medium text-foreground">Annual Summary</h3>
                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                  <div className="p-3 bg-gray-50 rounded border">
-                    <div className="text-xs text-gray-500">Annual Basic</div>
+                  <div className="rounded border border-border bg-muted/40 p-3">
+                    <div className="text-xs text-muted-foreground">Annual Basic</div>
                     <div className="font-semibold">{annualIncome.toLocaleString()}</div>
                   </div>
-                  <div className="p-3 bg-gray-50 rounded border">
-                    <div className="text-xs text-gray-500">Annual Tax</div>
+                  <div className="rounded border border-border bg-muted/40 p-3">
+                    <div className="text-xs text-muted-foreground">Annual Tax</div>
                     <div className="font-semibold text-red-600">{annualCalc.taxDetails.tax.toLocaleString(undefined, {maximumFractionDigits:2})}</div>
                   </div>
-                  <div className="p-3 bg-gray-50 rounded border">
-                    <div className="text-xs text-gray-500">Annual Pension</div>
+                  <div className="rounded border border-border bg-muted/40 p-3">
+                    <div className="text-xs text-muted-foreground">Annual Pension</div>
                     <div className="font-semibold text-orange-600">{annualCalc.pension.toLocaleString(undefined, {maximumFractionDigits:2})}</div>
                   </div>
-                  <div className="p-3 bg-gray-50 rounded border">
-                    <div className="text-xs text-gray-500">Annual Net</div>
+                  <div className="rounded border border-border bg-muted/40 p-3">
+                    <div className="text-xs text-muted-foreground">Annual Net</div>
                     <div className="font-semibold text-green-600">{annualNetIncome.toLocaleString(undefined, {maximumFractionDigits:2})}</div>
                   </div>
                </div>
@@ -484,9 +484,9 @@ function RouteComponent() {
       <TaxBracketInfo />  
        
 
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-           <h3 className="font-semibold text-blue-900 mb-2">How Allowances work</h3>
-           <ul className="list-disc list-inside text-sm text-blue-800 space-y-1">
+          <div className="rounded-xl border border-blue-500/20 bg-blue-500/10 p-6">
+            <h3 className="mb-2 font-semibold text-blue-700 dark:text-blue-300">How Allowances work</h3>
+            <ul className="list-inside list-disc space-y-1 text-sm text-blue-700 dark:text-blue-200">
              <li><strong>Basic Salary</strong> is fully taxable.</li>
              <li><strong>Allowances</strong> are non-taxable up to 25% of Basic Salary or 2,200 Birr (whichever is lower).</li>
              <li>Any allowance amount exceeding this limit(2200) is added to the Basic Salary to form the <strong>Taxable Income</strong>.</li>
