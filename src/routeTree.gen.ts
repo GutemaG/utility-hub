@@ -20,6 +20,7 @@ import { Route as QrCodeGeneratorRouteImport } from './routes/qr-code-generator'
 import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
 import { Route as MarkDownEditorRouteImport } from './routes/mark-down-editor'
+import { Route as LoanMortgageCalculatorRouteImport } from './routes/loan-mortgage-calculator'
 import { Route as LengthConversionRouteImport } from './routes/length-conversion'
 import { Route as EthiopianCalendarRouteImport } from './routes/ethiopian-calendar'
 import { Route as DataStorageConversionRouteImport } from './routes/data-storage-conversion'
@@ -83,6 +84,11 @@ const MarkDownEditorRoute = MarkDownEditorRouteImport.update({
   path: '/mark-down-editor',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoanMortgageCalculatorRoute = LoanMortgageCalculatorRouteImport.update({
+  id: '/loan-mortgage-calculator',
+  path: '/loan-mortgage-calculator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LengthConversionRoute = LengthConversionRouteImport.update({
   id: '/length-conversion',
   path: '/length-conversion',
@@ -127,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/length-conversion': typeof LengthConversionRoute
+  '/loan-mortgage-calculator': typeof LoanMortgageCalculatorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
@@ -147,6 +154,7 @@ export interface FileRoutesByTo {
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/length-conversion': typeof LengthConversionRoute
+  '/loan-mortgage-calculator': typeof LoanMortgageCalculatorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
@@ -168,6 +176,7 @@ export interface FileRoutesById {
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/length-conversion': typeof LengthConversionRoute
+  '/loan-mortgage-calculator': typeof LoanMortgageCalculatorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
     | '/length-conversion'
+    | '/loan-mortgage-calculator'
     | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
     | '/length-conversion'
+    | '/loan-mortgage-calculator'
     | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
@@ -230,6 +241,7 @@ export interface FileRouteTypes {
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
     | '/length-conversion'
+    | '/loan-mortgage-calculator'
     | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
@@ -251,6 +263,7 @@ export interface RootRouteChildren {
   DataStorageConversionRoute: typeof DataStorageConversionRoute
   EthiopianCalendarRoute: typeof EthiopianCalendarRoute
   LengthConversionRoute: typeof LengthConversionRoute
+  LoanMortgageCalculatorRoute: typeof LoanMortgageCalculatorRoute
   MarkDownEditorRoute: typeof MarkDownEditorRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   PayrollGeneratorRoute: typeof PayrollGeneratorRoute
@@ -343,6 +356,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarkDownEditorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/loan-mortgage-calculator': {
+      id: '/loan-mortgage-calculator'
+      path: '/loan-mortgage-calculator'
+      fullPath: '/loan-mortgage-calculator'
+      preLoaderRoute: typeof LoanMortgageCalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/length-conversion': {
       id: '/length-conversion'
       path: '/length-conversion'
@@ -403,6 +423,7 @@ const rootRouteChildren: RootRouteChildren = {
   DataStorageConversionRoute: DataStorageConversionRoute,
   EthiopianCalendarRoute: EthiopianCalendarRoute,
   LengthConversionRoute: LengthConversionRoute,
+  LoanMortgageCalculatorRoute: LoanMortgageCalculatorRoute,
   MarkDownEditorRoute: MarkDownEditorRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   PayrollGeneratorRoute: PayrollGeneratorRoute,
