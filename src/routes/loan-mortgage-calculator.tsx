@@ -81,7 +81,7 @@ function RouteComponent() {
     const numberOfPayments = years * 12;
 
     // Calculate monthly payment using mortgage formula
-    // M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1]
+    // M = P [ i(1 + i)^n ] / [ (1 + i)^n - 1]
     let monthlyPayment: number;
 
     if (monthlyRate === 0) {
