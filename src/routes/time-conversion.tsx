@@ -1,3 +1,4 @@
+import { useSEO } from "@/hooks/use-seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
@@ -112,6 +113,17 @@ function RouteComponent() {
   const [fromUnit, setFromUnit] = useState<string>("s");
   const [toUnit, setToUnit] = useState<string>("min");
 
+  useSEO({
+    title: "Time Converter | Utility Hub",
+    description:
+      "Convert between seconds, minutes, hours, days, weeks, months, years, and more with one simple tool.",
+    path: "/time-conversion",
+    keywords:
+      "time converter, seconds to minutes, hours to days, convert time units, unit conversion",
+    applicationCategory: "Tool",
+    featureList: ["Instant conversion", "Wide time unit support", "Readable results"],
+  });
+
   // Initialize with 3600 seconds (1 hour) and convert to all units
   useEffect(() => {
     convertTime("3600", "s");
@@ -211,77 +223,8 @@ function RouteComponent() {
     if (seconds < 3153600000) return "🏛️ Century";
     return "🏺 Ancient";
   };
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Time - Utility Hub",
-    description:
-      "Time Converter: Convert between different time units including seconds, minutes, hours, days, weeks, months, years, and more. Ideal for students, engineers, and travelers.",
-    url: "https://utility.ethioqr.app/time-conversion",
-    applicationCategory: "Tool",
-    operatingSystem: "Web Browser",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
-    featureList: [
-      "Real-time conversion as you type",
-      "Supports 21 different time units",
-      "Time context indicators",
-      "Responsive design for all devices",
-    ],
-  };
-
-  // Add structured data to page head
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
-      <div style={{ display: "none" }}>
-        <title>Time Convertor - Utility Hub</title>
-        <meta
-          name="description"
-          content="Time Converter: Convert between different time units including seconds, minutes, hours, days, weeks, months, years, and more. Ideal for students, engineers, and travelers."
-        />
-        <meta
-          name="keywords"
-          content="time converter, time conversion, seconds to minutes, hours to days, convert time units, measurement conversion, real-time time conversion, metric time units, imperial time units"
-        />
-        <meta name="author" content="FormulaLab" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="Time Convertor" />
-        <meta
-          property="og:description"
-          content="Time Converter: Convert between different time units including seconds, minutes, hours, days, weeks, months, years, and more. Ideal for students, engineers, and travelers."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://utility.ethioqr.app/time-conversion"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Time Convertor" />
-        <meta
-          name="twitter:description"
-          content="Time Converter: Convert between different time units including seconds, minutes, hours, days, weeks, months, years, and more. Ideal for students, engineers, and travelers."
-        />
-        <link
-          rel="canonical"
-          href="https://utility.ethioqr.app/time-conversion"
-        />
-      </div>
-
       <div className="max-w-6xl mx-auto p-4 space-y-6">
         {/* Header */}
         <div className="text-center">

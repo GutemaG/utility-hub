@@ -1,5 +1,6 @@
+import { useSEO } from "@/hooks/use-seo";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   format,
   differenceInYears,
@@ -20,6 +21,23 @@ export const Route = createFileRoute("/age-and-date-convertors")({
 });
 
 function RouteComponent() {
+  useSEO({
+    title: "Age & Date Converter | Utility Hub",
+    description:
+      "Convert between Gregorian and Ethiopian calendars, calculate ages, and perform date operations.",
+    path: "/age-and-date-convertors",
+    keywords:
+      "age calculator, date converter, ethiopian calendar, gregorian calendar, date operations",
+    applicationCategory: "Tool",
+    featureList: [
+      "Age calculator",
+      "Date converter",
+      "Date calculator",
+      "Date range calculator",
+      "Ethiopian calendar support",
+    ],
+  });
+
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [birthDate, setBirthDate] = useState<Date>(new Date());
   const [targetDate, setTargetDate] = useState<Date>(new Date());
@@ -73,37 +91,6 @@ function RouteComponent() {
     operationUnit
   );
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Age & Date Convertors - Utility Hub",
-    url: "https://utility.ethioqr.app/age-and-date-convertors",
-    description:
-      "Convert between Gregorian and Ethiopian calendars, calculate ages, and perform date operations",
-    applicationCategory: "FinanceApplication",
-    operatingSystem: "Web Browser",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    featureList: [
-      "Age Calculator",
-      "Date Converter",
-      "Date Calculator",
-      "Date Range Calculator",
-      "Ethiopian Calendar Support",
-      "Gregorian Calendar Support",
-    ],
-  };
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-    return () => {
-      document.head.removeChild(script);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   // Helper to render key-value pairs cleanly
   const KeyValueCard = ({
     title,
@@ -129,35 +116,6 @@ function RouteComponent() {
 
   return (
     <>
-      {/* Hidden SEO Metadata */}
-      <div className="hidden">
-        <title>Age & Date Convertor - Utility Hub</title>
-        <meta
-          name="description"
-          content="Convert between Gregorian and Ethiopian calendars, calculate ages, and perform date operations"
-        />
-        <meta
-          name="keywords"
-          content="Age Calculator, Date Converter, Ethiopian Calendar, Gregorian Calendar, Date Operations"
-        />
-        <meta name="author" content="FormulaLab" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="Ethiopian Age and Date Convertor" />
-        <meta
-          property="og:description"
-          content="Convert between Gregorian and Ethiopian calendars, calculate ages, and perform date operations"
-        />
-        <meta
-          property="og:url"
-          content="https://utility.ethioqr.app/age-and-date-convertors"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <link
-          rel="canonical"
-          href="https://utility.ethioqr.app/age-and-date-convertors"
-        />
-      </div>
-
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-10">

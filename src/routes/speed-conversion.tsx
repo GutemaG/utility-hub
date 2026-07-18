@@ -1,3 +1,4 @@
+import { useSEO } from "@/hooks/use-seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
@@ -117,6 +118,17 @@ function RouteComponent() {
   const [fromUnit, setFromUnit] = useState<string>("m/s");
   const [toUnit, setToUnit] = useState<string>("km/h");
 
+  useSEO({
+    title: "Speed Converter | Utility Hub",
+    description:
+      "Convert between meters per second, kilometers per hour, miles per hour, knots, and more in real time.",
+    path: "/speed-conversion",
+    keywords:
+      "speed converter, meters per second to kilometers per hour, miles per hour to knots, convert speed units",
+    applicationCategory: "Tool",
+    featureList: ["Real-time conversion", "Multiple speed units", "Context-based results"],
+  });
+
   // Initialize with 10 m/s and convert to all units
   useEffect(() => {
     convertSpeed("10", "m/s");
@@ -224,77 +236,8 @@ function RouteComponent() {
     if (metersPerSecond < 1000) return "⚡ Supersonic";
     return "🌌 Hypersonic";
   };
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Speed Convertor - Utility Hub",
-    description:
-      "Speed Converter: Convert between different speed units including m/s, km/h, mph, knots, and more. Ideal for students, engineers, and travelers.",
-    url: "https://utility.ethioqr.app/speed-conversion",
-    applicationCategory: "Tool",
-    operatingSystem: "Web Browser",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
-    featureList: [
-      "Real-time conversion as you type",
-      "Supports 16 different speed units",
-      "Speed context indicators",
-      "Responsive design for all devices",
-    ],
-  };
-
-  // Add structured data to page head
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
-      <div style={{ display: "none" }}>
-        <title>Speed Convertor - Utility Hub</title>
-        <meta
-          name="description"
-          content="Speed Converter: Convert between different speed units including m/s, km/h, mph, knots, and more. Ideal for students, engineers, and travelers."
-        />
-        <meta
-          name="keywords"
-          content="speed converter, speed conversion, meters per second to kilometers per hour, miles per hour to knots, convert speed units, measurement conversion, real-time speed conversion, metric speed units, imperial speed units"
-        />
-        <meta name="author" content="FormulaLab" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="Speed Convertor" />
-        <meta
-          property="og:description"
-          content="Speed Converter: Convert between different speed units including m/s, km/h, mph, knots, and more. Ideal for students, engineers, and travelers."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://utility.ethioqr.app/speed-conversion"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Speed Convertor" />
-        <meta
-          name="twitter:description"
-          content="Speed Converter: Convert between different speed units including m/s, km/h, mph, knots, and more. Ideal for students, engineers, and travelers."
-        />
-        <link
-          rel="canonical"
-          href="https://utility.ethioqr.app/speed-conversion"
-        />
-      </div>
-
       <div className="max-w-6xl mx-auto p-4 space-y-6">
         {/* Header */}
         <div className="text-center">

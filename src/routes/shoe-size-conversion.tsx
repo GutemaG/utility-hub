@@ -1,3 +1,4 @@
+import { useSEO } from "@/hooks/use-seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
@@ -115,6 +116,17 @@ function RouteComponent() {
   const [toUnit, setToUnit] = useState<string>("EU");
   const [footLengthMM, setFootLengthMM] = useState<number>(0);
 
+  useSEO({
+    title: "Shoe Size Converter | Utility Hub",
+    description:
+      "Convert between US, UK, EU, JP, AU, MX, and BR shoe sizes with a fast international shoe size converter.",
+    path: "/shoe-size-conversion",
+    keywords:
+      "shoe size converter, convert shoe sizes, US to UK shoe size, EU shoe size, international shoe sizes",
+    applicationCategory: "Tool",
+    featureList: ["International sizing systems", "Foot length in millimeters", "Quick conversion"],
+  });
+
   // Initialize with US Men size 9
   useEffect(() => {
     const initialValues: { [key: string]: string } = {};
@@ -199,77 +211,8 @@ function RouteComponent() {
     if (mm < 310) return "Large Adult";
     return "Extra Large Adult";
   };
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Shoe Size - Utility Hub",
-    description:
-      "Shoe Size Converter: Instantly convert between US, UK, EU, JP, AU, MX, and BR shoe sizes. Perfect for shoppers and travelers.",
-    url: "https://utility.ethioqr.app/shoe-size-conversion",
-    applicationCategory: "Tool",
-    operatingSystem: "Web Browser",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
-    featureList: [
-      "Real-time conversion as you type",
-      "Supports 8 international sizing systems",
-      "Shows foot length in millimeters",
-      "Responsive design for all devices",
-    ],
-  };
-
-  // Add structured data to page head
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
-      <div style={{ display: "none" }}>
-        <title>Shoe Size Convertor - Utility Hub</title>
-        <meta
-          name="description"
-          content="Shoe Size Converter: Instantly convert between US, UK, EU, JP, AU, MX, and BR shoe sizes. Perfect for shoppers and travelers."
-        />
-        <meta
-          name="keywords"
-          content="shoe size converter, shoe size chart, convert shoe sizes, US to UK shoe size, EU to US shoe size, JP shoe size, AU shoe size, MX shoe size, BR shoe size, foot length measurement"
-        />
-        <meta name="author" content="FormulaLab" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="Shoe Size Convertor" />
-        <meta
-          property="og:description"
-          content="Shoe Size Converter: Instantly convert between US, UK, EU, JP, AU, MX, and BR shoe sizes. Perfect for shoppers and travelers."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://utility.ethioqr.app/shoe-size-conversion"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Shoe Size Convertor" />
-        <meta
-          name="twitter:description"
-          content="Shoe Size Converter: Instantly convert between US, UK, EU, JP, AU, MX, and BR shoe sizes. Perfect for shoppers and travelers."
-        />
-        <link
-          rel="canonical"
-          href="https://utility.ethioqr.app/shoe-size-conversion"
-        />
-      </div>
-
       <div className="max-w-6xl mx-auto p-4 space-y-6">
         {/* Header */}
         <div className="text-center">

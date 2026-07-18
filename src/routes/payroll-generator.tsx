@@ -1,5 +1,6 @@
 import { FileDropzone } from "@/components/file-drop-zone";
 import { payrollColumnDef } from "@/components/payroll-column-def";
+import { useSEO } from "@/hooks/use-seo";
 import {
   Collapsible,
   CollapsibleContent,
@@ -25,8 +26,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ChevronDown } from "lucide-react"; // Added for the collapsible icon
-import React, { useState, useCallback, useEffect } from "react";
-import * as XLSX from "xlsx";
+import React, { useState, useCallback } from "react";
 
 export const Route = createFileRoute("/payroll-generator")({
   component: BulkPayrollProcessor,
@@ -104,14 +104,15 @@ const usePayrollProcessor = () => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [fileError, setFileError] = useState<string | null>(null);
 
-  const processFile = useCallback((file: File) => {
+  const processFile = useCallback(async (file: File) => {
     setIsProcessing(true);
     setFileError(null);
     setEmployeeData([]);
 
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       try {
+        const XLSX = await import("xlsx");
         const data = new Uint8Array(e.target?.result as ArrayBuffer);
         const workbook = XLSX.read(data, { type: "array" });
         const sheetName = workbook.SheetNames[0];
@@ -145,21 +146,23 @@ const usePayrollProcessor = () => {
     reader.readAsArrayBuffer(file);
   }, []);
 
-  const handleDownloadResults = () => {
+  const handleDownloadResults = useCallback(async () => {
     if (employeeData.length === 0) return;
+    const XLSX = await import("xlsx");
     const dataToExport = employeeData.map(({ ...rest }) => rest);
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Payroll Results");
     XLSX.writeFile(workbook, "Ethiopian_Payroll_Results.xlsx");
-  };
+  }, [employeeData]);
 
-  const handleDownloadSample = () => {
+  const handleDownloadSample = useCallback(async () => {
+    const XLSX = await import("xlsx");
     const worksheet = XLSX.utils.json_to_sheet(sampleData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Payroll Template");
     XLSX.writeFile(workbook, "payroll_template.xlsx");
-  };
+  }, []);
 
   return {
     employeeData,
@@ -436,91 +439,25 @@ function BulkPayrollProcessor() {
     handleDownloadSample,
   } = usePayrollProcessor();
 
-  // SEO structured data for tax calculator
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Ethiopian Payroll Generator",
+  useSEO({
+    title: "Ethiopian Payroll Generator | Utility Hub",
     description:
-      "Free online Ethiopian payroll generator for bulk employee processing. Instantly calculate income tax, pension, gross and net salary for multiple employees using Excel upload. Supports Ethiopian tax and pension rules for 2024.",
-    url: "https://utility.ethioqr.app/payroll-generator",
+      "Process Ethiopian payroll in bulk with income tax, pension, gross pay, and net pay calculations from Excel uploads.",
+    path: "/payroll-generator",
+    keywords:
+      "Ethiopian payroll generator, bulk payroll, income tax calculator, pension calculator, salary calculator Ethiopia",
     applicationCategory: "FinanceApplication",
-    operatingSystem: "Web Browser",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
     featureList: [
-      "Bulk payroll calculation from Excel",
-      "Ethiopian income tax calculation",
-      "Employee and employer pension calculation",
+      "Bulk payroll calculation",
+      "Income tax calculation",
+      "Pension calculation",
       "Gross and net salary breakdown",
-      "Tax bracket and deduction details",
-      "Downloadable results and templates",
+      "Excel upload support",
     ],
-    keywords: [
-      "Ethiopian payroll calculator",
-      "Ethiopian payroll generator",
-      "income tax",
-      "pension",
-      "bulk salary processing",
-      "payroll Excel upload",
-      "salary calculator Ethiopia",
-      "tax 2024",
-    ],
-  };
-
-  // Add structured data to page head
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
+  });
 
   return (
     <>
-      <div style={{ display: "none" }}>
-        <title>Ethiopian Payroll Generator</title>
-        <meta
-          name="description"
-          content="Free Ethiopian payroll generator for 2024. Instantly calculate income tax, pension, gross and net salary for multiple employees using Excel upload. Supports Ethiopian tax and pension rules for bulk payroll processing."
-        />
-        <meta
-          name="keywords"
-          content="Ethiopian payroll generator, bulk payroll, income tax calculator, pension calculator, salary calculator, Ethiopia payroll 2024, Excel payroll upload, gross to net salary"
-        />
-        <meta name="author" content="FormulaLab" />
-        <meta name="robots" content="index, follow" />
-        <meta
-          property="og:title"
-          content="Ethiopian Payroll generator 2025 - Bulk Salary & Tax Processing"
-        />
-        <meta
-          property="og:description"
-          content="Calculate Ethiopian payroll, income tax, and pension for multiple employees with our free online bulk payroll calculator. Upload Excel sheets and get detailed results."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://utility.ethioqr.app/payroll-generator"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Ethiopian Payroll Generator 2024" />
-        <meta
-          name="twitter:description"
-          content="Free Ethiopian payroll Generator for bulk salary, tax, and pension processing. Upload Excel and get instant results."
-        />
-        <link
-          rel="canonical"
-          href="https://utility.ethioqr.app/payroll-generator"
-        />
-      </div>
       <div className="space-y-8 max-w-7xl mx-auto">
         <header className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">

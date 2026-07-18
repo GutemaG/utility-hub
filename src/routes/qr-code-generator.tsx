@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useSEO } from "@/hooks/use-seo";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/qr-code-generator")({
@@ -197,55 +198,22 @@ function RouteComponent() {
     };
   }, [pdf.fileUrl]);
 
-  // Basic SEO (no meta name="keywords")
-  useEffect(() => {
-    const title = "QR Code Generator | UtilityHub";
-    const description =
-      "Create dynamic QR codes for Wi‑Fi, contact vCard, email, SMS, PDF, phone, Facebook, and more. Add a logo and customize colors and size.";
-
-    document.title = title;
-
-    const ensureMeta = (name: string, content: string) => {
-      let el = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
-      if (!el) {
-        el = document.createElement("meta");
-        el.setAttribute("name", name);
-        document.head.appendChild(el);
-      }
-      el.setAttribute("content", content);
-    };
-
-    ensureMeta("description", description);
-
-    const ld = {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      name: "QR Code Generator - UtilityHub",
-      applicationCategory: "Tool",
-      operatingSystem: "Web Browser",
-      url: "https://utility.ethioar.app/qr-code-generator",
-      description,
-      featureList: [
-        "Clickable content type cards",
-        "Wi‑Fi, vCard, Email, SMS, Phone, PDF, Facebook",
-        "Logo overlay via URL or presets",
-        "Color, size, and margin controls",
-        "High error correction levels",
-        "Telegram and WhatsApp",
-        "Export PNG and SVG",
-      ],
-    };
-
-    const scriptId = "qr-json-ld";
-    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
-    if (!script) {
-      script = document.createElement("script");
-      script.id = scriptId;
-      script.type = "application/ld+json";
-      document.head.appendChild(script);
-    }
-    script.text = JSON.stringify(ld);
-  }, []);
+  useSEO({
+    title: "QR Code Generator | Utility Hub",
+    description:
+      "Create dynamic QR codes for Wi‑Fi, contact vCard, email, SMS, PDF, phone, Facebook, and more. Add a logo and customize colors and size.",
+    path: "/qr-code-generator",
+    applicationCategory: "Tool",
+    featureList: [
+      "Clickable content type cards",
+      "Wi‑Fi, vCard, Email, SMS, Phone, PDF, Facebook",
+      "Logo overlay via URL or presets",
+      "Color, size, and margin controls",
+      "High error correction levels",
+      "Telegram and WhatsApp",
+      "Export PNG and SVG",
+    ],
+  });
 
   const handlePdfFile = (file?: File | null) => {
     if (!file) {
@@ -731,51 +699,62 @@ function QRPreview(
               className="relative"
               style={{ width: qrOptions.size, height: qrOptions.size }}
             >
-              <QRCodeCanvas
-                ref={canvasRef}
-                value={qrValue}
-                size={qrOptions.size}
-                level={qrOptions.level}
-                bgColor={qrOptions.bgColor}
-                fgColor={qrOptions.fgColor}
-                includeMargin={qrOptions.includeMargin}
-              />
-              {logoUrl ? (
-                <div
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 p-1 bg-white"
-                  style={{ borderRadius: logoRadius }}
-                >
-                  <img
-                    src={logoUrl}
-                    alt="logo"
-                    className="object-contain"
-                    style={{
-                      width: logoSize,
-                      height: logoSize,
-                      borderRadius: logoRadius,
-                    }}
+              {qrValue ? (
+                <>
+                  <QRCodeCanvas
+                    ref={canvasRef}
+                    value={qrValue}
+                    size={qrOptions.size}
+                    level={qrOptions.level}
+                    bgColor={qrOptions.bgColor}
+                    fgColor={qrOptions.fgColor}
+                    includeMargin={qrOptions.includeMargin}
                   />
+                  {logoUrl ? (
+                    <div
+                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 p-1 bg-white"
+                      style={{ borderRadius: logoRadius }}
+                    >
+                      <img
+                        src={logoUrl}
+                        alt="logo"
+                        className="object-contain"
+                        style={{
+                          width: logoSize,
+                          height: logoSize,
+                          borderRadius: logoRadius,
+                        }}
+                      />
+                    </div>
+                  ) : null}
+                  {/* Hidden SVG for SVG download */}
+                  <div className="hidden">
+                    <QRCodeSVG
+                      ref={svgRef}
+                      value={qrValue}
+                      size={qrOptions.size}
+                      level={qrOptions.level}
+                      bgColor={qrOptions.bgColor}
+                      fgColor={qrOptions.fgColor}
+                      includeMargin={qrOptions.includeMargin}
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="flex h-full w-full items-center justify-center rounded-xl border border-dashed border-gray-300 bg-gray-50 text-center text-sm text-gray-500">
+                  Enter content to generate a QR code
                 </div>
-              ) : null}
-              {/* Hidden SVG for SVG download */}
-              <div className="hidden">
-                <QRCodeSVG
-                  ref={svgRef}
-                  value={qrValue}
-                  size={qrOptions.size}
-                  level={qrOptions.level}
-                  bgColor={qrOptions.bgColor}
-                  fgColor={qrOptions.fgColor}
-                  includeMargin={qrOptions.includeMargin}
-                />
-              </div>
+              )}
+              {qrValue ? null : (
+                <div className="absolute inset-0" />
+              )}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <Button onClick={downloadPng} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={downloadPng} className="bg-blue-600 hover:bg-blue-700" disabled={!qrValue}>
                 Download PNG
               </Button>
-              <Button onClick={downloadSvg} variant="secondary">
+              <Button onClick={downloadSvg} variant="secondary" disabled={!qrValue}>
                 Download SVG
               </Button>
             </div>

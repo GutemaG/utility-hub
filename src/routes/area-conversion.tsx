@@ -1,3 +1,4 @@
+import { useSEO } from "@/hooks/use-seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
@@ -107,6 +108,17 @@ function RouteComponent() {
   const [fromUnit, setFromUnit] = useState<string>("m²");
   const [toUnit, setToUnit] = useState<string>("km²");
 
+  useSEO({
+    title: "Area Converter | Utility Hub",
+    description:
+      "Convert between square meters, square feet, acres, hectares, and more with instant area conversions.",
+    path: "/area-conversion",
+    keywords:
+      "area converter, square meters to square feet, acres to hectares, convert area units",
+    applicationCategory: "Tool",
+    featureList: ["Real-time conversion", "Multiple area units", "Responsive calculator"],
+  });
+
   // Initialize with 1000 square meters
   useEffect(() => {
     const initialValues: { [key: string]: string } = {};
@@ -204,77 +216,8 @@ function RouteComponent() {
     if (squareMeters < 1000000000) return "Huge";
     return "Massive";
   };
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Area Converter - Utility Hub",
-    description:
-      "Area Converter: Convert between Square Meters, Square Kilometers, Square Feet, Acres, Hectares, and more. Perfect for students, engineers, real estate professionals, and landscapers.",
-    url: "https://utility.ethioqr.app/area-conversion",
-    applicationCategory: "FinanceApplication",
-    operatingSystem: "Web Browser",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
-    featureList: [
-      "Real-time conversion as you type",
-      "Supports 16 different area units",
-      "Area context indicators",
-      "Responsive design for all devices",
-    ],
-  };
-
-  // Add structured data to page head
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
-      <div style={{ display: "none" }}>
-        <title>Area Convertor - Utility Hub</title>
-        <meta
-          name="description"
-          content="Area Converter: Convert between Square Meters, Square Kilometers, Square Feet, Acres, Hectares, and more. Perfect for students, engineers, real estate professionals, and landscapers."
-        />
-        <meta
-          name="keywords"
-          content="area converter, area conversion, square meters to square feet, acres to hectares, square kilometers to square miles, convert area units, measurement conversion, real-time area conversion, metric area units, imperial area units"
-        />
-        <meta name="author" content="FormulaLab" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="Area Convertor" />
-        <meta
-          property="og:description"
-          content="Area Converter: Convert between Square Meters, Square Kilometers, Square Feet, Acres, Hectares, and more. Perfect for students, engineers, real estate professionals, and landscapers."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://utility.ethioqr.app/area-conversion"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Area Convertor" />
-        <meta
-          name="twitter:description"
-          content="Area Converter: Convert between Square Meters, Square Kilometers, Square Feet, Acres, Hectares, and more. Perfect for students, engineers, real estate professionals, and landscapers."
-        />
-        <link
-          rel="canonical"
-          href="https://utility.ethioqr.app/area-conversion"
-        />
-      </div>
-
       <div className="max-w-6xl mx-auto p-4 space-y-6">
         {/* Header */}
         <div className="text-center">

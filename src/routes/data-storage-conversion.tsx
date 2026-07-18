@@ -1,3 +1,4 @@
+import { useSEO } from "@/hooks/use-seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
@@ -132,6 +133,17 @@ function RouteComponent() {
   const [fromUnit, setFromUnit] = useState<string>("B");
   const [toUnit, setToUnit] = useState<string>("KB");
 
+  useSEO({
+    title: "Data Storage Converter | Utility Hub",
+    description:
+      "Convert bytes, kilobytes, megabytes, gigabytes, and more with a fast, intuitive data storage converter.",
+    path: "/data-storage-conversion",
+    keywords:
+      "data storage converter, bytes to kilobytes, megabytes to gigabytes, convert data units",
+    applicationCategory: "Tool",
+    featureList: ["Real-time conversion", "Multiple data units", "Storage context hints"],
+  });
+
   // Initialize with 1024 bytes and convert to all units
   useEffect(() => {
     convertDataStorage("1024", "B");
@@ -236,77 +248,8 @@ function RouteComponent() {
     if (bytes < 100 * 1024 * 1024 * 1024) return "🗄️ Database";
     return "🌐 Data center";
   };
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Data Storage Convertor - Utility Hub",
-    description:
-      "Data Storage Converter: Convert between different data storage units instantly. Supports 25 units including Bytes, KB, MB, GB, TB, and more. Ideal for students, IT professionals, and anyone needing quick conversions.",
-    url: "https://utility.ethioar.app/data-storage-conversion",
-    applicationCategory: "Tool",
-    operatingSystem: "Web Browser",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
-    featureList: [
-      "Real-time conversion as you type",
-      "Supports 25 different data units",
-      "Data context indicators",
-      "Responsive design for all devices",
-    ],
-  };
-
-  // Add structured data to page head
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
-      <div style={{ display: "none" }}>
-        <title>Data Storage Convertor - Utility Hub</title>
-        <meta
-          name="description"
-          content="Data Storage Converter: Convert between different data storage units instantly. Supports 25 units including Bytes, KB, MB, GB, TB, and more. Ideal for students, IT professionals, and anyone needing quick conversions."
-        />
-        <meta
-          name="keywords"
-          content="data storage converter, data storage conversion, bytes to kilobytes, megabytes to gigabytes, convert data units, measurement conversion, real-time data conversion, digital storage units"
-        />
-        <meta name="author" content="FormulaLab" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="Data Storage Convertor" />
-        <meta
-          property="og:description"
-          content="Data Storage Converter: Convert between different data storage units including Bytes, KB, MB, GB, TB, and more. Ideal for students, IT professionals, and anyone needing quick conversions."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://utility.ethioqr.app/data-storage-conversion"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Data Storage Convertor" />
-        <meta
-          name="twitter:description"
-          content="Data Storage Converter: Convert between different data storage units including Bytes, KB, MB, GB, TB, and more. Ideal for students, IT professionals, and anyone needing quick conversions."
-        />
-        <link
-          rel="canonical"
-          href="https://utility.ethioqr.app/data-storage-conversion"
-        />
-      </div>
-
       <div className="max-w-6xl mx-auto p-4 space-y-6">
         {/* Header */}
         <div className="text-center">

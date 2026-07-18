@@ -1,5 +1,6 @@
+import { useSEO } from "@/hooks/use-seo";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const Route = createFileRoute("/bmi-calculation")({
   component: RouteComponent,
@@ -158,43 +159,22 @@ const bodyFatCategories = {
 };
 
 function RouteComponent() {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "BMI Calculator - Utility Hub",
+  useSEO({
+    title: "BMI Calculator | Utility Hub",
     description:
-      "Free online BMI, Body Fat, and Ideal Weight calculator. Calculate your Body Mass Index, body fat percentage using U.S. Navy method, and ideal weight based",
-    url: "https://utility.ethioar.app/bmi-calculation",
+      "Free online BMI, body fat, and ideal weight calculator with health category insights.",
+    path: "/bmi-calculation",
+    keywords:
+      "bmi calculator, body fat calculator, ideal weight calculator, health calculator, body mass index",
     applicationCategory: "HealthApplication",
-    operatingSystem: "Web Browser",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
     featureList: [
-      "Utility Hub",
-      "Utility Hub BMI Calculator",
-      "BMI Calculation",
-      "Body Fat Calculation using U.S. Navy method",
-      "Ideal Weight Calculation",
-      "Body Surface Area Calculation",
-      "Health Risk Assessment",
+      "BMI calculation",
+      "Body fat estimation",
+      "Ideal weight guidance",
+      "Body surface area estimate",
+      "Health risk assessment",
     ],
-  };
-
-  // Add structured data to page head
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   const [activeSection, setActiveSection] = useState<
     "bmi" | "bodyFat" | "idealWeight"
@@ -330,39 +310,6 @@ function RouteComponent() {
 
   return (
     <>
-      <div style={{ display: "none" }}>
-        <title>BMI Calculator - Utility Hub</title>
-        <meta
-          name="description"
-          content="Free online BMI, Body Fat, and Ideal Weight calculator. Calculate your Body Mass Index, body fat percentage using U.S. Navy method, and ideal weight based"
-        />
-        <meta
-          name="keywords"
-          content="bmi calculator, body fat calculator, ideal weight calculator, body surface area, health risk assessment, us navy body fat, bmi categories, healthy weight, fitness calculator"
-        />
-        <meta name="author" content="FormulaLab" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="BMI Calculator" />
-        <meta
-          property="og:description"
-          content="Free online BMI, Body Fat, and Ideal Weight calculator. Calculate your Body Mass Index, body fat percentage using U.S. Navy method, and ideal weight based"
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://utility.ethioqr.app/bmi-calculation"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="BMI Calculator" />
-        <meta
-          name="twitter:description"
-          content="Free online BMI, Body Fat, and Ideal Weight calculator. Calculate your Body Mass Index, body fat percentage using U.S. Navy method, and ideal weight based"
-        />
-        <link
-          rel="canonical"
-          href="https://utility.ethioqr.app/bmi-calculation"
-        />
-      </div>
       <div className="max-w-4xl mx-auto p-4 space-y-6">
         {/* Header */}
         <div className="text-center">

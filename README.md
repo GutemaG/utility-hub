@@ -97,6 +97,12 @@
    npm run build
    ```
 
+5. **Set the site URL for SEO and canonical links**
+   ```bash
+   cp .env.example .env
+   ```
+   Then update the `VITE_SITE_URL` value if you want to override the default Vercel domain.
+
 > App runs on `http://localhost:5173` by default.
 
 ---
