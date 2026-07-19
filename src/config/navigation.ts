@@ -155,6 +155,12 @@ export const navigationGroups: NavGroup[] = [
         url: "/regex-tester",
         description: "Test regex patterns with flags and highlighted matches.",
       },
+      {
+        title: "Pomodoro Timer",
+        url: "/pomodoro-timer",
+        description:
+          "Focus timer with customizable sessions, breaks, fullscreen mode, and mini floating window.",
+      },
     ],
   },
 ];
