@@ -28,12 +28,15 @@ import { Route as LoanCalculatorRouteImport } from './routes/loan-calculator'
 import { Route as LengthConversionRouteImport } from './routes/length-conversion'
 import { Route as JwtDecoderRouteImport } from './routes/jwt-decoder'
 import { Route as JsonValidatorRouteImport } from './routes/json-validator'
+import { Route as FakeHackerSimulatorRouteImport } from './routes/fake-hacker-simulator'
 import { Route as EthiopianCalendarRouteImport } from './routes/ethiopian-calendar'
 import { Route as DataStorageConversionRouteImport } from './routes/data-storage-conversion'
 import { Route as CurrencyConversionRouteImport } from './routes/currency-conversion'
+import { Route as CheatSheetsRouteImport } from './routes/cheat-sheets'
 import { Route as CharacterCounterRouteImport } from './routes/character-counter'
 import { Route as BmiCalculationRouteImport } from './routes/bmi-calculation'
 import { Route as Base64ToolRouteImport } from './routes/base64-tool'
+import { Route as AsciiArtGeneratorRouteImport } from './routes/ascii-art-generator'
 import { Route as AreaConversionRouteImport } from './routes/area-conversion'
 import { Route as AgeAndDateConvertorsRouteImport } from './routes/age-and-date-convertors'
 import { Route as IndexRouteImport } from './routes/index'
@@ -133,6 +136,11 @@ const JsonValidatorRoute = JsonValidatorRouteImport.update({
   path: '/json-validator',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FakeHackerSimulatorRoute = FakeHackerSimulatorRouteImport.update({
+  id: '/fake-hacker-simulator',
+  path: '/fake-hacker-simulator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EthiopianCalendarRoute = EthiopianCalendarRouteImport.update({
   id: '/ethiopian-calendar',
   path: '/ethiopian-calendar',
@@ -148,6 +156,11 @@ const CurrencyConversionRoute = CurrencyConversionRouteImport.update({
   path: '/currency-conversion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheatSheetsRoute = CheatSheetsRouteImport.update({
+  id: '/cheat-sheets',
+  path: '/cheat-sheets',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CharacterCounterRoute = CharacterCounterRouteImport.update({
   id: '/character-counter',
   path: '/character-counter',
@@ -161,6 +174,11 @@ const BmiCalculationRoute = BmiCalculationRouteImport.update({
 const Base64ToolRoute = Base64ToolRouteImport.update({
   id: '/base64-tool',
   path: '/base64-tool',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AsciiArtGeneratorRoute = AsciiArtGeneratorRouteImport.update({
+  id: '/ascii-art-generator',
+  path: '/ascii-art-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AreaConversionRoute = AreaConversionRouteImport.update({
@@ -183,12 +201,15 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/age-and-date-convertors': typeof AgeAndDateConvertorsRoute
   '/area-conversion': typeof AreaConversionRoute
+  '/ascii-art-generator': typeof AsciiArtGeneratorRoute
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
+  '/cheat-sheets': typeof CheatSheetsRoute
   '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
+  '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
@@ -213,12 +234,15 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/age-and-date-convertors': typeof AgeAndDateConvertorsRoute
   '/area-conversion': typeof AreaConversionRoute
+  '/ascii-art-generator': typeof AsciiArtGeneratorRoute
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
+  '/cheat-sheets': typeof CheatSheetsRoute
   '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
+  '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
@@ -244,12 +268,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/age-and-date-convertors': typeof AgeAndDateConvertorsRoute
   '/area-conversion': typeof AreaConversionRoute
+  '/ascii-art-generator': typeof AsciiArtGeneratorRoute
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
+  '/cheat-sheets': typeof CheatSheetsRoute
   '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
+  '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
@@ -276,12 +303,15 @@ export interface FileRouteTypes {
     | '/'
     | '/age-and-date-convertors'
     | '/area-conversion'
+    | '/ascii-art-generator'
     | '/base64-tool'
     | '/bmi-calculation'
     | '/character-counter'
+    | '/cheat-sheets'
     | '/currency-conversion'
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
+    | '/fake-hacker-simulator'
     | '/json-validator'
     | '/jwt-decoder'
     | '/length-conversion'
@@ -306,12 +336,15 @@ export interface FileRouteTypes {
     | '/'
     | '/age-and-date-convertors'
     | '/area-conversion'
+    | '/ascii-art-generator'
     | '/base64-tool'
     | '/bmi-calculation'
     | '/character-counter'
+    | '/cheat-sheets'
     | '/currency-conversion'
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
+    | '/fake-hacker-simulator'
     | '/json-validator'
     | '/jwt-decoder'
     | '/length-conversion'
@@ -336,12 +369,15 @@ export interface FileRouteTypes {
     | '/'
     | '/age-and-date-convertors'
     | '/area-conversion'
+    | '/ascii-art-generator'
     | '/base64-tool'
     | '/bmi-calculation'
     | '/character-counter'
+    | '/cheat-sheets'
     | '/currency-conversion'
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
+    | '/fake-hacker-simulator'
     | '/json-validator'
     | '/jwt-decoder'
     | '/length-conversion'
@@ -367,12 +403,15 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AgeAndDateConvertorsRoute: typeof AgeAndDateConvertorsRoute
   AreaConversionRoute: typeof AreaConversionRoute
+  AsciiArtGeneratorRoute: typeof AsciiArtGeneratorRoute
   Base64ToolRoute: typeof Base64ToolRoute
   BmiCalculationRoute: typeof BmiCalculationRoute
   CharacterCounterRoute: typeof CharacterCounterRoute
+  CheatSheetsRoute: typeof CheatSheetsRoute
   CurrencyConversionRoute: typeof CurrencyConversionRoute
   DataStorageConversionRoute: typeof DataStorageConversionRoute
   EthiopianCalendarRoute: typeof EthiopianCalendarRoute
+  FakeHackerSimulatorRoute: typeof FakeHackerSimulatorRoute
   JsonValidatorRoute: typeof JsonValidatorRoute
   JwtDecoderRoute: typeof JwtDecoderRoute
   LengthConversionRoute: typeof LengthConversionRoute
@@ -529,6 +568,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JsonValidatorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/fake-hacker-simulator': {
+      id: '/fake-hacker-simulator'
+      path: '/fake-hacker-simulator'
+      fullPath: '/fake-hacker-simulator'
+      preLoaderRoute: typeof FakeHackerSimulatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ethiopian-calendar': {
       id: '/ethiopian-calendar'
       path: '/ethiopian-calendar'
@@ -550,6 +596,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CurrencyConversionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cheat-sheets': {
+      id: '/cheat-sheets'
+      path: '/cheat-sheets'
+      fullPath: '/cheat-sheets'
+      preLoaderRoute: typeof CheatSheetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/character-counter': {
       id: '/character-counter'
       path: '/character-counter'
@@ -569,6 +622,13 @@ declare module '@tanstack/react-router' {
       path: '/base64-tool'
       fullPath: '/base64-tool'
       preLoaderRoute: typeof Base64ToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ascii-art-generator': {
+      id: '/ascii-art-generator'
+      path: '/ascii-art-generator'
+      fullPath: '/ascii-art-generator'
+      preLoaderRoute: typeof AsciiArtGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/area-conversion': {
@@ -599,12 +659,15 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgeAndDateConvertorsRoute: AgeAndDateConvertorsRoute,
   AreaConversionRoute: AreaConversionRoute,
+  AsciiArtGeneratorRoute: AsciiArtGeneratorRoute,
   Base64ToolRoute: Base64ToolRoute,
   BmiCalculationRoute: BmiCalculationRoute,
   CharacterCounterRoute: CharacterCounterRoute,
+  CheatSheetsRoute: CheatSheetsRoute,
   CurrencyConversionRoute: CurrencyConversionRoute,
   DataStorageConversionRoute: DataStorageConversionRoute,
   EthiopianCalendarRoute: EthiopianCalendarRoute,
+  FakeHackerSimulatorRoute: FakeHackerSimulatorRoute,
   JsonValidatorRoute: JsonValidatorRoute,
   JwtDecoderRoute: JwtDecoderRoute,
   LengthConversionRoute: LengthConversionRoute,
