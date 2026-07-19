@@ -2,13 +2,37 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-    <script type="module" crossorigin src="/assets/index-BNJg4XJm.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DbxwJjet.css">
-  </head>
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Utility Hub</title>
+    <script>
+      (() => {
+        try {
+          const storageKey = "vite-ui-theme"
+          const storedTheme = localStorage.getItem(storageKey) ?? "system"
+          const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+          const resolvedTheme = storedTheme === "system"
+            ? (prefersDark ? "dark" : "light")
+            : storedTheme
+
+          document.documentElement.classList.remove("light", "dark")
+          document.documentElement.classList.add(resolvedTheme)
+          document.documentElement.style.colorScheme = resolvedTheme
+        } catch {
+          document.documentElement.classList.remove("dark")
+          document.documentElement.classList.add("light")
+          document.documentElement.style.colorScheme = "light"
+        }
+      })()
+    </script>
+    <script type="module" crossorigin src="/assets/index-BJTa7HL5.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BHelfoXx.css">
+  <link rel="manifest" href="/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
   <body>
-    <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>

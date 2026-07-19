@@ -20,6 +20,7 @@ import { Route as ShoeSizeConversionRouteImport } from './routes/shoe-size-conve
 import { Route as SalaryCalculationRouteImport } from './routes/salary-calculation'
 import { Route as RegexTesterRouteImport } from './routes/regex-tester'
 import { Route as QrCodeGeneratorRouteImport } from './routes/qr-code-generator'
+import { Route as PomodoroTimerRouteImport } from './routes/pomodoro-timer'
 import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
 import { Route as MarkDownEditorRouteImport } from './routes/mark-down-editor'
@@ -90,6 +91,11 @@ const RegexTesterRoute = RegexTesterRouteImport.update({
 const QrCodeGeneratorRoute = QrCodeGeneratorRouteImport.update({
   id: '/qr-code-generator',
   path: '/qr-code-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PomodoroTimerRoute = PomodoroTimerRouteImport.update({
+  id: '/pomodoro-timer',
+  path: '/pomodoro-timer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PayrollGeneratorRoute = PayrollGeneratorRouteImport.update({
@@ -190,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
+  '/pomodoro-timer': typeof PomodoroTimerRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
   '/regex-tester': typeof RegexTesterRoute
   '/salary-calculation': typeof SalaryCalculationRoute
@@ -219,6 +226,7 @@ export interface FileRoutesByTo {
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
+  '/pomodoro-timer': typeof PomodoroTimerRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
   '/regex-tester': typeof RegexTesterRoute
   '/salary-calculation': typeof SalaryCalculationRoute
@@ -249,6 +257,7 @@ export interface FileRoutesById {
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
+  '/pomodoro-timer': typeof PomodoroTimerRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
   '/regex-tester': typeof RegexTesterRoute
   '/salary-calculation': typeof SalaryCalculationRoute
@@ -280,6 +289,7 @@ export interface FileRouteTypes {
     | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
+    | '/pomodoro-timer'
     | '/qr-code-generator'
     | '/regex-tester'
     | '/salary-calculation'
@@ -309,6 +319,7 @@ export interface FileRouteTypes {
     | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
+    | '/pomodoro-timer'
     | '/qr-code-generator'
     | '/regex-tester'
     | '/salary-calculation'
@@ -338,6 +349,7 @@ export interface FileRouteTypes {
     | '/mark-down-editor'
     | '/password-generator'
     | '/payroll-generator'
+    | '/pomodoro-timer'
     | '/qr-code-generator'
     | '/regex-tester'
     | '/salary-calculation'
@@ -368,6 +380,7 @@ export interface RootRouteChildren {
   MarkDownEditorRoute: typeof MarkDownEditorRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   PayrollGeneratorRoute: typeof PayrollGeneratorRoute
+  PomodoroTimerRoute: typeof PomodoroTimerRoute
   QrCodeGeneratorRoute: typeof QrCodeGeneratorRoute
   RegexTesterRoute: typeof RegexTesterRoute
   SalaryCalculationRoute: typeof SalaryCalculationRoute
@@ -458,6 +471,13 @@ declare module '@tanstack/react-router' {
       path: '/qr-code-generator'
       fullPath: '/qr-code-generator'
       preLoaderRoute: typeof QrCodeGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pomodoro-timer': {
+      id: '/pomodoro-timer'
+      path: '/pomodoro-timer'
+      fullPath: '/pomodoro-timer'
+      preLoaderRoute: typeof PomodoroTimerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/payroll-generator': {
@@ -592,6 +612,7 @@ const rootRouteChildren: RootRouteChildren = {
   MarkDownEditorRoute: MarkDownEditorRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   PayrollGeneratorRoute: PayrollGeneratorRoute,
+  PomodoroTimerRoute: PomodoroTimerRoute,
   QrCodeGeneratorRoute: QrCodeGeneratorRoute,
   RegexTesterRoute: RegexTesterRoute,
   SalaryCalculationRoute: SalaryCalculationRoute,
