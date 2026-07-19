@@ -156,10 +156,32 @@ export const navigationGroups: NavGroup[] = [
         description: "Test regex patterns with flags and highlighted matches.",
       },
       {
+        title: "Cheat Sheets",
+        url: "/cheat-sheets",
+        description:
+          "Quick references for developer commands and shortcuts, with roadmap for more cheat sheets.",
+      },
+      {
         title: "Pomodoro Timer",
         url: "/pomodoro-timer",
         description:
           "Focus timer with customizable sessions, breaks, fullscreen mode, and mini floating window.",
+      },
+    ],
+  },
+  {
+    title: "Fun",
+    url: "#",
+    items: [
+      {
+        title: "ASCII Art Generator",
+        url: "/ascii-art-generator",
+        description: "Turn text into fun ASCII banners with style controls.",
+      },
+      {
+        title: "Fake Hacker Simulator",
+        url: "/fake-hacker-simulator",
+        description: "Simulate dramatic terminal activity with typing and fullscreen mode.",
       },
     ],
   },

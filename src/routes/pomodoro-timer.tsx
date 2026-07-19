@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useSEO } from "@/hooks/use-seo";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,12 @@ export const Route = createFileRoute("/pomodoro-timer")({
 
 type Phase = "focus" | "short-break" | "long-break";
 type MiniWindowAction = "toggle-run" | "skip";
+type FloatingWindowError = "mobile-unsupported" | "permission-denied" | "popup-blocked";
+
+interface FloatingWindowResult {
+  windowRef: Window | null;
+  error: FloatingWindowError | null;
+}
 
 interface PomodoroSettings {
   focusMinutes: number;
@@ -99,6 +105,22 @@ function RouteComponent() {
   }, [isMiniWindowOpen, phase, isRunning, remainingSeconds]);
 
   useEffect(() => {
+    if (!isMiniWindowOpen) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      if (!miniWindowRef.current || miniWindowRef.current.closed) {
+        handleMiniWindowClosed();
+      }
+    }, 500);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [isMiniWindowOpen]);
+
+  useEffect(() => {
     return () => {
       if (miniWindowRef.current && !miniWindowRef.current.closed) {
         miniWindowRef.current.close();
@@ -140,7 +162,39 @@ function RouteComponent() {
     });
   }, [isBreakFullscreenMode]);
 
-  const phaseLabel = useMemo(() => getPhaseLabel(phase), [phase]);
+  const phaseLabel = getPhaseLabel(phase);
+  const [isDesktopDevice, setIsDesktopDevice] = useState(() => detectDesktopDevice());
+
+  useEffect(() => {
+    const mediaQueries = [
+      window.matchMedia("(pointer: coarse)"),
+      window.matchMedia("(any-pointer: coarse)"),
+      window.matchMedia("(hover: none)"),
+      window.matchMedia("(any-hover: none)"),
+    ];
+
+    const updateDesktopSupport = () => {
+      setIsDesktopDevice(detectDesktopDevice());
+    };
+
+    for (const query of mediaQueries) {
+      query.addEventListener("change", updateDesktopSupport);
+    }
+
+    window.addEventListener("resize", updateDesktopSupport);
+    window.addEventListener("orientationchange", updateDesktopSupport);
+    window.addEventListener("focus", updateDesktopSupport);
+
+    return () => {
+      for (const query of mediaQueries) {
+        query.removeEventListener("change", updateDesktopSupport);
+      }
+
+      window.removeEventListener("resize", updateDesktopSupport);
+      window.removeEventListener("orientationchange", updateDesktopSupport);
+      window.removeEventListener("focus", updateDesktopSupport);
+    };
+  }, []);
 
   const startTimer = () => {
     if (remainingSeconds <= 0) {
@@ -213,24 +267,34 @@ function RouteComponent() {
       if (miniWindowRef.current && !miniWindowRef.current.closed) {
         miniWindowRef.current.close();
       }
-      miniWindowRef.current = null;
-      setIsMiniWindowOpen(false);
+      handleMiniWindowClosed();
       return;
     }
 
-    const miniWindow = await openFloatingTimerWindow();
-    if (!miniWindow) {
-      setMessage(
-        "Mini window could not be opened. Allow popups for this site or use a Chromium browser for Document Picture-in-Picture."
-      );
+    const floatingResult = await openFloatingTimerWindow();
+    if (!floatingResult.windowRef) {
+      if (floatingResult.error === "mobile-unsupported") {
+        setMessage(
+          "Floating mini timer is currently supported on desktop browsers only. On mobile, use the main timer or fullscreen break mode."
+        );
+      } else if (floatingResult.error === "permission-denied") {
+        setMessage(
+          "Picture-in-Picture permission was denied. Allow Picture-in-Picture for this site in browser settings, then try again."
+        );
+      } else {
+        setMessage(
+          "Mini window could not be opened. Allow popups for this site or use a Chromium browser for Document Picture-in-Picture."
+        );
+      }
       return;
     }
+
+    const miniWindow = floatingResult.windowRef;
 
     miniWindowRef.current = miniWindow;
-    miniWindow.addEventListener("beforeunload", () => {
-      setIsMiniWindowOpen(false);
-      miniWindowRef.current = null;
-    });
+    miniWindow.addEventListener("beforeunload", handleMiniWindowClosed);
+    miniWindow.addEventListener("pagehide", handleMiniWindowClosed);
+    miniWindow.addEventListener("unload", handleMiniWindowClosed);
 
     renderMiniWindowContent(miniWindow.document, {
       phase,
@@ -239,6 +303,11 @@ function RouteComponent() {
       onAction: handleMiniWindowAction,
     });
     setIsMiniWindowOpen(true);
+  };
+
+  const handleMiniWindowClosed = () => {
+    miniWindowRef.current = null;
+    setIsMiniWindowOpen(false);
   };
 
   const handleMiniWindowAction = (action: MiniWindowAction) => {
@@ -270,6 +339,8 @@ function RouteComponent() {
       }
     }
   };
+
+  const isFloatingMiniSupported = isDesktopDevice;
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 p-4 sm:p-6">
@@ -313,9 +384,11 @@ function RouteComponent() {
               Exit Fullscreen
             </Button>
           ) : null}
-          <Button type="button" variant="outline" onClick={() => void toggleMiniWindow()}>
-            {isMiniWindowOpen ? "Close Floating Mini Timer" : "Open Floating Mini Timer"}
-          </Button>
+          {isFloatingMiniSupported ? (
+            <Button type="button" variant="outline" onClick={() => void toggleMiniWindow()}>
+              {isMiniWindowOpen ? "Close Floating Mini Timer" : "Open Floating Mini Timer"}
+            </Button>
+          ) : null}
         </div>
       </section>
 
@@ -566,7 +639,7 @@ function formatSeconds(totalSeconds: number) {
   return `${minutes}:${seconds}`;
 }
 
-async function openFloatingTimerWindow(): Promise<Window | null> {
+async function openFloatingTimerWindow(): Promise<FloatingWindowResult> {
   const anyWindow = window as Window & {
     documentPictureInPicture?: {
       requestWindow: (options: { width: number; height: number }) => Promise<Window>;
@@ -579,17 +652,58 @@ async function openFloatingTimerWindow(): Promise<Window | null> {
         width: 340,
         height: 220,
       });
-      return pipWindow;
-    } catch {
+      return { windowRef: pipWindow, error: null };
+    } catch (error) {
+      if (isPermissionDeniedError(error)) {
+        return { windowRef: null, error: "permission-denied" };
+      }
+
       // Continue to popup fallback.
     }
   }
 
-  return window.open(
+  const popup = window.open(
     "",
     "utility-hub-pomodoro-mini",
     "width=340,height=240,resizable=yes,scrollbars=no,noopener"
   );
+
+  if (!popup) {
+    return { windowRef: null, error: "popup-blocked" };
+  }
+
+  return { windowRef: popup, error: null };
+}
+
+function detectDesktopDevice() {
+  const navigatorWithUserAgentData = window.navigator as Navigator & {
+    userAgentData?: { mobile?: boolean };
+  };
+
+  const mobileUserAgent = /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(
+    window.navigator.userAgent
+  );
+  const touchMacLikeIpad =
+    window.navigator.platform === "MacIntel" && window.navigator.maxTouchPoints > 1;
+  const userAgentSaysMobile = Boolean(navigatorWithUserAgentData.userAgentData?.mobile);
+  const coarsePointer =
+    window.matchMedia("(pointer: coarse)").matches ||
+    window.matchMedia("(any-pointer: coarse)").matches;
+  const noHover =
+    window.matchMedia("(hover: none)").matches &&
+    window.matchMedia("(any-hover: none)").matches;
+  const likelyTouchOnlyInput = coarsePointer && (noHover || window.navigator.maxTouchPoints > 0);
+  const isMobile = mobileUserAgent || touchMacLikeIpad || userAgentSaysMobile || likelyTouchOnlyInput;
+
+  return !isMobile;
+}
+
+function isPermissionDeniedError(error: unknown) {
+  if (!(error instanceof DOMException)) {
+    return false;
+  }
+
+  return error.name === "NotAllowedError" || error.name === "SecurityError";
 }
 
 function renderMiniWindowContent(
@@ -639,18 +753,19 @@ function ensureMiniWindowMarkup(doc: Document) {
     <style>
       :root { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif; }
       body { margin: 0; background: #0f172a; color: #e2e8f0; }
-      #pomodoro-mini-root { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 14px; }
-      .card { width: 100%; border-radius: 16px; border: 1px solid rgba(148, 163, 184, 0.35); background: rgba(15, 23, 42, 0.95); padding: 14px; text-align: center; }
+      #pomodoro-mini-root { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 12px; box-sizing: border-box; }
+      .card { width: min(100%, 460px); border-radius: 16px; border: 1px solid rgba(148, 163, 184, 0.35); background: rgba(15, 23, 42, 0.95); padding: clamp(10px, 2.5vw, 16px); text-align: center; box-sizing: border-box; }
       .phase { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #94a3b8; }
-      .timer { margin-top: 6px; font-size: 44px; font-weight: 700; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .timer { margin-top: 6px; font-size: clamp(2rem, 20vw, 3.1rem); line-height: 1; font-weight: 700; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
       .status { margin-top: 6px; font-size: 12px; color: #cbd5e1; }
-      .actions { margin-top: 10px; display: flex; gap: 8px; justify-content: center; }
+      .actions { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
       .btn {
         border: 1px solid rgba(148, 163, 184, 0.45);
         background: rgba(15, 23, 42, 0.85);
         color: #e2e8f0;
         border-radius: 10px;
-        padding: 6px 12px;
+        min-width: 80px;
+        padding: 7px 12px;
         font-size: 12px;
         cursor: pointer;
       }
