@@ -172,6 +172,12 @@ export const navigationGroups: NavGroup[] = [
         url: "/emoji-picker",
         description: "Search, browse by category, and copy emoji with recently used history.",
       },
+      {
+        title: "Prime Number Checker",
+        url: "/prime-number-checker",
+        description:
+          "Check primality, view factorization, nearest primes, and an interactive sieve grid.",
+      },
     ],
   },
   {
