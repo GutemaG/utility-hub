@@ -178,6 +178,12 @@ export const navigationGroups: NavGroup[] = [
         description:
           "Check primality, view factorization, nearest primes, and an interactive sieve grid.",
       },
+      {
+        title: "Phone Number Parser",
+        url: "/phone-number-parser",
+        description:
+          "Validate and format phone numbers with a searchable country code selector.",
+      },
     ],
   },
   {
