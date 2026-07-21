@@ -170,6 +170,18 @@ export const navigationGroups: NavGroup[] = [
     ],
   },
   {
+    title: "Design",
+    url: "#",
+    items: [
+      {
+        title: "Color Tools",
+        url: "/color-tools",
+        description:
+          "Convert colors between HEX, RGB, HSL, HWB, CIE LCH, and CMYK, browse the Tailwind palette, and generate gradients and color schemes.",
+      },
+    ],
+  },
+  {
     title: "Fun",
     url: "#",
     items: [
