@@ -30,6 +30,7 @@ import { Route as JwtDecoderRouteImport } from './routes/jwt-decoder'
 import { Route as JsonValidatorRouteImport } from './routes/json-validator'
 import { Route as FakeHackerSimulatorRouteImport } from './routes/fake-hacker-simulator'
 import { Route as EthiopianCalendarRouteImport } from './routes/ethiopian-calendar'
+import { Route as EmojiPickerRouteImport } from './routes/emoji-picker'
 import { Route as DataStorageConversionRouteImport } from './routes/data-storage-conversion'
 import { Route as CurrencyConversionRouteImport } from './routes/currency-conversion'
 import { Route as ColorToolsRouteImport } from './routes/color-tools'
@@ -147,6 +148,11 @@ const EthiopianCalendarRoute = EthiopianCalendarRouteImport.update({
   path: '/ethiopian-calendar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EmojiPickerRoute = EmojiPickerRouteImport.update({
+  id: '/emoji-picker',
+  path: '/emoji-picker',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DataStorageConversionRoute = DataStorageConversionRouteImport.update({
   id: '/data-storage-conversion',
   path: '/data-storage-conversion',
@@ -215,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/color-tools': typeof ColorToolsRoute
   '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
+  '/emoji-picker': typeof EmojiPickerRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/json-validator': typeof JsonValidatorRoute
@@ -249,6 +256,7 @@ export interface FileRoutesByTo {
   '/color-tools': typeof ColorToolsRoute
   '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
+  '/emoji-picker': typeof EmojiPickerRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/json-validator': typeof JsonValidatorRoute
@@ -284,6 +292,7 @@ export interface FileRoutesById {
   '/color-tools': typeof ColorToolsRoute
   '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
+  '/emoji-picker': typeof EmojiPickerRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/json-validator': typeof JsonValidatorRoute
@@ -320,6 +329,7 @@ export interface FileRouteTypes {
     | '/color-tools'
     | '/currency-conversion'
     | '/data-storage-conversion'
+    | '/emoji-picker'
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
     | '/json-validator'
@@ -354,6 +364,7 @@ export interface FileRouteTypes {
     | '/color-tools'
     | '/currency-conversion'
     | '/data-storage-conversion'
+    | '/emoji-picker'
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
     | '/json-validator'
@@ -388,6 +399,7 @@ export interface FileRouteTypes {
     | '/color-tools'
     | '/currency-conversion'
     | '/data-storage-conversion'
+    | '/emoji-picker'
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
     | '/json-validator'
@@ -423,6 +435,7 @@ export interface RootRouteChildren {
   ColorToolsRoute: typeof ColorToolsRoute
   CurrencyConversionRoute: typeof CurrencyConversionRoute
   DataStorageConversionRoute: typeof DataStorageConversionRoute
+  EmojiPickerRoute: typeof EmojiPickerRoute
   EthiopianCalendarRoute: typeof EthiopianCalendarRoute
   FakeHackerSimulatorRoute: typeof FakeHackerSimulatorRoute
   JsonValidatorRoute: typeof JsonValidatorRoute
@@ -595,6 +608,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EthiopianCalendarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/emoji-picker': {
+      id: '/emoji-picker'
+      path: '/emoji-picker'
+      fullPath: '/emoji-picker'
+      preLoaderRoute: typeof EmojiPickerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/data-storage-conversion': {
       id: '/data-storage-conversion'
       path: '/data-storage-conversion'
@@ -687,6 +707,7 @@ const rootRouteChildren: RootRouteChildren = {
   ColorToolsRoute: ColorToolsRoute,
   CurrencyConversionRoute: CurrencyConversionRoute,
   DataStorageConversionRoute: DataStorageConversionRoute,
+  EmojiPickerRoute: EmojiPickerRoute,
   EthiopianCalendarRoute: EthiopianCalendarRoute,
   FakeHackerSimulatorRoute: FakeHackerSimulatorRoute,
   JsonValidatorRoute: JsonValidatorRoute,

@@ -167,6 +167,11 @@ export const navigationGroups: NavGroup[] = [
         description:
           "Focus timer with customizable sessions, breaks, fullscreen mode, and mini floating window.",
       },
+      {
+        title: "Emoji Picker",
+        url: "/emoji-picker",
+        description: "Search, browse by category, and copy emoji with recently used history.",
+      },
     ],
   },
   {
