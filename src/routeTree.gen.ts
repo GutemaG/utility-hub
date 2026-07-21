@@ -20,6 +20,7 @@ import { Route as ShoeSizeConversionRouteImport } from './routes/shoe-size-conve
 import { Route as SalaryCalculationRouteImport } from './routes/salary-calculation'
 import { Route as RegexTesterRouteImport } from './routes/regex-tester'
 import { Route as QrCodeGeneratorRouteImport } from './routes/qr-code-generator'
+import { Route as PrimeNumberCheckerRouteImport } from './routes/prime-number-checker'
 import { Route as PomodoroTimerRouteImport } from './routes/pomodoro-timer'
 import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
@@ -96,6 +97,11 @@ const RegexTesterRoute = RegexTesterRouteImport.update({
 const QrCodeGeneratorRoute = QrCodeGeneratorRouteImport.update({
   id: '/qr-code-generator',
   path: '/qr-code-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrimeNumberCheckerRoute = PrimeNumberCheckerRouteImport.update({
+  id: '/prime-number-checker',
+  path: '/prime-number-checker',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PomodoroTimerRoute = PomodoroTimerRouteImport.update({
@@ -232,6 +238,7 @@ export interface FileRoutesByFullPath {
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/pomodoro-timer': typeof PomodoroTimerRoute
+  '/prime-number-checker': typeof PrimeNumberCheckerRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
   '/regex-tester': typeof RegexTesterRoute
   '/salary-calculation': typeof SalaryCalculationRoute
@@ -267,6 +274,7 @@ export interface FileRoutesByTo {
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/pomodoro-timer': typeof PomodoroTimerRoute
+  '/prime-number-checker': typeof PrimeNumberCheckerRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
   '/regex-tester': typeof RegexTesterRoute
   '/salary-calculation': typeof SalaryCalculationRoute
@@ -303,6 +311,7 @@ export interface FileRoutesById {
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/pomodoro-timer': typeof PomodoroTimerRoute
+  '/prime-number-checker': typeof PrimeNumberCheckerRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
   '/regex-tester': typeof RegexTesterRoute
   '/salary-calculation': typeof SalaryCalculationRoute
@@ -340,6 +349,7 @@ export interface FileRouteTypes {
     | '/password-generator'
     | '/payroll-generator'
     | '/pomodoro-timer'
+    | '/prime-number-checker'
     | '/qr-code-generator'
     | '/regex-tester'
     | '/salary-calculation'
@@ -375,6 +385,7 @@ export interface FileRouteTypes {
     | '/password-generator'
     | '/payroll-generator'
     | '/pomodoro-timer'
+    | '/prime-number-checker'
     | '/qr-code-generator'
     | '/regex-tester'
     | '/salary-calculation'
@@ -410,6 +421,7 @@ export interface FileRouteTypes {
     | '/password-generator'
     | '/payroll-generator'
     | '/pomodoro-timer'
+    | '/prime-number-checker'
     | '/qr-code-generator'
     | '/regex-tester'
     | '/salary-calculation'
@@ -446,6 +458,7 @@ export interface RootRouteChildren {
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   PayrollGeneratorRoute: typeof PayrollGeneratorRoute
   PomodoroTimerRoute: typeof PomodoroTimerRoute
+  PrimeNumberCheckerRoute: typeof PrimeNumberCheckerRoute
   QrCodeGeneratorRoute: typeof QrCodeGeneratorRoute
   RegexTesterRoute: typeof RegexTesterRoute
   SalaryCalculationRoute: typeof SalaryCalculationRoute
@@ -536,6 +549,13 @@ declare module '@tanstack/react-router' {
       path: '/qr-code-generator'
       fullPath: '/qr-code-generator'
       preLoaderRoute: typeof QrCodeGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prime-number-checker': {
+      id: '/prime-number-checker'
+      path: '/prime-number-checker'
+      fullPath: '/prime-number-checker'
+      preLoaderRoute: typeof PrimeNumberCheckerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pomodoro-timer': {
@@ -718,6 +738,7 @@ const rootRouteChildren: RootRouteChildren = {
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   PayrollGeneratorRoute: PayrollGeneratorRoute,
   PomodoroTimerRoute: PomodoroTimerRoute,
+  PrimeNumberCheckerRoute: PrimeNumberCheckerRoute,
   QrCodeGeneratorRoute: QrCodeGeneratorRoute,
   RegexTesterRoute: RegexTesterRoute,
   SalaryCalculationRoute: SalaryCalculationRoute,
