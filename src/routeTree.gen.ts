@@ -32,6 +32,7 @@ import { Route as FakeHackerSimulatorRouteImport } from './routes/fake-hacker-si
 import { Route as EthiopianCalendarRouteImport } from './routes/ethiopian-calendar'
 import { Route as DataStorageConversionRouteImport } from './routes/data-storage-conversion'
 import { Route as CurrencyConversionRouteImport } from './routes/currency-conversion'
+import { Route as ColorToolsRouteImport } from './routes/color-tools'
 import { Route as CheatSheetsRouteImport } from './routes/cheat-sheets'
 import { Route as CharacterCounterRouteImport } from './routes/character-counter'
 import { Route as BmiCalculationRouteImport } from './routes/bmi-calculation'
@@ -156,6 +157,11 @@ const CurrencyConversionRoute = CurrencyConversionRouteImport.update({
   path: '/currency-conversion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ColorToolsRoute = ColorToolsRouteImport.update({
+  id: '/color-tools',
+  path: '/color-tools',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheatSheetsRoute = CheatSheetsRouteImport.update({
   id: '/cheat-sheets',
   path: '/cheat-sheets',
@@ -206,6 +212,7 @@ export interface FileRoutesByFullPath {
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
   '/cheat-sheets': typeof CheatSheetsRoute
+  '/color-tools': typeof ColorToolsRoute
   '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
@@ -239,6 +246,7 @@ export interface FileRoutesByTo {
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
   '/cheat-sheets': typeof CheatSheetsRoute
+  '/color-tools': typeof ColorToolsRoute
   '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
@@ -273,6 +281,7 @@ export interface FileRoutesById {
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
   '/cheat-sheets': typeof CheatSheetsRoute
+  '/color-tools': typeof ColorToolsRoute
   '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
@@ -308,6 +317,7 @@ export interface FileRouteTypes {
     | '/bmi-calculation'
     | '/character-counter'
     | '/cheat-sheets'
+    | '/color-tools'
     | '/currency-conversion'
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
@@ -341,6 +351,7 @@ export interface FileRouteTypes {
     | '/bmi-calculation'
     | '/character-counter'
     | '/cheat-sheets'
+    | '/color-tools'
     | '/currency-conversion'
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
@@ -374,6 +385,7 @@ export interface FileRouteTypes {
     | '/bmi-calculation'
     | '/character-counter'
     | '/cheat-sheets'
+    | '/color-tools'
     | '/currency-conversion'
     | '/data-storage-conversion'
     | '/ethiopian-calendar'
@@ -408,6 +420,7 @@ export interface RootRouteChildren {
   BmiCalculationRoute: typeof BmiCalculationRoute
   CharacterCounterRoute: typeof CharacterCounterRoute
   CheatSheetsRoute: typeof CheatSheetsRoute
+  ColorToolsRoute: typeof ColorToolsRoute
   CurrencyConversionRoute: typeof CurrencyConversionRoute
   DataStorageConversionRoute: typeof DataStorageConversionRoute
   EthiopianCalendarRoute: typeof EthiopianCalendarRoute
@@ -596,6 +609,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CurrencyConversionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/color-tools': {
+      id: '/color-tools'
+      path: '/color-tools'
+      fullPath: '/color-tools'
+      preLoaderRoute: typeof ColorToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cheat-sheets': {
       id: '/cheat-sheets'
       path: '/cheat-sheets'
@@ -664,6 +684,7 @@ const rootRouteChildren: RootRouteChildren = {
   BmiCalculationRoute: BmiCalculationRoute,
   CharacterCounterRoute: CharacterCounterRoute,
   CheatSheetsRoute: CheatSheetsRoute,
+  ColorToolsRoute: ColorToolsRoute,
   CurrencyConversionRoute: CurrencyConversionRoute,
   DataStorageConversionRoute: DataStorageConversionRoute,
   EthiopianCalendarRoute: EthiopianCalendarRoute,

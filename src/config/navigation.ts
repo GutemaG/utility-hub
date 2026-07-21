@@ -159,13 +159,25 @@ export const navigationGroups: NavGroup[] = [
         title: "Cheat Sheets",
         url: "/cheat-sheets",
         description:
-          "Quick references for developer commands and shortcuts, with roadmap for more cheat sheets.",
+          "Searchable quick references for Git, GitHub, editors, shells, regex, Docker, and more.",
       },
       {
         title: "Pomodoro Timer",
         url: "/pomodoro-timer",
         description:
           "Focus timer with customizable sessions, breaks, fullscreen mode, and mini floating window.",
+      },
+    ],
+  },
+  {
+    title: "Design",
+    url: "#",
+    items: [
+      {
+        title: "Color Tools",
+        url: "/color-tools",
+        description:
+          "Convert colors between HEX, RGB, HSL, HWB, CIE LCH, and CMYK, browse the Tailwind palette, and generate gradients and color schemes.",
       },
     ],
   },

@@ -41,9 +41,9 @@ function RootLayout() {
     <>
       <SidebarProvider>
         <CommandPalette />
-        <AppSidebar />
+        <AppSidebar className="print:hidden" />
         <SidebarInset>
-          <header className="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4 ">
+          <header className="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4 print:hidden">
             <SidebarTrigger className="-ml-1" />
             <div className="ml-auto flex items-center gap-2">
               <InstallPwaButton />
