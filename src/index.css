@@ -119,6 +119,24 @@
   }
 }
 
+@media print {
+  /* A non-zero @page margin gives the browser room to draw its own
+     header/footer (title, date, URL, page numbers) inside that margin.
+     Zeroing it out suppresses that chrome; pages that need breathing room
+     add their own print:p-* padding on the actual content instead. */
+  @page {
+    margin: 0;
+  }
+
+  /* Browsers strip background colors on print by default to save ink;
+     without this, things like the cheat sheet zebra-striping never show
+     up in the printed/PDF output even though they render fine on screen. */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
 /* .rdp-week {
   border: 1px solid var(--border);
 } */

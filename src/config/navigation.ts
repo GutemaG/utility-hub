@@ -159,7 +159,7 @@ export const navigationGroups: NavGroup[] = [
         title: "Cheat Sheets",
         url: "/cheat-sheets",
         description:
-          "Quick references for developer commands and shortcuts, with roadmap for more cheat sheets.",
+          "Searchable quick references for Git, GitHub, editors, shells, regex, Docker, and more.",
       },
       {
         title: "Pomodoro Timer",
