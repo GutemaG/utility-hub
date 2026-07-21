@@ -25,6 +25,7 @@ import { Route as PomodoroTimerRouteImport } from './routes/pomodoro-timer'
 import { Route as PhoneNumberParserRouteImport } from './routes/phone-number-parser'
 import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
+import { Route as MatrixCalculatorRouteImport } from './routes/matrix-calculator'
 import { Route as MarkDownEditorRouteImport } from './routes/mark-down-editor'
 import { Route as LoanCalculatorRouteImport } from './routes/loan-calculator'
 import { Route as LengthConversionRouteImport } from './routes/length-conversion'
@@ -123,6 +124,11 @@ const PayrollGeneratorRoute = PayrollGeneratorRouteImport.update({
 const PasswordGeneratorRoute = PasswordGeneratorRouteImport.update({
   id: '/password-generator',
   path: '/password-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MatrixCalculatorRoute = MatrixCalculatorRouteImport.update({
+  id: '/matrix-calculator',
+  path: '/matrix-calculator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarkDownEditorRoute = MarkDownEditorRouteImport.update({
@@ -241,6 +247,7 @@ export interface FileRoutesByFullPath {
   '/length-conversion': typeof LengthConversionRoute
   '/loan-calculator': typeof LoanCalculatorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
+  '/matrix-calculator': typeof MatrixCalculatorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -278,6 +285,7 @@ export interface FileRoutesByTo {
   '/length-conversion': typeof LengthConversionRoute
   '/loan-calculator': typeof LoanCalculatorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
+  '/matrix-calculator': typeof MatrixCalculatorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -316,6 +324,7 @@ export interface FileRoutesById {
   '/length-conversion': typeof LengthConversionRoute
   '/loan-calculator': typeof LoanCalculatorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
+  '/matrix-calculator': typeof MatrixCalculatorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -355,6 +364,7 @@ export interface FileRouteTypes {
     | '/length-conversion'
     | '/loan-calculator'
     | '/mark-down-editor'
+    | '/matrix-calculator'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -392,6 +402,7 @@ export interface FileRouteTypes {
     | '/length-conversion'
     | '/loan-calculator'
     | '/mark-down-editor'
+    | '/matrix-calculator'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -429,6 +440,7 @@ export interface FileRouteTypes {
     | '/length-conversion'
     | '/loan-calculator'
     | '/mark-down-editor'
+    | '/matrix-calculator'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -467,6 +479,7 @@ export interface RootRouteChildren {
   LengthConversionRoute: typeof LengthConversionRoute
   LoanCalculatorRoute: typeof LoanCalculatorRoute
   MarkDownEditorRoute: typeof MarkDownEditorRoute
+  MatrixCalculatorRoute: typeof MatrixCalculatorRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   PayrollGeneratorRoute: typeof PayrollGeneratorRoute
   PhoneNumberParserRoute: typeof PhoneNumberParserRoute
@@ -597,6 +610,13 @@ declare module '@tanstack/react-router' {
       path: '/password-generator'
       fullPath: '/password-generator'
       preLoaderRoute: typeof PasswordGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/matrix-calculator': {
+      id: '/matrix-calculator'
+      path: '/matrix-calculator'
+      fullPath: '/matrix-calculator'
+      preLoaderRoute: typeof MatrixCalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mark-down-editor': {
@@ -755,6 +775,7 @@ const rootRouteChildren: RootRouteChildren = {
   LengthConversionRoute: LengthConversionRoute,
   LoanCalculatorRoute: LoanCalculatorRoute,
   MarkDownEditorRoute: MarkDownEditorRoute,
+  MatrixCalculatorRoute: MatrixCalculatorRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   PayrollGeneratorRoute: PayrollGeneratorRoute,
   PhoneNumberParserRoute: PhoneNumberParserRoute,

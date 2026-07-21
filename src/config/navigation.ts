@@ -184,6 +184,12 @@ export const navigationGroups: NavGroup[] = [
         description:
           "Validate and format phone numbers with a searchable country code selector.",
       },
+      {
+        title: "Matrix Calculator",
+        url: "/matrix-calculator",
+        description:
+          "Add, subtract, multiply, transpose, and invert matrices with an animated step-by-step walkthrough.",
+      },
     ],
   },
   {
