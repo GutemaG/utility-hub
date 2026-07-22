@@ -31,6 +31,7 @@ import { Route as LoanCalculatorRouteImport } from './routes/loan-calculator'
 import { Route as LengthConversionRouteImport } from './routes/length-conversion'
 import { Route as JwtDecoderRouteImport } from './routes/jwt-decoder'
 import { Route as JsonValidatorRouteImport } from './routes/json-validator'
+import { Route as InternetSpeedTestRouteImport } from './routes/internet-speed-test'
 import { Route as FakeHackerSimulatorRouteImport } from './routes/fake-hacker-simulator'
 import { Route as EthiopianCalendarRouteImport } from './routes/ethiopian-calendar'
 import { Route as EmojiPickerRouteImport } from './routes/emoji-picker'
@@ -156,6 +157,11 @@ const JsonValidatorRoute = JsonValidatorRouteImport.update({
   path: '/json-validator',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InternetSpeedTestRoute = InternetSpeedTestRouteImport.update({
+  id: '/internet-speed-test',
+  path: '/internet-speed-test',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FakeHackerSimulatorRoute = FakeHackerSimulatorRouteImport.update({
   id: '/fake-hacker-simulator',
   path: '/fake-hacker-simulator',
@@ -242,6 +248,7 @@ export interface FileRoutesByFullPath {
   '/emoji-picker': typeof EmojiPickerRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
+  '/internet-speed-test': typeof InternetSpeedTestRoute
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
@@ -280,6 +287,7 @@ export interface FileRoutesByTo {
   '/emoji-picker': typeof EmojiPickerRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
+  '/internet-speed-test': typeof InternetSpeedTestRoute
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
@@ -319,6 +327,7 @@ export interface FileRoutesById {
   '/emoji-picker': typeof EmojiPickerRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
+  '/internet-speed-test': typeof InternetSpeedTestRoute
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
@@ -359,6 +368,7 @@ export interface FileRouteTypes {
     | '/emoji-picker'
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
+    | '/internet-speed-test'
     | '/json-validator'
     | '/jwt-decoder'
     | '/length-conversion'
@@ -397,6 +407,7 @@ export interface FileRouteTypes {
     | '/emoji-picker'
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
+    | '/internet-speed-test'
     | '/json-validator'
     | '/jwt-decoder'
     | '/length-conversion'
@@ -435,6 +446,7 @@ export interface FileRouteTypes {
     | '/emoji-picker'
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
+    | '/internet-speed-test'
     | '/json-validator'
     | '/jwt-decoder'
     | '/length-conversion'
@@ -474,6 +486,7 @@ export interface RootRouteChildren {
   EmojiPickerRoute: typeof EmojiPickerRoute
   EthiopianCalendarRoute: typeof EthiopianCalendarRoute
   FakeHackerSimulatorRoute: typeof FakeHackerSimulatorRoute
+  InternetSpeedTestRoute: typeof InternetSpeedTestRoute
   JsonValidatorRoute: typeof JsonValidatorRoute
   JwtDecoderRoute: typeof JwtDecoderRoute
   LengthConversionRoute: typeof LengthConversionRoute
@@ -654,6 +667,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JsonValidatorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/internet-speed-test': {
+      id: '/internet-speed-test'
+      path: '/internet-speed-test'
+      fullPath: '/internet-speed-test'
+      preLoaderRoute: typeof InternetSpeedTestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/fake-hacker-simulator': {
       id: '/fake-hacker-simulator'
       path: '/fake-hacker-simulator'
@@ -770,6 +790,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmojiPickerRoute: EmojiPickerRoute,
   EthiopianCalendarRoute: EthiopianCalendarRoute,
   FakeHackerSimulatorRoute: FakeHackerSimulatorRoute,
+  InternetSpeedTestRoute: InternetSpeedTestRoute,
   JsonValidatorRoute: JsonValidatorRoute,
   JwtDecoderRoute: JwtDecoderRoute,
   LengthConversionRoute: LengthConversionRoute,

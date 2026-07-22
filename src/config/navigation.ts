@@ -191,6 +191,11 @@ export const navigationGroups: NavGroup[] = [
         description:
           "Add, subtract, multiply, transpose, and invert matrices with an animated step-by-step walkthrough.",
       },
+      {
+        title: "Internet Speed Test",
+        url: "/internet-speed-test",
+        description: "Measure download speed, upload speed, latency, and jitter right in your browser.",
+      },
     ],
   },
   {
