@@ -191,8 +191,8 @@ function Index() {
           to="/base64-tool"
         />
         <FeatureCard
-          title="JWT Decoder"
-          description="Decode JWT header, payload, expiration, and issued time."
+          title="JWT Decoder & Encoder"
+          description="Decode and verify a JWT's header, payload, and signature, or build and sign a new one."
           to="/jwt-decoder"
         />
         <FeatureCard

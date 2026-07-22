@@ -1,171 +1,531 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { Check, Copy, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useSEO } from "@/hooks/use-seo";
 import { copyText } from "@/lib/clipboard";
+import { cn } from "@/lib/utils";
+import {
+  EXAMPLE_HEADER,
+  EXAMPLE_PAYLOAD,
+  EXAMPLE_SECRET,
+  HEADER_CLAIM_INFO,
+  JWT_ALGORITHMS,
+  JwtDecodeError,
+  PAYLOAD_CLAIM_INFO,
+  buildJwt,
+  decodeJwtStructure,
+  isHmacAlgorithm,
+  secretToBytes,
+  verifyHmacSignature,
+  type JwtAlgorithm,
+} from "@/lib/jwt";
+import { JwtTokenEditor, TokenSpans } from "@/components/jwt/token-field";
+import { JsonPanel } from "@/components/jwt/json-panel";
+import { SecretField } from "@/components/jwt/secret-field";
+import { StatusRow, type StatusState } from "@/components/jwt/status-row";
 
 export const Route = createFileRoute("/jwt-decoder")({
   component: RouteComponent,
 });
 
-function RouteComponent() {
-  const [token, setToken] = useState("");
-  const [copied, setCopied] = useState<"header" | "payload" | null>(null);
+type JwtMode = "decode" | "encode";
 
-  useSEO({
-    title: "JWT Decoder | Utility Hub",
-    description: "Decode JWT header and payload with readable issued/expiration time details.",
-    path: "/jwt-decoder",
-    keywords: "jwt decoder, decode token, jwt header payload, jwt exp iat",
-    applicationCategory: "DeveloperApplication",
-    featureList: ["Decode header", "Decode payload", "Expiration time", "Issued time"],
-  });
-
-  const result = useMemo(() => decodeJwt(token), [token]);
-
-  const copy = async (value: string, target: "header" | "payload") => {
-    if (!value) return;
-    const didCopy = await copyText(value);
-    if (didCopy) {
-      setCopied(target);
-      setTimeout(() => setCopied(null), 1500);
-    }
-  };
-
-  return (
-    <div className="mx-auto max-w-5xl space-y-6 p-4 sm:p-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-foreground">JWT Decoder</h1>
-        <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-          Paste a JWT to decode header and payload instantly.
-        </p>
-      </div>
-
-      <div className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
-        <label className="mb-2 block text-sm font-medium text-foreground">JWT Token</label>
-        <Textarea
-          value={token}
-          onChange={(e) => setToken(e.target.value.trim())}
-          className="min-h-28 font-mono text-sm"
-          placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-        />
-
-        {result.status === "error" ? (
-          <div className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-            {result.message}
-          </div>
-        ) : null}
-
-        {result.status === "success" ? (
-          <>
-            <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
-              <Panel
-                title="Header"
-                value={result.headerPretty}
-                copied={copied === "header"}
-                onCopy={() => copy(result.headerPretty, "header")}
-              />
-              <Panel
-                title="Payload"
-                value={result.payloadPretty}
-                copied={copied === "payload"}
-                onCopy={() => copy(result.payloadPretty, "payload")}
-              />
-            </div>
-
-            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <InfoRow label="Issued At (iat)" value={result.issuedAt} />
-              <InfoRow label="Expires At (exp)" value={result.expiresAt} />
-            </div>
-          </>
-        ) : null}
-      </div>
-    </div>
-  );
-}
-
-function Panel({
-  title,
-  value,
-  copied,
-  onCopy,
-}: {
-  title: string;
-  value: string;
-  copied: boolean;
-  onCopy: () => void;
-}) {
-  return (
-    <div className="space-y-2 rounded-lg border border-border bg-muted/30 p-3">
-      <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-foreground">{title}</p>
-        <Button type="button" size="sm" variant="ghost" onClick={onCopy}>
-          {copied ? "Copied" : "Copy"}
-        </Button>
-      </div>
-      <pre className="max-h-72 overflow-auto rounded bg-background p-3 text-xs leading-5 text-foreground">
-        {value}
-      </pre>
-    </div>
-  );
-}
-
-function InfoRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-md border border-border bg-background px-3 py-2 text-sm">
-      <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
-      <p className="mt-1 text-foreground">{value}</p>
-    </div>
-  );
-}
-
-type JwtDecodeResult =
+type DecodeState =
   | { status: "idle" }
   | { status: "error"; message: string }
   | {
       status: "success";
-      headerPretty: string;
-      payloadPretty: string;
-      issuedAt: string;
-      expiresAt: string;
+      header: Record<string, unknown>;
+      payload: Record<string, unknown>;
+      signatureB64: string;
+      signingInput: string;
     };
 
-function decodeJwt(token: string): JwtDecodeResult {
-  if (!token) return { status: "idle" };
+interface VerifyState {
+  state: StatusState;
+  message: string;
+}
 
-  const parts = token.split(".");
-  if (parts.length < 2) {
-    return { status: "error", message: "Invalid JWT format. Expected header.payload.signature." };
-  }
+const DEFAULT_PAYLOAD_TEXT = JSON.stringify(EXAMPLE_PAYLOAD, null, 2);
 
-  try {
-    const header = JSON.parse(base64UrlDecode(parts[0]));
-    const payload = JSON.parse(base64UrlDecode(parts[1]));
+function headerTextFor(alg: JwtAlgorithm) {
+  return JSON.stringify({ alg, typ: "JWT" }, null, 2);
+}
+
+function RouteComponent() {
+  const [mode, setMode] = useState<JwtMode>("decode");
+
+  // --- Decoder state ---
+  const [token, setToken] = useState("");
+  const [autoFocusEnabled, setAutoFocusEnabled] = useState(false);
+  const [secret, setSecret] = useState("");
+  const [secretIsBase64Url, setSecretIsBase64Url] = useState(false);
+  const [exampleAlg, setExampleAlg] = useState<JwtAlgorithm>("HS256");
+  const [tokenCopied, setTokenCopied] = useState(false);
+  const [verify, setVerify] = useState<VerifyState>({
+    state: "neutral",
+    message: "Enter the secret used to sign this token to verify its signature.",
+  });
+
+  const tokenRef = useRef<HTMLTextAreaElement>(null);
+
+  // --- Encoder state ---
+  const [encAlgorithm, setEncAlgorithm] = useState<JwtAlgorithm>("HS256");
+  const [headerText, setHeaderText] = useState(headerTextFor("HS256"));
+  const [payloadText, setPayloadText] = useState(DEFAULT_PAYLOAD_TEXT);
+  const [encSecret, setEncSecret] = useState(EXAMPLE_SECRET);
+  const [encSecretIsBase64Url, setEncSecretIsBase64Url] = useState(false);
+  const [encToken, setEncToken] = useState("");
+  const [encError, setEncError] = useState<string | null>(null);
+  const [encCopied, setEncCopied] = useState(false);
+
+  useSEO({
+    title: "JWT Decoder & Encoder | Utility Hub",
+    description:
+      "Decode, validate, and verify JSON Web Tokens (JWT), or build and sign a new one from custom header and payload claims — just like jwt.io.",
+    path: "/jwt-decoder",
+    keywords:
+      "jwt decoder, jwt encoder, decode jwt, encode jwt, sign jwt, jwt.io, jwt signature verification, jwt claims",
+    applicationCategory: "DeveloperApplication",
+    featureList: [
+      "Decode header and payload",
+      "Claims breakdown",
+      "HMAC signature verification",
+      "Build and sign a new JWT",
+      "Generate example tokens",
+    ],
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const example = await buildJwt("HS256", EXAMPLE_HEADER, EXAMPLE_PAYLOAD, EXAMPLE_SECRET, false);
+      if (!cancelled) {
+        setToken(example);
+        setSecret(EXAMPLE_SECRET);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (autoFocusEnabled) {
+      tokenRef.current?.focus();
+    }
+  }, [autoFocusEnabled]);
+
+  const decoded = useMemo<DecodeState>(() => {
+    const trimmed = token.trim();
+    if (!trimmed) return { status: "idle" };
+
+    try {
+      const result = decodeJwtStructure(trimmed);
+      return {
+        status: "success",
+        header: result.header,
+        payload: result.payload,
+        signatureB64: result.signatureB64,
+        signingInput: result.signingInput,
+      };
+    } catch (error) {
+      return {
+        status: "error",
+        message: error instanceof JwtDecodeError ? error.message : "Unable to decode token.",
+      };
+    }
+  }, [token]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function run() {
+      if (decoded.status !== "success") {
+        setVerify({ state: "neutral", message: "Paste a token above to verify its signature." });
+        return;
+      }
+
+      const alg = decoded.header.alg;
+      if (typeof alg !== "string" || !isHmacAlgorithm(alg)) {
+        setVerify({
+          state: "neutral",
+          message:
+            typeof alg === "string"
+              ? `Verifying "${alg}" signatures isn't supported yet — only HMAC (HS256/384/512) secrets can be checked here.`
+              : "This token has no recognizable algorithm to verify.",
+        });
+        return;
+      }
+
+      if (!secret) {
+        setVerify({ state: "neutral", message: "Enter the secret used to sign this token to verify its signature." });
+        return;
+      }
+
+      try {
+        const secretBytes = secretToBytes(secret, secretIsBase64Url);
+        const ok = await verifyHmacSignature(alg, secretBytes, decoded.signingInput, decoded.signatureB64);
+        if (!cancelled) {
+          setVerify({
+            state: ok ? "valid" : "invalid",
+            message: ok ? "Signature verified" : "Invalid signature for the given secret.",
+          });
+        }
+      } catch {
+        if (!cancelled) {
+          setVerify({ state: "invalid", message: "Unable to verify signature with the provided secret." });
+        }
+      }
+    }
+
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [decoded, secret, secretIsBase64Url]);
+
+  const generateExample = async () => {
+    const payload = { ...EXAMPLE_PAYLOAD, iat: Math.floor(Date.now() / 1000) };
+    const header = { alg: exampleAlg, typ: "JWT" };
+    const example = await buildJwt(exampleAlg, header, payload, EXAMPLE_SECRET, false);
+    setToken(example);
+    setSecret(EXAMPLE_SECRET);
+    setSecretIsBase64Url(false);
+  };
+
+  const copyToken = async () => {
+    if (!token) return;
+    const didCopy = await copyText(token);
+    if (didCopy) {
+      setTokenCopied(true);
+      setTimeout(() => setTokenCopied(false), 1500);
+    }
+  };
+
+  const secretStatus = useMemo<VerifyState>(() => {
+    if (!secret) {
+      return { state: "neutral", message: "No secret entered yet." };
+    }
+    if (secretIsBase64Url && !/^[A-Za-z0-9_-]+$/.test(secret)) {
+      return { state: "invalid", message: "Not valid Base64URL." };
+    }
+    return { state: "valid", message: "Valid secret" };
+  }, [secret, secretIsBase64Url]);
+
+  const validState: StatusState =
+    decoded.status === "idle" ? "neutral" : decoded.status === "success" ? "valid" : "invalid";
+  const validLabel =
+    decoded.status === "idle"
+      ? "Paste a token to check its structure."
+      : decoded.status === "success"
+        ? "Valid JWT"
+        : decoded.message;
+
+  const handleAlgorithmChange = (value: JwtAlgorithm) => {
+    setEncAlgorithm(value);
+    setHeaderText((current) => {
+      try {
+        const parsed = JSON.parse(current);
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+          return JSON.stringify({ ...parsed, alg: value }, null, 2);
+        }
+      } catch {
+        // Fall through to a fresh header if the current text isn't valid JSON.
+      }
+      return headerTextFor(value);
+    });
+  };
+
+  const encParsed = useMemo<
+    | { ok: true; header: Record<string, unknown>; payload: Record<string, unknown> }
+    | { ok: false; error: string }
+  >(() => {
+    let header: unknown;
+    try {
+      header = JSON.parse(headerText);
+    } catch {
+      return { ok: false, error: "Header isn't valid JSON." };
+    }
+    if (typeof header !== "object" || header === null || Array.isArray(header)) {
+      return { ok: false, error: "Header must be a JSON object." };
+    }
+
+    let payload: unknown;
+    try {
+      payload = JSON.parse(payloadText);
+    } catch {
+      return { ok: false, error: "Payload isn't valid JSON." };
+    }
+    if (typeof payload !== "object" || payload === null || Array.isArray(payload)) {
+      return { ok: false, error: "Payload must be a JSON object." };
+    }
 
     return {
-      status: "success",
-      headerPretty: JSON.stringify(header, null, 2),
-      payloadPretty: JSON.stringify(payload, null, 2),
-      issuedAt: formatEpoch(payload?.iat),
-      expiresAt: formatEpoch(payload?.exp),
+      ok: true,
+      header: header as Record<string, unknown>,
+      payload: payload as Record<string, unknown>,
     };
-  } catch {
-    return { status: "error", message: "Unable to decode token. Ensure header and payload are valid Base64URL JSON." };
-  }
-}
+  }, [headerText, payloadText]);
 
-function base64UrlDecode(value: string) {
-  const base64 = value.replace(/-/g, "+").replace(/_/g, "/");
-  const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-  const binary = atob(padded);
-  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
-  return new TextDecoder().decode(bytes);
-}
+  useEffect(() => {
+    let cancelled = false;
 
-function formatEpoch(value: unknown): string {
-  if (typeof value !== "number" || Number.isNaN(value)) {
-    return "Not available";
-  }
-  return `${new Date(value * 1000).toISOString()} (${new Date(value * 1000).toLocaleString()})`;
+    async function run() {
+      if (!encParsed.ok) {
+        setEncError(encParsed.error);
+        setEncToken("");
+        return;
+      }
+      if (!encSecret) {
+        setEncError("Enter a secret to sign the token.");
+        setEncToken("");
+        return;
+      }
+
+      try {
+        const signed = await buildJwt(encAlgorithm, encParsed.header, encParsed.payload, encSecret, encSecretIsBase64Url);
+        if (!cancelled) {
+          setEncToken(signed);
+          setEncError(null);
+        }
+      } catch {
+        if (!cancelled) {
+          setEncError("Unable to sign the token with the provided secret.");
+          setEncToken("");
+        }
+      }
+    }
+
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [encAlgorithm, encParsed, encSecret, encSecretIsBase64Url]);
+
+  const copyEncToken = async () => {
+    if (!encToken) return;
+    const didCopy = await copyText(encToken);
+    if (didCopy) {
+      setEncCopied(true);
+      setTimeout(() => setEncCopied(false), 1500);
+    }
+  };
+
+  const encStatus: StatusState = encError ? "invalid" : encToken ? "valid" : "neutral";
+  const encStatusLabel = encError ?? (encToken ? "Token signed" : "Fill in header, payload, and a secret to generate a token.");
+
+  return (
+    <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
+      <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="mx-auto inline-flex rounded-full border border-border bg-muted/50 p-1 sm:mx-0">
+          <button
+            type="button"
+            onClick={() => setMode("decode")}
+            className={cn(
+              "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
+              mode === "decode"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            JWT Decoder
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("encode")}
+            className={cn(
+              "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
+              mode === "encode"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            JWT Encoder
+          </button>
+        </div>
+
+        {mode === "decode" ? (
+          <div className="flex items-center gap-2">
+            <Button type="button" variant="outline" size="sm" onClick={generateExample}>
+              Generate example
+            </Button>
+            <Select value={exampleAlg} onValueChange={(value) => setExampleAlg(value as JwtAlgorithm)}>
+              <SelectTrigger size="sm" className="w-28">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {JWT_ALGORITHMS.map((alg) => (
+                  <SelectItem key={alg} value={alg}>
+                    {alg}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        ) : (
+          <Select value={encAlgorithm} onValueChange={(value) => handleAlgorithmChange(value as JwtAlgorithm)}>
+            <SelectTrigger size="sm" className="w-28">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {JWT_ALGORITHMS.map((alg) => (
+                <SelectItem key={alg} value={alg}>
+                  {alg}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+      </div>
+
+      <p className="text-center text-sm text-muted-foreground sm:text-base">
+        {mode === "decode"
+          ? "Paste a JWT below that you'd like to decode, validate, and verify."
+          : "Edit the header and payload claims below to build and sign a new JWT."}
+      </p>
+
+      {mode === "decode" ? (
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-foreground">Encoded Token</label>
+              <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <input
+                  type="checkbox"
+                  checked={autoFocusEnabled}
+                  onChange={(e) => setAutoFocusEnabled(e.target.checked)}
+                  className="accent-primary"
+                />
+                Enable auto-focus
+              </label>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">JSON Web Token (JWT)</span>
+              <div className="flex items-center gap-0.5">
+                <Button type="button" size="icon" variant="ghost" className="size-7" disabled={!token} onClick={copyToken}>
+                  {tokenCopied ? <Check className="size-4 text-emerald-600" /> : <Copy className="size-4" />}
+                  <span className="sr-only">Copy token</span>
+                </Button>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  className="size-7"
+                  disabled={!token}
+                  onClick={() => setToken("")}
+                >
+                  <X className="size-4" />
+                  <span className="sr-only">Clear token</span>
+                </Button>
+              </div>
+            </div>
+
+            <JwtTokenEditor
+              ref={tokenRef}
+              value={token}
+              onChange={setToken}
+              placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            />
+
+            <div className="space-y-1">
+              <StatusRow state={validState} label={validLabel} />
+              {decoded.status === "success" ? <StatusRow state={verify.state} label={verify.message} /> : null}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <JsonPanel
+              title="Decoded Header"
+              data={decoded.status === "success" ? decoded.header : null}
+              claimInfo={HEADER_CLAIM_INFO}
+            />
+            <JsonPanel
+              title="Decoded Payload"
+              data={decoded.status === "success" ? decoded.payload : null}
+              claimInfo={PAYLOAD_CLAIM_INFO}
+            />
+
+            <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-3">
+              <div>
+                <p className="text-sm font-medium text-foreground">
+                  JWT Signature Verification <span className="font-normal text-muted-foreground">(Optional)</span>
+                </p>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Enter the secret used to sign the JWT below:
+                </p>
+              </div>
+              <SecretField
+                value={secret}
+                onChange={setSecret}
+                isBase64Url={secretIsBase64Url}
+                onToggleBase64Url={setSecretIsBase64Url}
+              />
+              <StatusRow state={secretStatus.state} label={secretStatus.message} />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Header</label>
+              <Textarea
+                value={headerText}
+                onChange={(e) => setHeaderText(e.target.value)}
+                spellCheck={false}
+                className="min-h-28 font-mono text-sm"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Payload</label>
+              <Textarea
+                value={payloadText}
+                onChange={(e) => setPayloadText(e.target.value)}
+                spellCheck={false}
+                className="min-h-52 font-mono text-sm"
+              />
+            </div>
+            <SecretField
+              value={encSecret}
+              onChange={setEncSecret}
+              isBase64Url={encSecretIsBase64Url}
+              onToggleBase64Url={setEncSecretIsBase64Url}
+            />
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-foreground">Signed Token</label>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="size-7"
+                disabled={!encToken}
+                onClick={copyEncToken}
+              >
+                {encCopied ? <Check className="size-4 text-emerald-600" /> : <Copy className="size-4" />}
+                <span className="sr-only">Copy signed token</span>
+              </Button>
+            </div>
+            <div className="min-h-40 rounded-lg border border-border bg-muted/30 p-3 font-mono text-sm break-all whitespace-pre-wrap">
+              {encToken ? <TokenSpans token={encToken} /> : <span className="text-muted-foreground">Your signed JWT will appear here.</span>}
+            </div>
+            <StatusRow state={encStatus} label={encStatusLabel} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
