@@ -156,6 +156,16 @@ function Index() {
           to="/password-generator"
         />
         <FeatureCard
+          title="Hash Generator"
+          description="Generate and compare MD5, SHA-1, SHA-256, SHA-384, and SHA-512 hashes from text or a file."
+          to="/hash-generator"
+        />
+        <FeatureCard
+          title="Lorem Ipsum Generator"
+          description="Generate placeholder text by words, sentences, or paragraphs."
+          to="/lorem-ipsum-generator"
+        />
+        <FeatureCard
           title="UUID Generator"
           description="Generate universally unique identifiers."
           to="/uuid-generator"
