@@ -133,7 +133,8 @@ export const navigationGroups: NavGroup[] = [
       {
         title: "JSON Validator",
         url: "/json-validator",
-        description: "Validate JSON syntax with line and column hints.",
+        description:
+          "Validate, repair, minify, diff, tree-view, JSONPath-query, and schema-validate JSON, plus convert to/from CSV, YAML, XML, SQL, and Excel.",
       },
       {
         title: "Base64 Tool",
@@ -141,9 +142,9 @@ export const navigationGroups: NavGroup[] = [
         description: "Encode and decode Base64 text with Unicode support.",
       },
       {
-        title: "JWT Decoder",
+        title: "JWT Decoder & Encoder",
         url: "/jwt-decoder",
-        description: "Decode JWT header, payload, expiration, and issued time.",
+        description: "Decode and verify a JWT's header, payload, and signature, or build and sign a new one.",
       },
       {
         title: "Unix Timestamp",
