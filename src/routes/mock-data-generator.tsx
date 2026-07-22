@@ -522,7 +522,11 @@ function RouteComponent() {
               Excel is a binary format — use Download to save the .xlsx file.
             </p>
           ) : (
-            <Textarea readOnly value={formattedText} className="min-h-40 font-mono text-xs" />
+            <Textarea
+              readOnly
+              value={formattedText}
+              className="field-sizing-fixed h-40 max-h-64 resize-y overflow-y-auto font-mono text-xs"
+            />
           )}
         </div>
       ) : null}

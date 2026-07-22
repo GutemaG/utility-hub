@@ -242,7 +242,11 @@ function RouteComponent() {
             </Button>
           </div>
         </div>
-        <Textarea readOnly value={output} className="min-h-72 font-mono text-sm" />
+        <Textarea
+          readOnly
+          value={output}
+          className="field-sizing-fixed h-72 max-h-96 resize-y overflow-y-auto font-mono text-sm"
+        />
       </div>
     </div>
   );

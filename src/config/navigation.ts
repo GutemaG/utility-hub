@@ -166,6 +166,18 @@ export const navigationGroups: NavGroup[] = [
         description: "Encode and decode Base64 text with Unicode support.",
       },
       {
+        title: "Base64 File Converter",
+        url: "/base64-file-converter",
+        description:
+          "Convert a file to Base64 (data URI or raw), or decode Base64 back into a downloadable file.",
+      },
+      {
+        title: "Integer Base Converter",
+        url: "/integer-base-converter",
+        description:
+          "Convert integers between binary, octal, decimal, hexadecimal, base64, and any custom base.",
+      },
+      {
         title: "JWT Decoder & Encoder",
         url: "/jwt-decoder",
         description: "Decode and verify a JWT's header, payload, and signature, or build and sign a new one.",

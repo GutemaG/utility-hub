@@ -211,6 +211,16 @@ function Index() {
           to="/base64-tool"
         />
         <FeatureCard
+          title="Base64 File Converter"
+          description="Convert a file to Base64, or decode Base64 back into a downloadable file."
+          to="/base64-file-converter"
+        />
+        <FeatureCard
+          title="Integer Base Converter"
+          description="Convert integers between binary, octal, decimal, hexadecimal, base64, and any custom base."
+          to="/integer-base-converter"
+        />
+        <FeatureCard
           title="JWT Decoder & Encoder"
           description="Decode and verify a JWT's header, payload, and signature, or build and sign a new one."
           to="/jwt-decoder"

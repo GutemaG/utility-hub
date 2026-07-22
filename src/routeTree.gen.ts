@@ -34,6 +34,7 @@ import { Route as LengthConversionRouteImport } from './routes/length-conversion
 import { Route as JwtDecoderRouteImport } from './routes/jwt-decoder'
 import { Route as JsonValidatorRouteImport } from './routes/json-validator'
 import { Route as InternetSpeedTestRouteImport } from './routes/internet-speed-test'
+import { Route as IntegerBaseConverterRouteImport } from './routes/integer-base-converter'
 import { Route as HashGeneratorRouteImport } from './routes/hash-generator'
 import { Route as FakeHackerSimulatorRouteImport } from './routes/fake-hacker-simulator'
 import { Route as EthiopianCalendarRouteImport } from './routes/ethiopian-calendar'
@@ -45,6 +46,7 @@ import { Route as CheatSheetsRouteImport } from './routes/cheat-sheets'
 import { Route as CharacterCounterRouteImport } from './routes/character-counter'
 import { Route as BmiCalculationRouteImport } from './routes/bmi-calculation'
 import { Route as Base64ToolRouteImport } from './routes/base64-tool'
+import { Route as Base64FileConverterRouteImport } from './routes/base64-file-converter'
 import { Route as BarcodeGeneratorRouteImport } from './routes/barcode-generator'
 import { Route as AsciiArtGeneratorRouteImport } from './routes/ascii-art-generator'
 import { Route as AreaConversionRouteImport } from './routes/area-conversion'
@@ -176,6 +178,11 @@ const InternetSpeedTestRoute = InternetSpeedTestRouteImport.update({
   path: '/internet-speed-test',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IntegerBaseConverterRoute = IntegerBaseConverterRouteImport.update({
+  id: '/integer-base-converter',
+  path: '/integer-base-converter',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HashGeneratorRoute = HashGeneratorRouteImport.update({
   id: '/hash-generator',
   path: '/hash-generator',
@@ -231,6 +238,11 @@ const Base64ToolRoute = Base64ToolRouteImport.update({
   path: '/base64-tool',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Base64FileConverterRoute = Base64FileConverterRouteImport.update({
+  id: '/base64-file-converter',
+  path: '/base64-file-converter',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BarcodeGeneratorRoute = BarcodeGeneratorRouteImport.update({
   id: '/barcode-generator',
   path: '/barcode-generator',
@@ -263,6 +275,7 @@ export interface FileRoutesByFullPath {
   '/area-conversion': typeof AreaConversionRoute
   '/ascii-art-generator': typeof AsciiArtGeneratorRoute
   '/barcode-generator': typeof BarcodeGeneratorRoute
+  '/base64-file-converter': typeof Base64FileConverterRoute
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
@@ -274,6 +287,7 @@ export interface FileRoutesByFullPath {
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/hash-generator': typeof HashGeneratorRoute
+  '/integer-base-converter': typeof IntegerBaseConverterRoute
   '/internet-speed-test': typeof InternetSpeedTestRoute
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
@@ -306,6 +320,7 @@ export interface FileRoutesByTo {
   '/area-conversion': typeof AreaConversionRoute
   '/ascii-art-generator': typeof AsciiArtGeneratorRoute
   '/barcode-generator': typeof BarcodeGeneratorRoute
+  '/base64-file-converter': typeof Base64FileConverterRoute
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
@@ -317,6 +332,7 @@ export interface FileRoutesByTo {
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/hash-generator': typeof HashGeneratorRoute
+  '/integer-base-converter': typeof IntegerBaseConverterRoute
   '/internet-speed-test': typeof InternetSpeedTestRoute
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
@@ -350,6 +366,7 @@ export interface FileRoutesById {
   '/area-conversion': typeof AreaConversionRoute
   '/ascii-art-generator': typeof AsciiArtGeneratorRoute
   '/barcode-generator': typeof BarcodeGeneratorRoute
+  '/base64-file-converter': typeof Base64FileConverterRoute
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
@@ -361,6 +378,7 @@ export interface FileRoutesById {
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/hash-generator': typeof HashGeneratorRoute
+  '/integer-base-converter': typeof IntegerBaseConverterRoute
   '/internet-speed-test': typeof InternetSpeedTestRoute
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
@@ -395,6 +413,7 @@ export interface FileRouteTypes {
     | '/area-conversion'
     | '/ascii-art-generator'
     | '/barcode-generator'
+    | '/base64-file-converter'
     | '/base64-tool'
     | '/bmi-calculation'
     | '/character-counter'
@@ -406,6 +425,7 @@ export interface FileRouteTypes {
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
     | '/hash-generator'
+    | '/integer-base-converter'
     | '/internet-speed-test'
     | '/json-validator'
     | '/jwt-decoder'
@@ -438,6 +458,7 @@ export interface FileRouteTypes {
     | '/area-conversion'
     | '/ascii-art-generator'
     | '/barcode-generator'
+    | '/base64-file-converter'
     | '/base64-tool'
     | '/bmi-calculation'
     | '/character-counter'
@@ -449,6 +470,7 @@ export interface FileRouteTypes {
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
     | '/hash-generator'
+    | '/integer-base-converter'
     | '/internet-speed-test'
     | '/json-validator'
     | '/jwt-decoder'
@@ -481,6 +503,7 @@ export interface FileRouteTypes {
     | '/area-conversion'
     | '/ascii-art-generator'
     | '/barcode-generator'
+    | '/base64-file-converter'
     | '/base64-tool'
     | '/bmi-calculation'
     | '/character-counter'
@@ -492,6 +515,7 @@ export interface FileRouteTypes {
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
     | '/hash-generator'
+    | '/integer-base-converter'
     | '/internet-speed-test'
     | '/json-validator'
     | '/jwt-decoder'
@@ -525,6 +549,7 @@ export interface RootRouteChildren {
   AreaConversionRoute: typeof AreaConversionRoute
   AsciiArtGeneratorRoute: typeof AsciiArtGeneratorRoute
   BarcodeGeneratorRoute: typeof BarcodeGeneratorRoute
+  Base64FileConverterRoute: typeof Base64FileConverterRoute
   Base64ToolRoute: typeof Base64ToolRoute
   BmiCalculationRoute: typeof BmiCalculationRoute
   CharacterCounterRoute: typeof CharacterCounterRoute
@@ -536,6 +561,7 @@ export interface RootRouteChildren {
   EthiopianCalendarRoute: typeof EthiopianCalendarRoute
   FakeHackerSimulatorRoute: typeof FakeHackerSimulatorRoute
   HashGeneratorRoute: typeof HashGeneratorRoute
+  IntegerBaseConverterRoute: typeof IntegerBaseConverterRoute
   InternetSpeedTestRoute: typeof InternetSpeedTestRoute
   JsonValidatorRoute: typeof JsonValidatorRoute
   JwtDecoderRoute: typeof JwtDecoderRoute
@@ -740,6 +766,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InternetSpeedTestRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/integer-base-converter': {
+      id: '/integer-base-converter'
+      path: '/integer-base-converter'
+      fullPath: '/integer-base-converter'
+      preLoaderRoute: typeof IntegerBaseConverterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hash-generator': {
       id: '/hash-generator'
       path: '/hash-generator'
@@ -817,6 +850,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Base64ToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/base64-file-converter': {
+      id: '/base64-file-converter'
+      path: '/base64-file-converter'
+      fullPath: '/base64-file-converter'
+      preLoaderRoute: typeof Base64FileConverterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/barcode-generator': {
       id: '/barcode-generator'
       path: '/barcode-generator'
@@ -861,6 +901,7 @@ const rootRouteChildren: RootRouteChildren = {
   AreaConversionRoute: AreaConversionRoute,
   AsciiArtGeneratorRoute: AsciiArtGeneratorRoute,
   BarcodeGeneratorRoute: BarcodeGeneratorRoute,
+  Base64FileConverterRoute: Base64FileConverterRoute,
   Base64ToolRoute: Base64ToolRoute,
   BmiCalculationRoute: BmiCalculationRoute,
   CharacterCounterRoute: CharacterCounterRoute,
@@ -872,6 +913,7 @@ const rootRouteChildren: RootRouteChildren = {
   EthiopianCalendarRoute: EthiopianCalendarRoute,
   FakeHackerSimulatorRoute: FakeHackerSimulatorRoute,
   HashGeneratorRoute: HashGeneratorRoute,
+  IntegerBaseConverterRoute: IntegerBaseConverterRoute,
   InternetSpeedTestRoute: InternetSpeedTestRoute,
   JsonValidatorRoute: JsonValidatorRoute,
   JwtDecoderRoute: JwtDecoderRoute,
