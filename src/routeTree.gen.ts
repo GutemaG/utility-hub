@@ -25,13 +25,16 @@ import { Route as PomodoroTimerRouteImport } from './routes/pomodoro-timer'
 import { Route as PhoneNumberParserRouteImport } from './routes/phone-number-parser'
 import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
+import { Route as MockDataGeneratorRouteImport } from './routes/mock-data-generator'
 import { Route as MatrixCalculatorRouteImport } from './routes/matrix-calculator'
 import { Route as MarkDownEditorRouteImport } from './routes/mark-down-editor'
+import { Route as LoremIpsumGeneratorRouteImport } from './routes/lorem-ipsum-generator'
 import { Route as LoanCalculatorRouteImport } from './routes/loan-calculator'
 import { Route as LengthConversionRouteImport } from './routes/length-conversion'
 import { Route as JwtDecoderRouteImport } from './routes/jwt-decoder'
 import { Route as JsonValidatorRouteImport } from './routes/json-validator'
 import { Route as InternetSpeedTestRouteImport } from './routes/internet-speed-test'
+import { Route as HashGeneratorRouteImport } from './routes/hash-generator'
 import { Route as FakeHackerSimulatorRouteImport } from './routes/fake-hacker-simulator'
 import { Route as EthiopianCalendarRouteImport } from './routes/ethiopian-calendar'
 import { Route as EmojiPickerRouteImport } from './routes/emoji-picker'
@@ -128,6 +131,11 @@ const PasswordGeneratorRoute = PasswordGeneratorRouteImport.update({
   path: '/password-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MockDataGeneratorRoute = MockDataGeneratorRouteImport.update({
+  id: '/mock-data-generator',
+  path: '/mock-data-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MatrixCalculatorRoute = MatrixCalculatorRouteImport.update({
   id: '/matrix-calculator',
   path: '/matrix-calculator',
@@ -136,6 +144,11 @@ const MatrixCalculatorRoute = MatrixCalculatorRouteImport.update({
 const MarkDownEditorRoute = MarkDownEditorRouteImport.update({
   id: '/mark-down-editor',
   path: '/mark-down-editor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoremIpsumGeneratorRoute = LoremIpsumGeneratorRouteImport.update({
+  id: '/lorem-ipsum-generator',
+  path: '/lorem-ipsum-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoanCalculatorRoute = LoanCalculatorRouteImport.update({
@@ -161,6 +174,11 @@ const JsonValidatorRoute = JsonValidatorRouteImport.update({
 const InternetSpeedTestRoute = InternetSpeedTestRouteImport.update({
   id: '/internet-speed-test',
   path: '/internet-speed-test',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HashGeneratorRoute = HashGeneratorRouteImport.update({
+  id: '/hash-generator',
+  path: '/hash-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FakeHackerSimulatorRoute = FakeHackerSimulatorRouteImport.update({
@@ -255,13 +273,16 @@ export interface FileRoutesByFullPath {
   '/emoji-picker': typeof EmojiPickerRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
+  '/hash-generator': typeof HashGeneratorRoute
   '/internet-speed-test': typeof InternetSpeedTestRoute
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
   '/loan-calculator': typeof LoanCalculatorRoute
+  '/lorem-ipsum-generator': typeof LoremIpsumGeneratorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/matrix-calculator': typeof MatrixCalculatorRoute
+  '/mock-data-generator': typeof MockDataGeneratorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -295,13 +316,16 @@ export interface FileRoutesByTo {
   '/emoji-picker': typeof EmojiPickerRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
+  '/hash-generator': typeof HashGeneratorRoute
   '/internet-speed-test': typeof InternetSpeedTestRoute
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
   '/loan-calculator': typeof LoanCalculatorRoute
+  '/lorem-ipsum-generator': typeof LoremIpsumGeneratorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/matrix-calculator': typeof MatrixCalculatorRoute
+  '/mock-data-generator': typeof MockDataGeneratorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -336,13 +360,16 @@ export interface FileRoutesById {
   '/emoji-picker': typeof EmojiPickerRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
+  '/hash-generator': typeof HashGeneratorRoute
   '/internet-speed-test': typeof InternetSpeedTestRoute
   '/json-validator': typeof JsonValidatorRoute
   '/jwt-decoder': typeof JwtDecoderRoute
   '/length-conversion': typeof LengthConversionRoute
   '/loan-calculator': typeof LoanCalculatorRoute
+  '/lorem-ipsum-generator': typeof LoremIpsumGeneratorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/matrix-calculator': typeof MatrixCalculatorRoute
+  '/mock-data-generator': typeof MockDataGeneratorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -378,13 +405,16 @@ export interface FileRouteTypes {
     | '/emoji-picker'
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
+    | '/hash-generator'
     | '/internet-speed-test'
     | '/json-validator'
     | '/jwt-decoder'
     | '/length-conversion'
     | '/loan-calculator'
+    | '/lorem-ipsum-generator'
     | '/mark-down-editor'
     | '/matrix-calculator'
+    | '/mock-data-generator'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -418,13 +448,16 @@ export interface FileRouteTypes {
     | '/emoji-picker'
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
+    | '/hash-generator'
     | '/internet-speed-test'
     | '/json-validator'
     | '/jwt-decoder'
     | '/length-conversion'
     | '/loan-calculator'
+    | '/lorem-ipsum-generator'
     | '/mark-down-editor'
     | '/matrix-calculator'
+    | '/mock-data-generator'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -458,13 +491,16 @@ export interface FileRouteTypes {
     | '/emoji-picker'
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
+    | '/hash-generator'
     | '/internet-speed-test'
     | '/json-validator'
     | '/jwt-decoder'
     | '/length-conversion'
     | '/loan-calculator'
+    | '/lorem-ipsum-generator'
     | '/mark-down-editor'
     | '/matrix-calculator'
+    | '/mock-data-generator'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -499,13 +535,16 @@ export interface RootRouteChildren {
   EmojiPickerRoute: typeof EmojiPickerRoute
   EthiopianCalendarRoute: typeof EthiopianCalendarRoute
   FakeHackerSimulatorRoute: typeof FakeHackerSimulatorRoute
+  HashGeneratorRoute: typeof HashGeneratorRoute
   InternetSpeedTestRoute: typeof InternetSpeedTestRoute
   JsonValidatorRoute: typeof JsonValidatorRoute
   JwtDecoderRoute: typeof JwtDecoderRoute
   LengthConversionRoute: typeof LengthConversionRoute
   LoanCalculatorRoute: typeof LoanCalculatorRoute
+  LoremIpsumGeneratorRoute: typeof LoremIpsumGeneratorRoute
   MarkDownEditorRoute: typeof MarkDownEditorRoute
   MatrixCalculatorRoute: typeof MatrixCalculatorRoute
+  MockDataGeneratorRoute: typeof MockDataGeneratorRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   PayrollGeneratorRoute: typeof PayrollGeneratorRoute
   PhoneNumberParserRoute: typeof PhoneNumberParserRoute
@@ -638,6 +677,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PasswordGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mock-data-generator': {
+      id: '/mock-data-generator'
+      path: '/mock-data-generator'
+      fullPath: '/mock-data-generator'
+      preLoaderRoute: typeof MockDataGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/matrix-calculator': {
       id: '/matrix-calculator'
       path: '/matrix-calculator'
@@ -650,6 +696,13 @@ declare module '@tanstack/react-router' {
       path: '/mark-down-editor'
       fullPath: '/mark-down-editor'
       preLoaderRoute: typeof MarkDownEditorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lorem-ipsum-generator': {
+      id: '/lorem-ipsum-generator'
+      path: '/lorem-ipsum-generator'
+      fullPath: '/lorem-ipsum-generator'
+      preLoaderRoute: typeof LoremIpsumGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/loan-calculator': {
@@ -685,6 +738,13 @@ declare module '@tanstack/react-router' {
       path: '/internet-speed-test'
       fullPath: '/internet-speed-test'
       preLoaderRoute: typeof InternetSpeedTestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hash-generator': {
+      id: '/hash-generator'
+      path: '/hash-generator'
+      fullPath: '/hash-generator'
+      preLoaderRoute: typeof HashGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/fake-hacker-simulator': {
@@ -811,13 +871,16 @@ const rootRouteChildren: RootRouteChildren = {
   EmojiPickerRoute: EmojiPickerRoute,
   EthiopianCalendarRoute: EthiopianCalendarRoute,
   FakeHackerSimulatorRoute: FakeHackerSimulatorRoute,
+  HashGeneratorRoute: HashGeneratorRoute,
   InternetSpeedTestRoute: InternetSpeedTestRoute,
   JsonValidatorRoute: JsonValidatorRoute,
   JwtDecoderRoute: JwtDecoderRoute,
   LengthConversionRoute: LengthConversionRoute,
   LoanCalculatorRoute: LoanCalculatorRoute,
+  LoremIpsumGeneratorRoute: LoremIpsumGeneratorRoute,
   MarkDownEditorRoute: MarkDownEditorRoute,
   MatrixCalculatorRoute: MatrixCalculatorRoute,
+  MockDataGeneratorRoute: MockDataGeneratorRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   PayrollGeneratorRoute: PayrollGeneratorRoute,
   PhoneNumberParserRoute: PhoneNumberParserRoute,

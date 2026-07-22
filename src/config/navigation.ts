@@ -106,6 +106,23 @@ export const navigationGroups: NavGroup[] = [
         description: "Create strong, customizable passwords.",
       },
       {
+        title: "Hash Generator",
+        url: "/hash-generator",
+        description:
+          "Generate MD5, SHA-1, SHA-256, SHA-384, and SHA-512 hashes from text or a file, and compare against an expected hash.",
+      },
+      {
+        title: "Lorem Ipsum Generator",
+        url: "/lorem-ipsum-generator",
+        description: "Generate placeholder text by words, sentences, or paragraphs.",
+      },
+      {
+        title: "Mock Data Generator",
+        url: "/mock-data-generator",
+        description:
+          "Design a schema and generate realistic mock data (names, emails, addresses, dates, and more), exported as CSV, JSON, SQL, or Excel.",
+      },
+      {
         title: "UUID Generator",
         url: "/uuid-generator",
         description: "Generate universally unique identifiers.",
@@ -124,7 +141,8 @@ export const navigationGroups: NavGroup[] = [
       {
         title: "Markdown Editor",
         url: "/mark-down-editor",
-        description: "Create and preview Markdown documents.",
+        description:
+          "Write and preview Markdown, convert to HTML, copy as rich or raw HTML, and convert HTML back to Markdown.",
       },
       {
         title: "URL Encoder",
