@@ -221,6 +221,11 @@ function Index() {
           to="/integer-base-converter"
         />
         <FeatureCard
+          title="Number Converter"
+          description="Convert numbers to/from Roman numerals, and look up Ethiopian Ge'ez numerals with Amharic number words."
+          to="/number-converter"
+        />
+        <FeatureCard
           title="JWT Decoder & Encoder"
           description="Decode and verify a JWT's header, payload, and signature, or build and sign a new one."
           to="/jwt-decoder"

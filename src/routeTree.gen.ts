@@ -25,6 +25,7 @@ import { Route as PomodoroTimerRouteImport } from './routes/pomodoro-timer'
 import { Route as PhoneNumberParserRouteImport } from './routes/phone-number-parser'
 import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
+import { Route as NumberConverterRouteImport } from './routes/number-converter'
 import { Route as MockDataGeneratorRouteImport } from './routes/mock-data-generator'
 import { Route as MatrixCalculatorRouteImport } from './routes/matrix-calculator'
 import { Route as MarkDownEditorRouteImport } from './routes/mark-down-editor'
@@ -131,6 +132,11 @@ const PayrollGeneratorRoute = PayrollGeneratorRouteImport.update({
 const PasswordGeneratorRoute = PasswordGeneratorRouteImport.update({
   id: '/password-generator',
   path: '/password-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NumberConverterRoute = NumberConverterRouteImport.update({
+  id: '/number-converter',
+  path: '/number-converter',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MockDataGeneratorRoute = MockDataGeneratorRouteImport.update({
@@ -297,6 +303,7 @@ export interface FileRoutesByFullPath {
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/matrix-calculator': typeof MatrixCalculatorRoute
   '/mock-data-generator': typeof MockDataGeneratorRoute
+  '/number-converter': typeof NumberConverterRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -342,6 +349,7 @@ export interface FileRoutesByTo {
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/matrix-calculator': typeof MatrixCalculatorRoute
   '/mock-data-generator': typeof MockDataGeneratorRoute
+  '/number-converter': typeof NumberConverterRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -388,6 +396,7 @@ export interface FileRoutesById {
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/matrix-calculator': typeof MatrixCalculatorRoute
   '/mock-data-generator': typeof MockDataGeneratorRoute
+  '/number-converter': typeof NumberConverterRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -435,6 +444,7 @@ export interface FileRouteTypes {
     | '/mark-down-editor'
     | '/matrix-calculator'
     | '/mock-data-generator'
+    | '/number-converter'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -480,6 +490,7 @@ export interface FileRouteTypes {
     | '/mark-down-editor'
     | '/matrix-calculator'
     | '/mock-data-generator'
+    | '/number-converter'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -525,6 +536,7 @@ export interface FileRouteTypes {
     | '/mark-down-editor'
     | '/matrix-calculator'
     | '/mock-data-generator'
+    | '/number-converter'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -571,6 +583,7 @@ export interface RootRouteChildren {
   MarkDownEditorRoute: typeof MarkDownEditorRoute
   MatrixCalculatorRoute: typeof MatrixCalculatorRoute
   MockDataGeneratorRoute: typeof MockDataGeneratorRoute
+  NumberConverterRoute: typeof NumberConverterRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   PayrollGeneratorRoute: typeof PayrollGeneratorRoute
   PhoneNumberParserRoute: typeof PhoneNumberParserRoute
@@ -701,6 +714,13 @@ declare module '@tanstack/react-router' {
       path: '/password-generator'
       fullPath: '/password-generator'
       preLoaderRoute: typeof PasswordGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/number-converter': {
+      id: '/number-converter'
+      path: '/number-converter'
+      fullPath: '/number-converter'
+      preLoaderRoute: typeof NumberConverterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mock-data-generator': {
@@ -923,6 +943,7 @@ const rootRouteChildren: RootRouteChildren = {
   MarkDownEditorRoute: MarkDownEditorRoute,
   MatrixCalculatorRoute: MatrixCalculatorRoute,
   MockDataGeneratorRoute: MockDataGeneratorRoute,
+  NumberConverterRoute: NumberConverterRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   PayrollGeneratorRoute: PayrollGeneratorRoute,
   PhoneNumberParserRoute: PhoneNumberParserRoute,
