@@ -166,6 +166,11 @@ function Index() {
           to="/qr-code-generator"
         />
         <FeatureCard
+          title="Barcode Generator"
+          description="Generate 1D barcodes (CODE128, EAN, UPC) and 2D barcodes (Data Matrix, PDF417, Aztec Code)."
+          to="/barcode-generator"
+        />
+        <FeatureCard
           title="Markdown Editor"
           description="Create and preview Markdown documents."
           to="/mark-down-editor"

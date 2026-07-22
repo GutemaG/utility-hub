@@ -42,6 +42,7 @@ import { Route as CheatSheetsRouteImport } from './routes/cheat-sheets'
 import { Route as CharacterCounterRouteImport } from './routes/character-counter'
 import { Route as BmiCalculationRouteImport } from './routes/bmi-calculation'
 import { Route as Base64ToolRouteImport } from './routes/base64-tool'
+import { Route as BarcodeGeneratorRouteImport } from './routes/barcode-generator'
 import { Route as AsciiArtGeneratorRouteImport } from './routes/ascii-art-generator'
 import { Route as AreaConversionRouteImport } from './routes/area-conversion'
 import { Route as AgeAndDateConvertorsRouteImport } from './routes/age-and-date-convertors'
@@ -212,6 +213,11 @@ const Base64ToolRoute = Base64ToolRouteImport.update({
   path: '/base64-tool',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BarcodeGeneratorRoute = BarcodeGeneratorRouteImport.update({
+  id: '/barcode-generator',
+  path: '/barcode-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AsciiArtGeneratorRoute = AsciiArtGeneratorRouteImport.update({
   id: '/ascii-art-generator',
   path: '/ascii-art-generator',
@@ -238,6 +244,7 @@ export interface FileRoutesByFullPath {
   '/age-and-date-convertors': typeof AgeAndDateConvertorsRoute
   '/area-conversion': typeof AreaConversionRoute
   '/ascii-art-generator': typeof AsciiArtGeneratorRoute
+  '/barcode-generator': typeof BarcodeGeneratorRoute
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
@@ -277,6 +284,7 @@ export interface FileRoutesByTo {
   '/age-and-date-convertors': typeof AgeAndDateConvertorsRoute
   '/area-conversion': typeof AreaConversionRoute
   '/ascii-art-generator': typeof AsciiArtGeneratorRoute
+  '/barcode-generator': typeof BarcodeGeneratorRoute
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
@@ -317,6 +325,7 @@ export interface FileRoutesById {
   '/age-and-date-convertors': typeof AgeAndDateConvertorsRoute
   '/area-conversion': typeof AreaConversionRoute
   '/ascii-art-generator': typeof AsciiArtGeneratorRoute
+  '/barcode-generator': typeof BarcodeGeneratorRoute
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
   '/character-counter': typeof CharacterCounterRoute
@@ -358,6 +367,7 @@ export interface FileRouteTypes {
     | '/age-and-date-convertors'
     | '/area-conversion'
     | '/ascii-art-generator'
+    | '/barcode-generator'
     | '/base64-tool'
     | '/bmi-calculation'
     | '/character-counter'
@@ -397,6 +407,7 @@ export interface FileRouteTypes {
     | '/age-and-date-convertors'
     | '/area-conversion'
     | '/ascii-art-generator'
+    | '/barcode-generator'
     | '/base64-tool'
     | '/bmi-calculation'
     | '/character-counter'
@@ -436,6 +447,7 @@ export interface FileRouteTypes {
     | '/age-and-date-convertors'
     | '/area-conversion'
     | '/ascii-art-generator'
+    | '/barcode-generator'
     | '/base64-tool'
     | '/bmi-calculation'
     | '/character-counter'
@@ -476,6 +488,7 @@ export interface RootRouteChildren {
   AgeAndDateConvertorsRoute: typeof AgeAndDateConvertorsRoute
   AreaConversionRoute: typeof AreaConversionRoute
   AsciiArtGeneratorRoute: typeof AsciiArtGeneratorRoute
+  BarcodeGeneratorRoute: typeof BarcodeGeneratorRoute
   Base64ToolRoute: typeof Base64ToolRoute
   BmiCalculationRoute: typeof BmiCalculationRoute
   CharacterCounterRoute: typeof CharacterCounterRoute
@@ -744,6 +757,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Base64ToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/barcode-generator': {
+      id: '/barcode-generator'
+      path: '/barcode-generator'
+      fullPath: '/barcode-generator'
+      preLoaderRoute: typeof BarcodeGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ascii-art-generator': {
       id: '/ascii-art-generator'
       path: '/ascii-art-generator'
@@ -780,6 +800,7 @@ const rootRouteChildren: RootRouteChildren = {
   AgeAndDateConvertorsRoute: AgeAndDateConvertorsRoute,
   AreaConversionRoute: AreaConversionRoute,
   AsciiArtGeneratorRoute: AsciiArtGeneratorRoute,
+  BarcodeGeneratorRoute: BarcodeGeneratorRoute,
   Base64ToolRoute: Base64ToolRoute,
   BmiCalculationRoute: BmiCalculationRoute,
   CharacterCounterRoute: CharacterCounterRoute,
