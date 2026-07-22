@@ -116,6 +116,12 @@ export const navigationGroups: NavGroup[] = [
         description: "Create QR codes for URLs, text, and more.",
       },
       {
+        title: "Barcode Generator",
+        url: "/barcode-generator",
+        description:
+          "Generate 1D barcodes (CODE128, CODE39, EAN, UPC, ITF-14, MSI, Pharmacode, Codabar) and 2D barcodes (Data Matrix, PDF417, Aztec Code).",
+      },
+      {
         title: "Markdown Editor",
         url: "/mark-down-editor",
         description: "Create and preview Markdown documents.",
