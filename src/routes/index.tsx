@@ -205,6 +205,11 @@ function Index() {
           description="Test regex patterns with flags and highlighted matches."
           to="/regex-tester"
         />
+        <FeatureCard
+          title="Internet Speed Test"
+          description="Measure download speed, upload speed, latency, and jitter right in your browser."
+          to="/internet-speed-test"
+        />
       </div>
 
       <div className="mt-10 text-center text-zinc-500 dark:text-zinc-400 text-xs">
