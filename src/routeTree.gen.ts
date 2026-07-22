@@ -25,6 +25,7 @@ import { Route as PomodoroTimerRouteImport } from './routes/pomodoro-timer'
 import { Route as PhoneNumberParserRouteImport } from './routes/phone-number-parser'
 import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
+import { Route as MockDataGeneratorRouteImport } from './routes/mock-data-generator'
 import { Route as MatrixCalculatorRouteImport } from './routes/matrix-calculator'
 import { Route as MarkDownEditorRouteImport } from './routes/mark-down-editor'
 import { Route as LoremIpsumGeneratorRouteImport } from './routes/lorem-ipsum-generator'
@@ -128,6 +129,11 @@ const PayrollGeneratorRoute = PayrollGeneratorRouteImport.update({
 const PasswordGeneratorRoute = PasswordGeneratorRouteImport.update({
   id: '/password-generator',
   path: '/password-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MockDataGeneratorRoute = MockDataGeneratorRouteImport.update({
+  id: '/mock-data-generator',
+  path: '/mock-data-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MatrixCalculatorRoute = MatrixCalculatorRouteImport.update({
@@ -276,6 +282,7 @@ export interface FileRoutesByFullPath {
   '/lorem-ipsum-generator': typeof LoremIpsumGeneratorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/matrix-calculator': typeof MatrixCalculatorRoute
+  '/mock-data-generator': typeof MockDataGeneratorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -318,6 +325,7 @@ export interface FileRoutesByTo {
   '/lorem-ipsum-generator': typeof LoremIpsumGeneratorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/matrix-calculator': typeof MatrixCalculatorRoute
+  '/mock-data-generator': typeof MockDataGeneratorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -361,6 +369,7 @@ export interface FileRoutesById {
   '/lorem-ipsum-generator': typeof LoremIpsumGeneratorRoute
   '/mark-down-editor': typeof MarkDownEditorRoute
   '/matrix-calculator': typeof MatrixCalculatorRoute
+  '/mock-data-generator': typeof MockDataGeneratorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -405,6 +414,7 @@ export interface FileRouteTypes {
     | '/lorem-ipsum-generator'
     | '/mark-down-editor'
     | '/matrix-calculator'
+    | '/mock-data-generator'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -447,6 +457,7 @@ export interface FileRouteTypes {
     | '/lorem-ipsum-generator'
     | '/mark-down-editor'
     | '/matrix-calculator'
+    | '/mock-data-generator'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -489,6 +500,7 @@ export interface FileRouteTypes {
     | '/lorem-ipsum-generator'
     | '/mark-down-editor'
     | '/matrix-calculator'
+    | '/mock-data-generator'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -532,6 +544,7 @@ export interface RootRouteChildren {
   LoremIpsumGeneratorRoute: typeof LoremIpsumGeneratorRoute
   MarkDownEditorRoute: typeof MarkDownEditorRoute
   MatrixCalculatorRoute: typeof MatrixCalculatorRoute
+  MockDataGeneratorRoute: typeof MockDataGeneratorRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   PayrollGeneratorRoute: typeof PayrollGeneratorRoute
   PhoneNumberParserRoute: typeof PhoneNumberParserRoute
@@ -662,6 +675,13 @@ declare module '@tanstack/react-router' {
       path: '/password-generator'
       fullPath: '/password-generator'
       preLoaderRoute: typeof PasswordGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mock-data-generator': {
+      id: '/mock-data-generator'
+      path: '/mock-data-generator'
+      fullPath: '/mock-data-generator'
+      preLoaderRoute: typeof MockDataGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/matrix-calculator': {
@@ -860,6 +880,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoremIpsumGeneratorRoute: LoremIpsumGeneratorRoute,
   MarkDownEditorRoute: MarkDownEditorRoute,
   MatrixCalculatorRoute: MatrixCalculatorRoute,
+  MockDataGeneratorRoute: MockDataGeneratorRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   PayrollGeneratorRoute: PayrollGeneratorRoute,
   PhoneNumberParserRoute: PhoneNumberParserRoute,

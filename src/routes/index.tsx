@@ -166,6 +166,11 @@ function Index() {
           to="/lorem-ipsum-generator"
         />
         <FeatureCard
+          title="Mock Data Generator"
+          description="Design a schema and generate realistic mock data, exported as CSV, JSON, SQL, or Excel."
+          to="/mock-data-generator"
+        />
+        <FeatureCard
           title="UUID Generator"
           description="Generate universally unique identifiers."
           to="/uuid-generator"

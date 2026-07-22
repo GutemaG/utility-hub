@@ -117,6 +117,12 @@ export const navigationGroups: NavGroup[] = [
         description: "Generate placeholder text by words, sentences, or paragraphs.",
       },
       {
+        title: "Mock Data Generator",
+        url: "/mock-data-generator",
+        description:
+          "Design a schema and generate realistic mock data (names, emails, addresses, dates, and more), exported as CSV, JSON, SQL, or Excel.",
+      },
+      {
         title: "UUID Generator",
         url: "/uuid-generator",
         description: "Generate universally unique identifiers.",
