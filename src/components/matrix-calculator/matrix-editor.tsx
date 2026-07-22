@@ -76,21 +76,25 @@ export function MatrixEditor({ label, values, resetSignal, onChange, onResize }:
         />
       </div>
 
-      <div
-        className="grid gap-1.5"
-        style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
-      >
-        {text.map((row, i) =>
-          row.map((cellText, j) => (
-            <input
-              key={`${i}-${j}`}
-              type="number"
-              value={cellText}
-              onChange={(e) => handleCellChange(i, j, e.target.value)}
-              className="h-10 w-14 rounded-md border border-input bg-background text-center font-mono text-sm text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring sm:h-11 sm:w-16"
-            />
-          ))
-        )}
+      <div className="inline-grid overflow-hidden rounded-md border border-input bg-background">
+        <div
+          className="grid"
+          style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
+        >
+          {text.map((row, i) =>
+            row.map((cellText, j) => (
+              <input
+                key={`${i}-${j}`}
+                type="number"
+                value={cellText}
+                onChange={(e) => handleCellChange(i, j, e.target.value)}
+                className={`h-10 w-14 border-input bg-background text-center font-mono text-sm text-foreground focus:relative focus:z-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-ring sm:h-11 sm:w-16 ${
+                  j < cols - 1 ? "border-r" : ""
+                } ${i < rows - 1 ? "border-b" : ""}`}
+              />
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
