@@ -178,6 +178,18 @@ export const navigationGroups: NavGroup[] = [
         description:
           "Check primality, view factorization, nearest primes, and an interactive sieve grid.",
       },
+      {
+        title: "Phone Number Parser",
+        url: "/phone-number-parser",
+        description:
+          "Validate and format phone numbers with a searchable country code selector.",
+      },
+      {
+        title: "Matrix Calculator",
+        url: "/matrix-calculator",
+        description:
+          "Add, subtract, multiply, transpose, and invert matrices with an animated step-by-step walkthrough.",
+      },
     ],
   },
   {
