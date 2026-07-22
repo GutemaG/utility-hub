@@ -172,7 +172,7 @@ function Index() {
         />
         <FeatureCard
           title="Markdown Editor"
-          description="Create and preview Markdown documents."
+          description="Write Markdown, convert to/from HTML, and copy as rich or raw HTML."
           to="/mark-down-editor"
         />
         <FeatureCard

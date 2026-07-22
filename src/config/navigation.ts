@@ -124,7 +124,8 @@ export const navigationGroups: NavGroup[] = [
       {
         title: "Markdown Editor",
         url: "/mark-down-editor",
-        description: "Create and preview Markdown documents.",
+        description:
+          "Write and preview Markdown, convert to HTML, copy as rich or raw HTML, and convert HTML back to Markdown.",
       },
       {
         title: "URL Encoder",
