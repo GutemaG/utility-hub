@@ -131,7 +131,7 @@ function RouteComponent() {
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Enter text to hash"
-              className="min-h-32"
+              className="field-sizing-fixed h-32 max-h-48 resize-y overflow-y-auto"
             />
           </div>
         ) : (

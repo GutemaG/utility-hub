@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowDownAZ,
@@ -28,7 +28,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useSEO } from "@/hooks/use-seo";
 import { copyText } from "@/lib/clipboard";
-import { stringify as toYaml } from "yaml";
+import { parse as parseYamlText, stringify as toYaml } from "yaml";
 
 export const Route = createFileRoute("/json-validator")({
   component: RouteComponent,
@@ -51,9 +51,11 @@ type ToolMode =
 
 type ConvertDirection = "encode" | "decode";
 
-const CONVERT_MODES: ToolMode[] = ["xml", "sql", "excel"];
+const CONVERT_MODES: ToolMode[] = ["csv", "yaml", "xml", "sql", "excel"];
 
 const CONVERT_FORMAT_LABEL: Partial<Record<ToolMode, string>> = {
+  csv: "CSV",
+  yaml: "YAML",
   xml: "XML",
   sql: "SQL",
   excel: "Excel",
@@ -96,12 +98,12 @@ const MODE_META: Record<ToolMode, { label: string; help: string; icon: LucideIco
   },
   csv: {
     label: "CSV",
-    help: "Converts JSON object or array of objects into CSV output.",
+    help: "Convert JSON to CSV, or parse CSV back into JSON.",
     icon: Table2,
   },
   yaml: {
     label: "YAML",
-    help: "Converts JSON into human-readable YAML format.",
+    help: "Convert JSON to YAML, or parse YAML back into JSON.",
     icon: FileCode,
   },
   tree: {
@@ -143,6 +145,19 @@ const MODE_GROUPS: { label: string; modes: ToolMode[] }[] = [
   { label: "Convert", modes: ["csv", "yaml", "xml", "sql", "excel"] },
 ];
 
+type InputKind = "json" | "csv" | "yaml" | "xml" | "sql" | "file";
+
+function getInputKind(mode: ToolMode, direction: ConvertDirection): InputKind {
+  if (direction === "decode") {
+    if (mode === "csv") return "csv";
+    if (mode === "yaml") return "yaml";
+    if (mode === "xml") return "xml";
+    if (mode === "sql") return "sql";
+    if (mode === "excel") return "file";
+  }
+  return "json";
+}
+
 function RouteComponent() {
   const [input, setInput] = useState(`{\n  "name": "Utility Hub",\n  "version": "1.0.1"\n}`);
   const [secondaryInput, setSecondaryInput] = useState("{}");
@@ -164,13 +179,23 @@ function RouteComponent() {
     setExcelFileError(null);
   }, [mode]);
 
+  const inputKind = getInputKind(mode, direction);
+  const prevInputKindRef = useRef(inputKind);
+  useEffect(() => {
+    if (prevInputKindRef.current !== inputKind) {
+      setInput("");
+      setSecondaryInput("");
+      prevInputKindRef.current = inputKind;
+    }
+  }, [inputKind]);
+
   useSEO({
     title: "JSON Validator & Converter | Utility Hub",
     description:
-      "Validate, repair, minify, sort, diff, tree-view, JSONPath query, and schema-validate JSON, plus convert to CSV, YAML, XML, SQL, or Excel — both ways.",
+      "Validate, repair, minify, sort, diff, tree-view, JSONPath query, and schema-validate JSON, plus convert to/from CSV, YAML, XML, SQL, or Excel — both ways.",
     path: "/json-validator",
     keywords:
-      "json validator, json formatter, json minify, json sort keys, json diff, json tree viewer, jsonpath tester, json schema validator, json to csv, json to yaml, json to xml, xml to json, json to sql, sql to json, json to excel, excel to json",
+      "json validator, json formatter, json minify, json sort keys, json diff, json tree viewer, jsonpath tester, json schema validator, json to csv, csv to json, json to yaml, yaml to json, json to xml, xml to json, json to sql, sql to json, json to excel, excel to json",
     applicationCategory: "DeveloperApplication",
     featureList: [
       "JSON validation",
@@ -181,7 +206,7 @@ function RouteComponent() {
       "Collapsible JSON tree view",
       "JSONPath query tester",
       "JSON Schema validation",
-      "JSON to CSV",
+      "JSON to/from CSV",
       "JSON to/from YAML",
       "JSON to/from XML",
       "JSON to/from SQL INSERT statements",
@@ -281,7 +306,7 @@ function RouteComponent() {
         ? "JSON"
         : mode === "excel" && direction === "decode"
           ? "Excel File"
-          : (mode === "xml" || mode === "sql") && direction === "decode"
+          : (mode === "xml" || mode === "sql" || mode === "csv" || mode === "yaml") && direction === "decode"
             ? `Input ${formatLabel}`
             : "Input JSON";
 
@@ -292,7 +317,11 @@ function RouteComponent() {
         ? "Paste XML here..."
         : mode === "sql" && direction === "decode"
           ? "Paste INSERT statements here..."
-          : "Paste JSON here...";
+          : mode === "csv" && direction === "decode"
+            ? "Paste CSV here..."
+            : mode === "yaml" && direction === "decode"
+              ? "Paste YAML here..."
+              : "Paste JSON here...";
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
@@ -490,7 +519,7 @@ function RouteComponent() {
                 <Textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  className="min-h-64 font-mono text-sm"
+                  className="field-sizing-fixed h-64 max-h-[32rem] resize-y overflow-y-auto font-mono text-sm"
                   placeholder={inputPlaceholder}
                   spellCheck={false}
                   aria-label="Primary JSON input"
@@ -509,7 +538,7 @@ function RouteComponent() {
                 <Textarea
                   value={secondaryInput}
                   onChange={(e) => setSecondaryInput(e.target.value)}
-                  className="min-h-64 font-mono text-sm"
+                  className="field-sizing-fixed h-64 max-h-[32rem] resize-y overflow-y-auto font-mono text-sm"
                   placeholder={mode === "schema" ? "Paste JSON Schema here..." : "Paste second JSON for diff..."}
                   spellCheck={false}
                   aria-label={mode === "schema" ? "JSON Schema input" : "Secondary JSON input for diff"}
@@ -535,7 +564,8 @@ function RouteComponent() {
             mode === "repair" ||
             mode === "sort" ||
             mode === "minify" ||
-            ((mode === "xml" || mode === "sql" || mode === "excel") && direction === "decode") ? (
+            ((mode === "xml" || mode === "sql" || mode === "excel" || mode === "csv" || mode === "yaml") &&
+              direction === "decode") ? (
               <div className="rounded-md border border-border bg-muted/30 p-3">
                 {result.output ? (
                   <JsonHighlightedPreview value={result.output} />
@@ -559,7 +589,7 @@ function RouteComponent() {
               <Textarea
                 value={result.output}
                 readOnly
-                className="min-h-64 font-mono text-sm"
+                className="field-sizing-fixed h-64 max-h-[32rem] resize-y overflow-y-auto font-mono text-sm"
                 placeholder="Result appears here"
                 spellCheck={false}
                 aria-label="Tool output"
@@ -670,6 +700,38 @@ function runJsonTool({
         status: "success",
         output: JSON.stringify(rows, null, 2),
         message: `Parsed ${rows.length} row(s) from SQL.`,
+        location: null,
+        diffRows: [],
+      };
+    }
+
+    if (mode === "csv" && direction === "decode") {
+      let rows: Array<Record<string, unknown>> | unknown[][];
+      try {
+        rows = csvToJson(input, delimiter, includeHeader);
+      } catch (csvError) {
+        throw new Error(csvError instanceof Error ? csvError.message : "Could not parse CSV.");
+      }
+      return {
+        status: "success",
+        output: JSON.stringify(rows, null, 2),
+        message: `Parsed ${rows.length} row(s) from CSV.`,
+        location: null,
+        diffRows: [],
+      };
+    }
+
+    if (mode === "yaml" && direction === "decode") {
+      let value: unknown;
+      try {
+        value = parseYamlText(input);
+      } catch (yamlError) {
+        throw new Error(yamlError instanceof Error ? `Invalid YAML: ${yamlError.message}` : "Invalid YAML");
+      }
+      return {
+        status: "success",
+        output: JSON.stringify(value, null, 2),
+        message: "YAML converted to JSON.",
         location: null,
         diffRows: [],
       };
@@ -995,6 +1057,94 @@ function escapeCsvCell(value: string, delimiter: string): string {
     return `"${value.replace(/"/g, '""')}"`;
   }
   return value;
+}
+
+function parseCsvRows(text: string, delimiter: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let field = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i];
+
+    if (inQuotes) {
+      if (ch === '"') {
+        if (text[i + 1] === '"') {
+          field += '"';
+          i += 1;
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        field += ch;
+      }
+      continue;
+    }
+
+    if (ch === '"') {
+      inQuotes = true;
+      continue;
+    }
+
+    if (ch === delimiter) {
+      row.push(field);
+      field = "";
+      continue;
+    }
+
+    if (ch === "\n" || ch === "\r") {
+      if (ch === "\r" && text[i + 1] === "\n") i += 1;
+      row.push(field);
+      field = "";
+      if (row.length > 1 || row[0] !== "") {
+        rows.push(row);
+      }
+      row = [];
+      continue;
+    }
+
+    field += ch;
+  }
+
+  if (field !== "" || row.length > 0) {
+    row.push(field);
+    rows.push(row);
+  }
+
+  return rows;
+}
+
+function coerceCsvValue(raw: string): unknown {
+  if (raw === "") return "";
+  if (/^-?\d+(\.\d+)?$/.test(raw)) return Number(raw);
+  if (/^true$/i.test(raw)) return true;
+  if (/^false$/i.test(raw)) return false;
+  return raw;
+}
+
+function csvToJson(
+  text: string,
+  delimiter: string,
+  hasHeader: boolean
+): Array<Record<string, unknown>> | unknown[][] {
+  const rows = parseCsvRows(text, delimiter);
+  if (rows.length === 0) {
+    throw new Error("No CSV rows found.");
+  }
+
+  if (!hasHeader) {
+    return rows.map((row) => row.map(coerceCsvValue));
+  }
+
+  const [header, ...dataRows] = rows;
+  return dataRows.map((row) => {
+    const obj: Record<string, unknown> = {};
+    header.forEach((key, i) => {
+      obj[key] = coerceCsvValue(row[i] ?? "");
+    });
+    return obj;
+  });
 }
 
 function jsonToXml(value: unknown): string {
@@ -1551,13 +1701,27 @@ function getSampleForMode(mode: ToolMode, direction: ConvertDirection) {
   }
 
   if (mode === "csv") {
-    return {
-      input: `[
+    return direction === "decode"
+      ? {
+          input: `name,age,city\nAlice,28,Addis Ababa\nBob,31,Nairobi`,
+          secondaryInput: "",
+        }
+      : {
+          input: `[
   { "name": "Alice", "age": 28, "city": "Addis Ababa" },
   { "name": "Bob", "age": 31, "city": "Nairobi" }
 ]`,
-      secondaryInput: "",
-    };
+          secondaryInput: "",
+        };
+  }
+
+  if (mode === "yaml") {
+    return direction === "decode"
+      ? {
+          input: `name: Utility Hub\nversion: 1.0.1\nfeatures:\n  - json\n  - csv\n  - yaml\nactive: true`,
+          secondaryInput: "",
+        }
+      : { input: baseObject, secondaryInput: "" };
   }
 
   if (mode === "jsonpath") {
