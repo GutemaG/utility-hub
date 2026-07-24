@@ -38,6 +38,12 @@ export const navigationGroups: NavGroup[] = [
         description:
           "Calculate monthly payment, total interest, and amortization schedule.",
       },
+      {
+        title: "Number Sum Calculator",
+        url: "/number-sum-calculator",
+        description:
+          "Paste a column or grid of numbers and get the sum, average, min/max, and per-row/column totals. Handles CSV, tab, and space-separated values, skipping blank lines automatically.",
+      },
     ],
   },
   {

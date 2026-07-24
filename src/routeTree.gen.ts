@@ -25,6 +25,7 @@ import { Route as PomodoroTimerRouteImport } from './routes/pomodoro-timer'
 import { Route as PhoneNumberParserRouteImport } from './routes/phone-number-parser'
 import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
+import { Route as NumberSumCalculatorRouteImport } from './routes/number-sum-calculator'
 import { Route as NumberConverterRouteImport } from './routes/number-converter'
 import { Route as MockDataGeneratorRouteImport } from './routes/mock-data-generator'
 import { Route as MatrixCalculatorRouteImport } from './routes/matrix-calculator'
@@ -132,6 +133,11 @@ const PayrollGeneratorRoute = PayrollGeneratorRouteImport.update({
 const PasswordGeneratorRoute = PasswordGeneratorRouteImport.update({
   id: '/password-generator',
   path: '/password-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NumberSumCalculatorRoute = NumberSumCalculatorRouteImport.update({
+  id: '/number-sum-calculator',
+  path: '/number-sum-calculator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NumberConverterRoute = NumberConverterRouteImport.update({
@@ -304,6 +310,7 @@ export interface FileRoutesByFullPath {
   '/matrix-calculator': typeof MatrixCalculatorRoute
   '/mock-data-generator': typeof MockDataGeneratorRoute
   '/number-converter': typeof NumberConverterRoute
+  '/number-sum-calculator': typeof NumberSumCalculatorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -350,6 +357,7 @@ export interface FileRoutesByTo {
   '/matrix-calculator': typeof MatrixCalculatorRoute
   '/mock-data-generator': typeof MockDataGeneratorRoute
   '/number-converter': typeof NumberConverterRoute
+  '/number-sum-calculator': typeof NumberSumCalculatorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -397,6 +405,7 @@ export interface FileRoutesById {
   '/matrix-calculator': typeof MatrixCalculatorRoute
   '/mock-data-generator': typeof MockDataGeneratorRoute
   '/number-converter': typeof NumberConverterRoute
+  '/number-sum-calculator': typeof NumberSumCalculatorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
@@ -445,6 +454,7 @@ export interface FileRouteTypes {
     | '/matrix-calculator'
     | '/mock-data-generator'
     | '/number-converter'
+    | '/number-sum-calculator'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -491,6 +501,7 @@ export interface FileRouteTypes {
     | '/matrix-calculator'
     | '/mock-data-generator'
     | '/number-converter'
+    | '/number-sum-calculator'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -537,6 +548,7 @@ export interface FileRouteTypes {
     | '/matrix-calculator'
     | '/mock-data-generator'
     | '/number-converter'
+    | '/number-sum-calculator'
     | '/password-generator'
     | '/payroll-generator'
     | '/phone-number-parser'
@@ -584,6 +596,7 @@ export interface RootRouteChildren {
   MatrixCalculatorRoute: typeof MatrixCalculatorRoute
   MockDataGeneratorRoute: typeof MockDataGeneratorRoute
   NumberConverterRoute: typeof NumberConverterRoute
+  NumberSumCalculatorRoute: typeof NumberSumCalculatorRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   PayrollGeneratorRoute: typeof PayrollGeneratorRoute
   PhoneNumberParserRoute: typeof PhoneNumberParserRoute
@@ -714,6 +727,13 @@ declare module '@tanstack/react-router' {
       path: '/password-generator'
       fullPath: '/password-generator'
       preLoaderRoute: typeof PasswordGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/number-sum-calculator': {
+      id: '/number-sum-calculator'
+      path: '/number-sum-calculator'
+      fullPath: '/number-sum-calculator'
+      preLoaderRoute: typeof NumberSumCalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/number-converter': {
@@ -944,6 +964,7 @@ const rootRouteChildren: RootRouteChildren = {
   MatrixCalculatorRoute: MatrixCalculatorRoute,
   MockDataGeneratorRoute: MockDataGeneratorRoute,
   NumberConverterRoute: NumberConverterRoute,
+  NumberSumCalculatorRoute: NumberSumCalculatorRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   PayrollGeneratorRoute: PayrollGeneratorRoute,
   PhoneNumberParserRoute: PhoneNumberParserRoute,
