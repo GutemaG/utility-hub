@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/table";
 import { copyText } from "@/lib/clipboard";
 import {
+  extractNumbersFromInput,
   formatResultNumber,
   parseExcludeList,
   parseNumberGrid,
@@ -87,6 +88,7 @@ function RouteComponent() {
     featureList: [
       "Auto-detects newline, comma, tab, or space separated numbers",
       "Skips blank lines and empty cells, with a one-click cleanup button",
+      "Strips labels and currency symbols from pasted reports, keeping only the numbers",
       "Exclude specific values (like stray zeros) from the totals, or delete them from the list entirely",
       "Sort the pasted numbers ascending or descending",
       "Sum, count, average, min, and max",
@@ -113,6 +115,7 @@ function RouteComponent() {
         .filter((line) => line.trim() !== "")
         .join("\n")
     );
+  const handleKeepNumbersOnly = () => setInput((current) => extractNumbersFromInput(current));
   const handleRemoveListedValues = () =>
     setInput((current) => removeValuesFromInput(current, result.delimiterUsed, excludeValues));
   const handleSort = (direction: "asc" | "desc") =>
@@ -163,6 +166,16 @@ function RouteComponent() {
             </Select>
             <Button type="button" variant="outline" size="sm" onClick={handleRemoveBlankLines} disabled={!input}>
               Remove blank lines
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleKeepNumbersOnly}
+              disabled={!input}
+              title="Strip labels, currency symbols, and other text, keeping only the numbers (negatives, decimals, and thousands commas are preserved)"
+            >
+              Keep numbers only
             </Button>
             <Button type="button" variant="outline" size="sm" onClick={handleSample}>
               Load sample
@@ -244,6 +257,7 @@ function RouteComponent() {
             Skipped {result.invalidTokens.length} non-numeric token{result.invalidTokens.length === 1 ? "" : "s"}:{" "}
             {result.invalidTokens.slice(0, 12).join(", ")}
             {result.invalidTokens.length > 12 ? ", …" : ""}
+            {" "}— use <span className="font-semibold">Keep numbers only</span> to strip the text.
           </p>
         ) : null}
       </div>

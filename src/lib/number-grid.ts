@@ -30,6 +30,9 @@ export interface NumberGridResult {
 
 const NUMBER_PATTERN = /^[+-]?(\d+\.?\d*|\.\d+)$/;
 
+/** A single number written with thousands separators, e.g. "1,332.15" or "(12,000)" — not a CSV row. */
+const THOUSANDS_NUMBER_PATTERN = /^\(?[+-]?\d{1,3}(,\d{3})+(\.\d+)?\)?$/;
+
 function parseToken(token: string, stripThousandsCommas: boolean): number | null {
   let s = token.trim();
   if (s === "") return null;
@@ -53,6 +56,7 @@ function detectDelimiter(nonEmptyLines: string[]): Exclude<DelimiterMode, "auto"
 
   const commaLines = nonEmptyLines.filter((l) => l.includes(","));
   const looksLikeCsv = commaLines.some((l) => {
+    if (THOUSANDS_NUMBER_PATTERN.test(l.trim())) return false;
     const parts = l.split(",").map((p) => p.trim()).filter((p) => p !== "");
     if (parts.length < 2) return false;
     const numericParts = parts.filter((p) => NUMBER_PATTERN.test(p.replace(/^\((.+)\)$/, "-$1")));
@@ -217,6 +221,36 @@ export function removeValuesFromInput(
     });
 
     if (hasRemainingValue) outLines.push(cells.join(joiner));
+  }
+
+  return outLines.join("\n");
+}
+
+const CURRENCY_SYMBOLS = "$€£¥₹";
+const NUMBER_BODY = String.raw`(?:\d{1,3}(?:,\d{3})+(?!\d)|\d+)(?:\.\d+)?|\.\d+`;
+/**
+ * A number embedded in free text: accounting parens "(1,200.50)", or an optionally signed value
+ * with an optional currency symbol on either side of the sign ("-$5", "$-5", "+3.2", "1,332.15").
+ * The lookbehind stops a hyphen inside a word or date ("New-check", "2024-01") reading as a minus.
+ */
+const EMBEDDED_NUMBER = new RegExp(
+  String.raw`\([${CURRENCY_SYMBOLS}]?(?:${NUMBER_BODY})\)|(?<![\w.])[+-]?[${CURRENCY_SYMBOLS}]?[+-]?(?:${NUMBER_BODY})`,
+  "g"
+);
+
+/**
+ * Strips labels, currency symbols, and other text, keeping only the numbers on each line (signs,
+ * decimals, thousands commas, and accounting parens intact). Several numbers on one line are
+ * tab-joined so they still read as a grid row; lines with no number are dropped.
+ */
+export function extractNumbersFromInput(input: string): string {
+  const currencyPattern = new RegExp(`[${CURRENCY_SYMBOLS}]`, "g");
+  const outLines: string[] = [];
+
+  for (const line of input.split(/\r\n|\r|\n/)) {
+    const matches = line.match(EMBEDDED_NUMBER);
+    if (!matches) continue;
+    outLines.push(matches.map((m) => m.replace(currencyPattern, "")).join("\t"));
   }
 
   return outLines.join("\n");
