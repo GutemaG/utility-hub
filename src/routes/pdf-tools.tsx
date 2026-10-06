@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import type { PDFDocument as PDFDocumentType } from "pdf-lib";
-import type * as PdfJs from "pdfjs-dist";
 import { ArrowDown, ArrowUp, Download, FileText, ImageIcon, RotateCcw, RotateCw, Trash2, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -10,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { FileDropArea } from "@/components/file-drop-area";
 import { useSEO } from "@/hooks/use-seo";
 import { baseName, downloadBytes, downloadZip, formatBytes } from "@/lib/files";
+import { loadPdfJs, renderPdfPages } from "@/lib/pdfjs";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/pdf-tools")({
@@ -19,25 +19,14 @@ export const Route = createFileRoute("/pdf-tools")({
 // pdf-lib edits PDFs; pdf.js only draws page thumbnails. Both load on first use.
 const loadPdfLib = () => import("pdf-lib");
 
-let pdfjsPromise: Promise<typeof PdfJs> | null = null;
-function loadPdfJs() {
-  if (!pdfjsPromise) {
-    pdfjsPromise = Promise.all([import("pdfjs-dist"), import("pdfjs-dist/build/pdf.worker.min.mjs?url")]).then(
-      ([pdfjs, worker]) => {
-        pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
-        return pdfjs;
-      }
-    );
-  }
-  return pdfjsPromise;
-}
-
-type Tab = "merge" | "organize" | "images";
+type Tab = "merge" | "organize" | "images" | "toimages" | "stamp";
 
 const TABS: { key: Tab; label: string }[] = [
   { key: "merge", label: "Merge" },
   { key: "organize", label: "Organize & Split" },
   { key: "images", label: "Images → PDF" },
+  { key: "toimages", label: "PDF → JPG/PNG" },
+  { key: "stamp", label: "Page numbers & Watermark" },
 ];
 
 let nextId = 1;
@@ -46,17 +35,19 @@ function RouteComponent() {
   const [tab, setTab] = useState<Tab>("merge");
 
   useSEO({
-    title: "PDF Tools: Merge, Split, Organize & Images to PDF | Utility Hub",
+    title: "PDF Tools: Merge, Split, PDF to JPG, JPG to PDF, Page Numbers & Watermark | Utility Hub",
     description:
-      "Merge PDFs, split or extract pages, reorder, rotate and delete pages, and convert JPG/PNG images to PDF. Free and private: files are processed in your browser and never uploaded.",
+      "Merge PDFs, split or extract pages, reorder, rotate and delete pages, convert JPG/PNG to PDF and PDF to JPG/PNG, and add page numbers or a watermark. Free and private: files are processed in your browser and never uploaded.",
     path: "/pdf-tools",
-    keywords: "merge pdf, split pdf, extract pdf pages, rotate pdf, reorder pdf pages, delete pdf pages, jpg to pdf, images to pdf",
+    keywords: "merge pdf, split pdf, extract pdf pages, rotate pdf, reorder pdf pages, delete pdf pages, jpg to pdf, images to pdf, pdf to jpg, pdf to png, add page numbers to pdf, watermark pdf",
     applicationCategory: "BusinessApplication",
     featureList: [
       "Merge PDFs and images into one PDF",
       "Reorder, rotate and delete pages with thumbnails",
       "Extract selected pages or split by ranges or every N pages",
       "Convert images to PDF with page size and margins",
+      "Convert PDF pages to JPG or PNG at up to 300 DPI",
+      "Add page numbers and a text watermark (any language)",
       "No uploads: everything runs on your device",
     ],
   });
@@ -66,7 +57,7 @@ function RouteComponent() {
       <div className="text-center">
         <h1 className="mb-2 text-3xl font-bold text-foreground sm:text-4xl">PDF Tools</h1>
         <p className="text-muted-foreground">
-          Merge, split, reorder, rotate and create PDFs. Your files stay on your device.
+          Merge, split, reorder, rotate, convert and stamp PDFs. Your files stay on your device.
         </p>
       </div>
 
@@ -85,7 +76,11 @@ function RouteComponent() {
         ))}
       </div>
 
-      {tab === "merge" ? <MergeTool /> : tab === "organize" ? <OrganizeTool /> : <ImagesToPdfTool />}
+      {tab === "merge" && <MergeTool />}
+      {tab === "organize" && <OrganizeTool />}
+      {tab === "images" && <ImagesToPdfTool />}
+      {tab === "toimages" && <PdfToImagesTool />}
+      {tab === "stamp" && <StampTool />}
     </div>
   );
 }
@@ -519,6 +514,270 @@ function ImagesToPdfTool() {
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
     </Panel>
   );
+}
+
+// ---------------- PDF → Images ----------------
+
+function PdfToImagesTool() {
+  const [file, setFile] = useState<File | null>(null);
+  const [pageCount, setPageCount] = useState(0);
+  const [format, setFormat] = useState<"image/jpeg" | "image/png">("image/jpeg");
+  const [dpi, setDpi] = useState(150);
+  const [range, setRange] = useState("");
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = async (f: File) => {
+    setFile(f);
+    setError(null);
+    setPageCount(0);
+    try {
+      const pdfjs = await loadPdfJs();
+      const doc = await pdfjs.getDocument({ data: new Uint8Array(await f.arrayBuffer()) }).promise;
+      setPageCount(doc.numPages);
+      void doc.destroy();
+    } catch (e) {
+      setError(e instanceof Error && /password/i.test(e.message) ? "This PDF is password-protected." : "Could not open this PDF.");
+    }
+  };
+
+  const convert = async () => {
+    if (!file) return;
+    setError(null);
+    const ranges = range.trim() ? parseRanges(range, pageCount) : [[1, pageCount] as [number, number]];
+    const wanted = new Set<number>();
+    ranges.forEach(([a, b]) => {
+      for (let n = a; n <= b; n++) wanted.add(n);
+    });
+    if (!wanted.size) {
+      setError("No valid pages in that range.");
+      return;
+    }
+    setProgress({ done: 0, total: wanted.size });
+    try {
+      const ext = format === "image/png" ? "png" : "jpg";
+      const out: { name: string; data: Blob }[] = [];
+      for await (const { canvas, pageNumber } of renderPdfPages(file, dpi / 72, wanted)) {
+        const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, format, 0.9));
+        if (blob) out.push({ name: `${baseName(file.name)}-page-${String(pageNumber).padStart(String(pageCount).length, "0")}.${ext}`, data: blob });
+        setProgress({ done: out.length, total: wanted.size });
+      }
+      if (out.length === 1) downloadBytes(new Uint8Array(await out[0].data.arrayBuffer()), out[0].name, format);
+      else await downloadZip(out, `${baseName(file.name)}-images.zip`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Conversion failed.");
+    } finally {
+      setProgress(null);
+    }
+  };
+
+  return (
+    <Panel>
+      <FileDropArea accept="application/pdf,.pdf" onFiles={(f) => load(f[0])} hint="Choose a PDF. Each page becomes an image." />
+      {file ? (
+        <div className="text-sm">
+          <b>{file.name}</b> · {formatBytes(file.size)} {pageCount ? `· ${pageCount} page${pageCount === 1 ? "" : "s"}` : ""}
+        </div>
+      ) : null}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <Field label="Format">
+          <select className="h-9 w-full rounded-md border bg-background px-2 text-sm" value={format} onChange={(e) => setFormat(e.target.value as typeof format)}>
+            <option value="image/jpeg">JPG (smaller files)</option>
+            <option value="image/png">PNG (sharp text, larger)</option>
+          </select>
+        </Field>
+        <Field label="Quality">
+          <select className="h-9 w-full rounded-md border bg-background px-2 text-sm" value={dpi} onChange={(e) => setDpi(Number(e.target.value))}>
+            <option value={72}>72 DPI (screen)</option>
+            <option value={150}>150 DPI (good)</option>
+            <option value={300}>300 DPI (print)</option>
+          </select>
+        </Field>
+        <Field label="Pages (optional)">
+          <Input placeholder={pageCount ? `All (1-${pageCount}), or e.g. 1-3, 5` : "All"} value={range} onChange={(e) => setRange(e.target.value)} />
+        </Field>
+      </div>
+      <Button className="bg-blue-600 hover:bg-blue-700" disabled={!pageCount || !!progress} onClick={convert}>
+        <ImageIcon className="h-4 w-4" />
+        {progress ? `Converting ${progress.done} / ${progress.total}…` : "Convert to images"}
+      </Button>
+      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+    </Panel>
+  );
+}
+
+// ---------------- Page numbers & watermark ----------------
+
+type NumberPosition = "bottom-center" | "bottom-right" | "bottom-left" | "top-center" | "top-right" | "top-left";
+type NumberFormat = "n" | "page-n" | "n-of-total" | "page-n-of-total";
+
+function StampTool() {
+  const [file, setFile] = useState<File | null>(null);
+  const [numbers, setNumbers] = useState(true);
+  const [position, setPosition] = useState<NumberPosition>("bottom-center");
+  const [numFormat, setNumFormat] = useState<NumberFormat>("page-n-of-total");
+  const [startAt, setStartAt] = useState(1);
+  const [skipFirst, setSkipFirst] = useState(false);
+  const [numSize, setNumSize] = useState(11);
+  const [watermark, setWatermark] = useState(false);
+  const [wmText, setWmText] = useState("CONFIDENTIAL");
+  const [wmColor, setWmColor] = useState("#dc2626");
+  const [wmOpacity, setWmOpacity] = useState(25);
+  const [wmAngle, setWmAngle] = useState(45);
+  const [wmScale, setWmScale] = useState(70);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const apply = async () => {
+    if (!file) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const { PDFDocument, StandardFonts, rgb, degrees } = await loadPdfLib();
+      const doc = await openPdf(PDFDocument, file);
+      const font = await doc.embedFont(StandardFonts.Helvetica);
+      const pages = doc.getPages();
+      const total = pages.length;
+      const wm = watermark && wmText.trim() ? await doc.embedPng(await textToPng(wmText.trim(), wmColor)) : null;
+      const margin = 10 * MM_TO_PT;
+
+      pages.forEach((page, i) => {
+        const { width, height } = page.getSize();
+        if (wm) {
+          const w = (width * wmScale) / 100;
+          const h = (w / wm.width) * wm.height;
+          const t = (wmAngle * Math.PI) / 180;
+          // pdf-lib rotates around the image's bottom-left corner, so offset it to stay centred.
+          page.drawImage(wm, {
+            x: width / 2 - (w / 2) * Math.cos(t) + (h / 2) * Math.sin(t),
+            y: height / 2 - (w / 2) * Math.sin(t) - (h / 2) * Math.cos(t),
+            width: w,
+            height: h,
+            rotate: degrees(wmAngle),
+            opacity: wmOpacity / 100,
+          });
+        }
+        if (numbers && !(skipFirst && i === 0)) {
+          const n = startAt + i - (skipFirst ? 1 : 0);
+          const last = startAt + total - 1 - (skipFirst ? 1 : 0);
+          const label =
+            numFormat === "n" ? `${n}` : numFormat === "page-n" ? `Page ${n}` : numFormat === "n-of-total" ? `${n} / ${last}` : `Page ${n} of ${last}`;
+          const tw = font.widthOfTextAtSize(label, numSize);
+          const [v, hpos] = position.split("-") as ["top" | "bottom", "left" | "center" | "right"];
+          const x = hpos === "left" ? margin : hpos === "right" ? width - margin - tw : (width - tw) / 2;
+          const y = v === "bottom" ? margin * 0.8 : height - margin * 0.8 - numSize;
+          page.drawText(label, { x, y, size: numSize, font, color: rgb(0.2, 0.2, 0.2) });
+        }
+      });
+      downloadBytes(await doc.save(), `${baseName(file.name)}-stamped.pdf`, "application/pdf");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not update the PDF.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const select = "h-9 w-full rounded-md border bg-background px-2 text-sm";
+
+  return (
+    <Panel>
+      <FileDropArea accept="application/pdf,.pdf" onFiles={(f) => setFile(f[0])} hint="Choose the PDF to stamp." />
+      {file ? (
+        <div className="text-sm">
+          <b>{file.name}</b> · {formatBytes(file.size)}
+        </div>
+      ) : null}
+
+      <div className="space-y-4 rounded-lg border border-border p-4">
+        <label className="flex items-center gap-2 text-sm font-semibold">
+          <input type="checkbox" checked={numbers} onChange={(e) => setNumbers(e.target.checked)} /> Add page numbers
+        </label>
+        {numbers ? (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+            <Field label="Position">
+              <select className={select} value={position} onChange={(e) => setPosition(e.target.value as NumberPosition)}>
+                <option value="bottom-center">Bottom center</option>
+                <option value="bottom-right">Bottom right</option>
+                <option value="bottom-left">Bottom left</option>
+                <option value="top-center">Top center</option>
+                <option value="top-right">Top right</option>
+                <option value="top-left">Top left</option>
+              </select>
+            </Field>
+            <Field label="Format">
+              <select className={select} value={numFormat} onChange={(e) => setNumFormat(e.target.value as NumberFormat)}>
+                <option value="n">1</option>
+                <option value="page-n">Page 1</option>
+                <option value="n-of-total">1 / 10</option>
+                <option value="page-n-of-total">Page 1 of 10</option>
+              </select>
+            </Field>
+            <Field label="Start at">
+              <Input type="number" min={0} value={startAt} onChange={(e) => setStartAt(Number(e.target.value) || 0)} />
+            </Field>
+            <Field label={`Size (${numSize} pt)`}>
+              <input type="range" min={7} max={24} value={numSize} onChange={(e) => setNumSize(Number(e.target.value))} className="w-full" />
+            </Field>
+            <label className="flex items-center gap-2 text-sm sm:col-span-4">
+              <input type="checkbox" checked={skipFirst} onChange={(e) => setSkipFirst(e.target.checked)} /> Don't number the first page (cover)
+            </label>
+          </div>
+        ) : null}
+      </div>
+
+      <div className="space-y-4 rounded-lg border border-border p-4">
+        <label className="flex items-center gap-2 text-sm font-semibold">
+          <input type="checkbox" checked={watermark} onChange={(e) => setWatermark(e.target.checked)} /> Add a text watermark
+        </label>
+        {watermark ? (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <Field label="Text (any language)">
+              <Input value={wmText} onChange={(e) => setWmText(e.target.value)} />
+            </Field>
+            <Field label="Colour">
+              <input type="color" value={wmColor} onChange={(e) => setWmColor(e.target.value)} className="h-9 w-full cursor-pointer rounded-md border" />
+            </Field>
+            <Field label={`Opacity (${wmOpacity}%)`}>
+              <input type="range" min={5} max={100} value={wmOpacity} onChange={(e) => setWmOpacity(Number(e.target.value))} className="w-full" />
+            </Field>
+            <Field label="Angle">
+              <select className={select} value={wmAngle} onChange={(e) => setWmAngle(Number(e.target.value))}>
+                <option value={45}>Diagonal ↗</option>
+                <option value={-45}>Diagonal ↘</option>
+                <option value={0}>Horizontal</option>
+              </select>
+            </Field>
+            <Field label={`Width (${wmScale}% of page)`}>
+              <input type="range" min={20} max={100} value={wmScale} onChange={(e) => setWmScale(Number(e.target.value))} className="w-full" />
+            </Field>
+          </div>
+        ) : null}
+      </div>
+
+      <Button className="bg-blue-600 hover:bg-blue-700" disabled={!file || busy || (!numbers && !watermark)} onClick={apply}>
+        <Download className="h-4 w-4" /> {busy ? "Working…" : "Apply & download"}
+      </Button>
+      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+    </Panel>
+  );
+}
+
+/** Render watermark text to a transparent PNG so any script (Amharic, Arabic…) works in the PDF. */
+async function textToPng(text: string, color: string): Promise<Uint8Array> {
+  const fontSize = 160;
+  const font = `bold ${fontSize}px system-ui, "Noto Sans Ethiopic", "Nyala", sans-serif`;
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d")!;
+  ctx.font = font;
+  canvas.width = Math.ceil(ctx.measureText(text).width + fontSize * 0.4);
+  canvas.height = Math.ceil(fontSize * 1.4);
+  ctx.font = font;
+  ctx.fillStyle = color;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+  const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, "image/png"));
+  return new Uint8Array(await blob!.arrayBuffer());
 }
 
 // ---------------- PDF helpers ----------------

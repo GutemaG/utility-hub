@@ -28,15 +28,41 @@ export const navigationGroups: NavGroup[] = [
           "Generate detailed payroll reports for employees with deductions and benefits by uploading a CSV file (Ethiopia only).",
       },
       {
+        title: "Loan Calculator",
+        url: "/loan-calculator",
+        description:
+          "Calculate monthly payment, total interest, and amortization schedule.",
+      },
+      {
+        title: "Compound Interest Calculator",
+        url: "/compound-interest-calculator",
+        description: "Savings growth with monthly deposits, APY, yearly breakdown, and an APR to APY converter.",
+      },
+      {
+        title: "Calculator",
+        url: "/calculator",
+        description: "Scientific calculator with trig, logs, powers, factorials, live results and history.",
+      },
+      {
+        title: "Percentage Calculator",
+        url: "/percentage-calculator",
+        description: "X% of Y, what percent, percentage change, increase/decrease, difference, discount and VAT.",
+      },
+      {
+        title: "Grade & GPA Calculator",
+        url: "/grade-calculator",
+        description:
+          "Semester GPA and CGPA (Ethiopian and US scales), weighted course grade, and the score you need on the final.",
+      },
+      {
         title: "BMI Calculation",
         url: "/bmi-calculation",
         description: "Calculate Body Mass Index with health category feedback.",
       },
       {
-        title: "Loan Calculator",
-        url: "/loan-calculator",
-        description:
-          "Calculate monthly payment, total interest, and amortization schedule.",
+        title: "Calorie Calculator",
+        url: "/calorie-calculator",
+        description: "BMR, TDEE and daily calories to lose, maintain or gain weight, with a macro split.",
       },
       {
         title: "Number Sum Calculator",
@@ -69,6 +95,11 @@ export const navigationGroups: NavGroup[] = [
         title: "Weight Conversion",
         url: "/weight-conversion",
         description: "Pounds, kilograms, stones, ounces.",
+      },
+      {
+        title: "Volume Conversion",
+        url: "/volume-conversion",
+        description: "ml to oz, litres to gallons, cups, tablespoons and teaspoons (US and UK).",
       },
       {
         title: "Area Conversion",
@@ -223,12 +254,6 @@ export const navigationGroups: NavGroup[] = [
           "Searchable quick references for Git, GitHub, editors, shells, regex, Docker, and more.",
       },
       {
-        title: "Pomodoro Timer",
-        url: "/pomodoro-timer",
-        description:
-          "Focus timer with customizable sessions, breaks, fullscreen mode, and mini floating window.",
-      },
-      {
         title: "Emoji Picker",
         url: "/emoji-picker",
         description: "Search, browse by category, and copy emoji with recently used history.",
@@ -272,7 +297,40 @@ export const navigationGroups: NavGroup[] = [
         title: "PDF Tools",
         url: "/pdf-tools",
         description:
-          "Merge PDFs, split or extract pages, reorder, rotate and delete pages, and convert images to PDF.",
+          "Merge, split, reorder and rotate PDFs, convert JPG to PDF and PDF to JPG/PNG, and add page numbers or a watermark.",
+      },
+      {
+        title: "Background Remover",
+        url: "/background-remover",
+        description:
+          "Remove image backgrounds with on-device AI. Transparent PNG, solid colour, blurred or custom backgrounds.",
+      },
+      {
+        title: "Image to Text (OCR)",
+        url: "/image-to-text",
+        description: "Extract text from photos, screenshots and scanned PDFs, including Amharic and Tigrinya.",
+      },
+    ],
+  },
+  {
+    title: "Time & Productivity",
+    url: "#",
+    items: [
+      {
+        title: "Timer & Stopwatch",
+        url: "/online-timer",
+        description: "Countdown timer with alarm, stopwatch with laps, and a countdown to any date.",
+      },
+      {
+        title: "Pomodoro Timer",
+        url: "/pomodoro-timer",
+        description:
+          "Focus timer with customizable sessions, breaks, fullscreen mode, and mini floating window.",
+      },
+      {
+        title: "Typing Speed Test",
+        url: "/typing-speed-test",
+        description: "Measure your typing speed (WPM) and accuracy in English or Amharic.",
       },
     ],
   },
@@ -298,6 +356,11 @@ export const navigationGroups: NavGroup[] = [
     title: "Fun",
     url: "#",
     items: [
+      {
+        title: "Random Picker",
+        url: "/random-tools",
+        description: "Spin the wheel of names, flip a coin, roll dice, pick random numbers, or split a list into teams.",
+      },
       {
         title: "ASCII Art Generator",
         url: "/ascii-art-generator",

@@ -1,6 +1,7 @@
 const CATEGORY_STYLES: Record<string, string> = {
   metric: "bg-green-100 text-green-800",
   imperial: "bg-blue-100 text-blue-800",
+  us: "bg-amber-100 text-amber-800",
   nautical: "bg-purple-100 text-purple-800",
   astronomical: "bg-orange-100 text-orange-800",
   scientific: "bg-purple-100 text-purple-800",
