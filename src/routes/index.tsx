@@ -182,8 +182,33 @@ function Index() {
         />
         <FeatureCard
           title="Barcode Generator"
-          description="Generate 1D barcodes (CODE128, EAN, UPC) and 2D barcodes (Data Matrix, PDF417, Aztec Code)."
+          description="Generate 1D barcodes (Code 128, GS1-128, Code 39, EAN, UPC) and 2D barcodes (QR, Data Matrix, GS1, IUID, PDF417)."
           to="/barcode-generator"
+        />
+        <FeatureCard
+          title="QR & Barcode Scanner"
+          description="Scan QR codes and barcodes with your camera or from an image."
+          to="/qr-barcode-scanner"
+        />
+        <FeatureCard
+          title="Image Tools"
+          description="Compress, resize, crop and convert images, or generate favicons."
+          to="/image-tools"
+        />
+        <FeatureCard
+          title="PDF Tools"
+          description="Merge, split, reorder and rotate PDFs, and convert images to PDF."
+          to="/pdf-tools"
+        />
+        <FeatureCard
+          title="Business Card Generator"
+          description="Design a business card with a contact QR code and print it on A4."
+          to="/business-card-generator"
+        />
+        <FeatureCard
+          title="Cron Expression Generator"
+          description="Build cron schedules and see when they run next."
+          to="/cron-expression"
         />
         <FeatureCard
           title="Markdown Editor"

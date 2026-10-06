@@ -20,9 +20,11 @@ import { Route as ShoeSizeConversionRouteImport } from './routes/shoe-size-conve
 import { Route as SalaryCalculationRouteImport } from './routes/salary-calculation'
 import { Route as RegexTesterRouteImport } from './routes/regex-tester'
 import { Route as QrCodeGeneratorRouteImport } from './routes/qr-code-generator'
+import { Route as QrBarcodeScannerRouteImport } from './routes/qr-barcode-scanner'
 import { Route as PrimeNumberCheckerRouteImport } from './routes/prime-number-checker'
 import { Route as PomodoroTimerRouteImport } from './routes/pomodoro-timer'
 import { Route as PhoneNumberParserRouteImport } from './routes/phone-number-parser'
+import { Route as PdfToolsRouteImport } from './routes/pdf-tools'
 import { Route as PayrollGeneratorRouteImport } from './routes/payroll-generator'
 import { Route as PasswordGeneratorRouteImport } from './routes/password-generator'
 import { Route as NumberSumCalculatorRouteImport } from './routes/number-sum-calculator'
@@ -37,15 +39,18 @@ import { Route as JwtDecoderRouteImport } from './routes/jwt-decoder'
 import { Route as JsonValidatorRouteImport } from './routes/json-validator'
 import { Route as InternetSpeedTestRouteImport } from './routes/internet-speed-test'
 import { Route as IntegerBaseConverterRouteImport } from './routes/integer-base-converter'
+import { Route as ImageToolsRouteImport } from './routes/image-tools'
 import { Route as HashGeneratorRouteImport } from './routes/hash-generator'
 import { Route as FakeHackerSimulatorRouteImport } from './routes/fake-hacker-simulator'
 import { Route as EthiopianCalendarRouteImport } from './routes/ethiopian-calendar'
 import { Route as EmojiPickerRouteImport } from './routes/emoji-picker'
 import { Route as DataStorageConversionRouteImport } from './routes/data-storage-conversion'
 import { Route as CurrencyConversionRouteImport } from './routes/currency-conversion'
+import { Route as CronExpressionRouteImport } from './routes/cron-expression'
 import { Route as ColorToolsRouteImport } from './routes/color-tools'
 import { Route as CheatSheetsRouteImport } from './routes/cheat-sheets'
 import { Route as CharacterCounterRouteImport } from './routes/character-counter'
+import { Route as BusinessCardGeneratorRouteImport } from './routes/business-card-generator'
 import { Route as BmiCalculationRouteImport } from './routes/bmi-calculation'
 import { Route as Base64ToolRouteImport } from './routes/base64-tool'
 import { Route as Base64FileConverterRouteImport } from './routes/base64-file-converter'
@@ -110,6 +115,11 @@ const QrCodeGeneratorRoute = QrCodeGeneratorRouteImport.update({
   path: '/qr-code-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QrBarcodeScannerRoute = QrBarcodeScannerRouteImport.update({
+  id: '/qr-barcode-scanner',
+  path: '/qr-barcode-scanner',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrimeNumberCheckerRoute = PrimeNumberCheckerRouteImport.update({
   id: '/prime-number-checker',
   path: '/prime-number-checker',
@@ -123,6 +133,11 @@ const PomodoroTimerRoute = PomodoroTimerRouteImport.update({
 const PhoneNumberParserRoute = PhoneNumberParserRouteImport.update({
   id: '/phone-number-parser',
   path: '/phone-number-parser',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PdfToolsRoute = PdfToolsRouteImport.update({
+  id: '/pdf-tools',
+  path: '/pdf-tools',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PayrollGeneratorRoute = PayrollGeneratorRouteImport.update({
@@ -195,6 +210,11 @@ const IntegerBaseConverterRoute = IntegerBaseConverterRouteImport.update({
   path: '/integer-base-converter',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ImageToolsRoute = ImageToolsRouteImport.update({
+  id: '/image-tools',
+  path: '/image-tools',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HashGeneratorRoute = HashGeneratorRouteImport.update({
   id: '/hash-generator',
   path: '/hash-generator',
@@ -225,6 +245,11 @@ const CurrencyConversionRoute = CurrencyConversionRouteImport.update({
   path: '/currency-conversion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CronExpressionRoute = CronExpressionRouteImport.update({
+  id: '/cron-expression',
+  path: '/cron-expression',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ColorToolsRoute = ColorToolsRouteImport.update({
   id: '/color-tools',
   path: '/color-tools',
@@ -238,6 +263,11 @@ const CheatSheetsRoute = CheatSheetsRouteImport.update({
 const CharacterCounterRoute = CharacterCounterRouteImport.update({
   id: '/character-counter',
   path: '/character-counter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusinessCardGeneratorRoute = BusinessCardGeneratorRouteImport.update({
+  id: '/business-card-generator',
+  path: '/business-card-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BmiCalculationRoute = BmiCalculationRouteImport.update({
@@ -290,15 +320,18 @@ export interface FileRoutesByFullPath {
   '/base64-file-converter': typeof Base64FileConverterRoute
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
+  '/business-card-generator': typeof BusinessCardGeneratorRoute
   '/character-counter': typeof CharacterCounterRoute
   '/cheat-sheets': typeof CheatSheetsRoute
   '/color-tools': typeof ColorToolsRoute
+  '/cron-expression': typeof CronExpressionRoute
   '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/emoji-picker': typeof EmojiPickerRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/hash-generator': typeof HashGeneratorRoute
+  '/image-tools': typeof ImageToolsRoute
   '/integer-base-converter': typeof IntegerBaseConverterRoute
   '/internet-speed-test': typeof InternetSpeedTestRoute
   '/json-validator': typeof JsonValidatorRoute
@@ -313,9 +346,11 @@ export interface FileRoutesByFullPath {
   '/number-sum-calculator': typeof NumberSumCalculatorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
+  '/pdf-tools': typeof PdfToolsRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
   '/pomodoro-timer': typeof PomodoroTimerRoute
   '/prime-number-checker': typeof PrimeNumberCheckerRoute
+  '/qr-barcode-scanner': typeof QrBarcodeScannerRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
   '/regex-tester': typeof RegexTesterRoute
   '/salary-calculation': typeof SalaryCalculationRoute
@@ -337,15 +372,18 @@ export interface FileRoutesByTo {
   '/base64-file-converter': typeof Base64FileConverterRoute
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
+  '/business-card-generator': typeof BusinessCardGeneratorRoute
   '/character-counter': typeof CharacterCounterRoute
   '/cheat-sheets': typeof CheatSheetsRoute
   '/color-tools': typeof ColorToolsRoute
+  '/cron-expression': typeof CronExpressionRoute
   '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/emoji-picker': typeof EmojiPickerRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/hash-generator': typeof HashGeneratorRoute
+  '/image-tools': typeof ImageToolsRoute
   '/integer-base-converter': typeof IntegerBaseConverterRoute
   '/internet-speed-test': typeof InternetSpeedTestRoute
   '/json-validator': typeof JsonValidatorRoute
@@ -360,9 +398,11 @@ export interface FileRoutesByTo {
   '/number-sum-calculator': typeof NumberSumCalculatorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
+  '/pdf-tools': typeof PdfToolsRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
   '/pomodoro-timer': typeof PomodoroTimerRoute
   '/prime-number-checker': typeof PrimeNumberCheckerRoute
+  '/qr-barcode-scanner': typeof QrBarcodeScannerRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
   '/regex-tester': typeof RegexTesterRoute
   '/salary-calculation': typeof SalaryCalculationRoute
@@ -385,15 +425,18 @@ export interface FileRoutesById {
   '/base64-file-converter': typeof Base64FileConverterRoute
   '/base64-tool': typeof Base64ToolRoute
   '/bmi-calculation': typeof BmiCalculationRoute
+  '/business-card-generator': typeof BusinessCardGeneratorRoute
   '/character-counter': typeof CharacterCounterRoute
   '/cheat-sheets': typeof CheatSheetsRoute
   '/color-tools': typeof ColorToolsRoute
+  '/cron-expression': typeof CronExpressionRoute
   '/currency-conversion': typeof CurrencyConversionRoute
   '/data-storage-conversion': typeof DataStorageConversionRoute
   '/emoji-picker': typeof EmojiPickerRoute
   '/ethiopian-calendar': typeof EthiopianCalendarRoute
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/hash-generator': typeof HashGeneratorRoute
+  '/image-tools': typeof ImageToolsRoute
   '/integer-base-converter': typeof IntegerBaseConverterRoute
   '/internet-speed-test': typeof InternetSpeedTestRoute
   '/json-validator': typeof JsonValidatorRoute
@@ -408,9 +451,11 @@ export interface FileRoutesById {
   '/number-sum-calculator': typeof NumberSumCalculatorRoute
   '/password-generator': typeof PasswordGeneratorRoute
   '/payroll-generator': typeof PayrollGeneratorRoute
+  '/pdf-tools': typeof PdfToolsRoute
   '/phone-number-parser': typeof PhoneNumberParserRoute
   '/pomodoro-timer': typeof PomodoroTimerRoute
   '/prime-number-checker': typeof PrimeNumberCheckerRoute
+  '/qr-barcode-scanner': typeof QrBarcodeScannerRoute
   '/qr-code-generator': typeof QrCodeGeneratorRoute
   '/regex-tester': typeof RegexTesterRoute
   '/salary-calculation': typeof SalaryCalculationRoute
@@ -434,15 +479,18 @@ export interface FileRouteTypes {
     | '/base64-file-converter'
     | '/base64-tool'
     | '/bmi-calculation'
+    | '/business-card-generator'
     | '/character-counter'
     | '/cheat-sheets'
     | '/color-tools'
+    | '/cron-expression'
     | '/currency-conversion'
     | '/data-storage-conversion'
     | '/emoji-picker'
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
     | '/hash-generator'
+    | '/image-tools'
     | '/integer-base-converter'
     | '/internet-speed-test'
     | '/json-validator'
@@ -457,9 +505,11 @@ export interface FileRouteTypes {
     | '/number-sum-calculator'
     | '/password-generator'
     | '/payroll-generator'
+    | '/pdf-tools'
     | '/phone-number-parser'
     | '/pomodoro-timer'
     | '/prime-number-checker'
+    | '/qr-barcode-scanner'
     | '/qr-code-generator'
     | '/regex-tester'
     | '/salary-calculation'
@@ -481,15 +531,18 @@ export interface FileRouteTypes {
     | '/base64-file-converter'
     | '/base64-tool'
     | '/bmi-calculation'
+    | '/business-card-generator'
     | '/character-counter'
     | '/cheat-sheets'
     | '/color-tools'
+    | '/cron-expression'
     | '/currency-conversion'
     | '/data-storage-conversion'
     | '/emoji-picker'
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
     | '/hash-generator'
+    | '/image-tools'
     | '/integer-base-converter'
     | '/internet-speed-test'
     | '/json-validator'
@@ -504,9 +557,11 @@ export interface FileRouteTypes {
     | '/number-sum-calculator'
     | '/password-generator'
     | '/payroll-generator'
+    | '/pdf-tools'
     | '/phone-number-parser'
     | '/pomodoro-timer'
     | '/prime-number-checker'
+    | '/qr-barcode-scanner'
     | '/qr-code-generator'
     | '/regex-tester'
     | '/salary-calculation'
@@ -528,15 +583,18 @@ export interface FileRouteTypes {
     | '/base64-file-converter'
     | '/base64-tool'
     | '/bmi-calculation'
+    | '/business-card-generator'
     | '/character-counter'
     | '/cheat-sheets'
     | '/color-tools'
+    | '/cron-expression'
     | '/currency-conversion'
     | '/data-storage-conversion'
     | '/emoji-picker'
     | '/ethiopian-calendar'
     | '/fake-hacker-simulator'
     | '/hash-generator'
+    | '/image-tools'
     | '/integer-base-converter'
     | '/internet-speed-test'
     | '/json-validator'
@@ -551,9 +609,11 @@ export interface FileRouteTypes {
     | '/number-sum-calculator'
     | '/password-generator'
     | '/payroll-generator'
+    | '/pdf-tools'
     | '/phone-number-parser'
     | '/pomodoro-timer'
     | '/prime-number-checker'
+    | '/qr-barcode-scanner'
     | '/qr-code-generator'
     | '/regex-tester'
     | '/salary-calculation'
@@ -576,15 +636,18 @@ export interface RootRouteChildren {
   Base64FileConverterRoute: typeof Base64FileConverterRoute
   Base64ToolRoute: typeof Base64ToolRoute
   BmiCalculationRoute: typeof BmiCalculationRoute
+  BusinessCardGeneratorRoute: typeof BusinessCardGeneratorRoute
   CharacterCounterRoute: typeof CharacterCounterRoute
   CheatSheetsRoute: typeof CheatSheetsRoute
   ColorToolsRoute: typeof ColorToolsRoute
+  CronExpressionRoute: typeof CronExpressionRoute
   CurrencyConversionRoute: typeof CurrencyConversionRoute
   DataStorageConversionRoute: typeof DataStorageConversionRoute
   EmojiPickerRoute: typeof EmojiPickerRoute
   EthiopianCalendarRoute: typeof EthiopianCalendarRoute
   FakeHackerSimulatorRoute: typeof FakeHackerSimulatorRoute
   HashGeneratorRoute: typeof HashGeneratorRoute
+  ImageToolsRoute: typeof ImageToolsRoute
   IntegerBaseConverterRoute: typeof IntegerBaseConverterRoute
   InternetSpeedTestRoute: typeof InternetSpeedTestRoute
   JsonValidatorRoute: typeof JsonValidatorRoute
@@ -599,9 +662,11 @@ export interface RootRouteChildren {
   NumberSumCalculatorRoute: typeof NumberSumCalculatorRoute
   PasswordGeneratorRoute: typeof PasswordGeneratorRoute
   PayrollGeneratorRoute: typeof PayrollGeneratorRoute
+  PdfToolsRoute: typeof PdfToolsRoute
   PhoneNumberParserRoute: typeof PhoneNumberParserRoute
   PomodoroTimerRoute: typeof PomodoroTimerRoute
   PrimeNumberCheckerRoute: typeof PrimeNumberCheckerRoute
+  QrBarcodeScannerRoute: typeof QrBarcodeScannerRoute
   QrCodeGeneratorRoute: typeof QrCodeGeneratorRoute
   RegexTesterRoute: typeof RegexTesterRoute
   SalaryCalculationRoute: typeof SalaryCalculationRoute
@@ -694,6 +759,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QrCodeGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/qr-barcode-scanner': {
+      id: '/qr-barcode-scanner'
+      path: '/qr-barcode-scanner'
+      fullPath: '/qr-barcode-scanner'
+      preLoaderRoute: typeof QrBarcodeScannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/prime-number-checker': {
       id: '/prime-number-checker'
       path: '/prime-number-checker'
@@ -713,6 +785,13 @@ declare module '@tanstack/react-router' {
       path: '/phone-number-parser'
       fullPath: '/phone-number-parser'
       preLoaderRoute: typeof PhoneNumberParserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pdf-tools': {
+      id: '/pdf-tools'
+      path: '/pdf-tools'
+      fullPath: '/pdf-tools'
+      preLoaderRoute: typeof PdfToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/payroll-generator': {
@@ -813,6 +892,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IntegerBaseConverterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/image-tools': {
+      id: '/image-tools'
+      path: '/image-tools'
+      fullPath: '/image-tools'
+      preLoaderRoute: typeof ImageToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hash-generator': {
       id: '/hash-generator'
       path: '/hash-generator'
@@ -855,6 +941,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CurrencyConversionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cron-expression': {
+      id: '/cron-expression'
+      path: '/cron-expression'
+      fullPath: '/cron-expression'
+      preLoaderRoute: typeof CronExpressionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/color-tools': {
       id: '/color-tools'
       path: '/color-tools'
@@ -874,6 +967,13 @@ declare module '@tanstack/react-router' {
       path: '/character-counter'
       fullPath: '/character-counter'
       preLoaderRoute: typeof CharacterCounterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/business-card-generator': {
+      id: '/business-card-generator'
+      path: '/business-card-generator'
+      fullPath: '/business-card-generator'
+      preLoaderRoute: typeof BusinessCardGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bmi-calculation': {
@@ -944,15 +1044,18 @@ const rootRouteChildren: RootRouteChildren = {
   Base64FileConverterRoute: Base64FileConverterRoute,
   Base64ToolRoute: Base64ToolRoute,
   BmiCalculationRoute: BmiCalculationRoute,
+  BusinessCardGeneratorRoute: BusinessCardGeneratorRoute,
   CharacterCounterRoute: CharacterCounterRoute,
   CheatSheetsRoute: CheatSheetsRoute,
   ColorToolsRoute: ColorToolsRoute,
+  CronExpressionRoute: CronExpressionRoute,
   CurrencyConversionRoute: CurrencyConversionRoute,
   DataStorageConversionRoute: DataStorageConversionRoute,
   EmojiPickerRoute: EmojiPickerRoute,
   EthiopianCalendarRoute: EthiopianCalendarRoute,
   FakeHackerSimulatorRoute: FakeHackerSimulatorRoute,
   HashGeneratorRoute: HashGeneratorRoute,
+  ImageToolsRoute: ImageToolsRoute,
   IntegerBaseConverterRoute: IntegerBaseConverterRoute,
   InternetSpeedTestRoute: InternetSpeedTestRoute,
   JsonValidatorRoute: JsonValidatorRoute,
@@ -967,9 +1070,11 @@ const rootRouteChildren: RootRouteChildren = {
   NumberSumCalculatorRoute: NumberSumCalculatorRoute,
   PasswordGeneratorRoute: PasswordGeneratorRoute,
   PayrollGeneratorRoute: PayrollGeneratorRoute,
+  PdfToolsRoute: PdfToolsRoute,
   PhoneNumberParserRoute: PhoneNumberParserRoute,
   PomodoroTimerRoute: PomodoroTimerRoute,
   PrimeNumberCheckerRoute: PrimeNumberCheckerRoute,
+  QrBarcodeScannerRoute: QrBarcodeScannerRoute,
   QrCodeGeneratorRoute: QrCodeGeneratorRoute,
   RegexTesterRoute: RegexTesterRoute,
   SalaryCalculationRoute: SalaryCalculationRoute,

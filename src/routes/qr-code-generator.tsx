@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useSEO } from "@/hooks/use-seo";
 import { cn } from "@/lib/utils";
+import { buildVCard } from "@/lib/vcard";
 
 export const Route = createFileRoute("/qr-code-generator")({
   component: RouteComponent,
@@ -630,36 +631,6 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 // Helpers
 function escapeQr(v: string) {
   return v.replace(/([\\;,:"])/g, "\\$1");
-}
-
-function buildVCard(v: {
-  firstName: string;
-  lastName: string;
-  organization: string;
-  title: string;
-  phone: string;
-  email: string;
-  website: string;
-  address: string;
-  note: string;
-}) {
-  const lines = [
-    "BEGIN:VCARD",
-    "VERSION:3.0",
-    `N:${v.lastName};${v.firstName};;;`,
-    `FN:${[v.firstName, v.lastName].filter(Boolean).join(" ")}`,
-    v.organization ? `ORG:${v.organization}` : "",
-    v.title ? `TITLE:${v.title}` : "",
-    v.phone ? `TEL;TYPE=CELL:${v.phone}` : "",
-    v.email ? `EMAIL;TYPE=INTERNET:${v.email}` : "",
-    v.website ? `URL:${v.website}` : "",
-    v.address ? `ADR;TYPE=HOME:;;${v.address};;;;` : "",
-    v.note ? `NOTE:${v.note.replace(/\r?\n/g, "\\n")}` : "",
-    "END:VCARD",
-  ]
-    .filter(Boolean)
-    .join("\n");
-  return lines;
 }
 
 function QRPreview(
