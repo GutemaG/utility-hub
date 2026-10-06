@@ -17,6 +17,10 @@ export default defineConfig({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       includeAssets: ['logo.png', 'apple-touch-icon.png'],
+      workbox: {
+        // onnxruntime's 27 MB wasm (background remover) is emitted by the bundler but loaded on demand, so don't precache it
+        globIgnores: ['**/node_modules/**/*', '**/ort-wasm*'],
+      },
       manifest: {
         name: 'Utility Hub',
         short_name: 'UtilityHub',

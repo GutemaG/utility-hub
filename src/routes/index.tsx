@@ -78,6 +78,21 @@ function Index() {
       <h2 className="text-xl font-semibold mb-4 mt-8">🧮 Calculations</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <FeatureCard
+          title="Calculator"
+          description="Scientific calculator with live results and history."
+          to="/calculator"
+        />
+        <FeatureCard
+          title="Percentage Calculator"
+          description="Percent of, percentage change, increase/decrease, discount and VAT."
+          to="/percentage-calculator"
+        />
+        <FeatureCard
+          title="Grade & GPA Calculator"
+          description="GPA and CGPA (Ethiopian and US scales), weighted grades, and what you need on the final."
+          to="/grade-calculator"
+        />
+        <FeatureCard
           title="Salary Calculator"
           description="Estimate income or sales tax based on region or custom rates (Ethiopia only)."
           to="/salary-calculation"
@@ -96,6 +111,16 @@ function Index() {
           title="Loan Calculator"
           description="Calculate monthly payment, total interest, and amortization schedule."
           to="/loan-calculator"
+        />
+        <FeatureCard
+          title="Compound Interest Calculator"
+          description="Savings growth with monthly deposits, APY and a yearly breakdown."
+          to="/compound-interest-calculator"
+        />
+        <FeatureCard
+          title="Calorie Calculator"
+          description="Daily calories to lose, maintain or gain weight, with BMR, TDEE and macros."
+          to="/calorie-calculator"
         />
       </div>
 
@@ -122,6 +147,11 @@ function Index() {
           to="/weight-conversion"
         />
         <FeatureCard
+          title="Volume"
+          description="ml to oz, litres to gallons, cups, tablespoons, teaspoons."
+          to="/volume-conversion"
+        />
+        <FeatureCard
           title="Area"
           description="Square meters, feet, acres, hectares, square miles, etc."
           to="/area-conversion"
@@ -145,6 +175,54 @@ function Index() {
           title="Age & Date Converters"
           description="Exact age, date difference, add/subtract days."
           to="/age-and-date-convertors"
+        />
+      </div>
+
+      <h2 className="text-xl font-semibold mb-4">🖼️ Files &amp; Media</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <FeatureCard
+          title="Background Remover"
+          description="Remove image backgrounds with on-device AI, no upload."
+          to="/background-remover"
+        />
+        <FeatureCard
+          title="Image to Text (OCR)"
+          description="Extract text from photos, screenshots and scanned PDFs, including Amharic."
+          to="/image-to-text"
+        />
+        <FeatureCard
+          title="Image Tools"
+          description="Compress, resize, crop and convert images, or generate favicons."
+          to="/image-tools"
+        />
+        <FeatureCard
+          title="PDF Tools"
+          description="Merge, split, convert JPG ↔ PDF, add page numbers or a watermark."
+          to="/pdf-tools"
+        />
+      </div>
+
+      <h2 className="text-xl font-semibold mb-4">⏱️ Time &amp; Productivity</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <FeatureCard
+          title="Timer & Stopwatch"
+          description="Countdown timer with alarm, stopwatch with laps, countdown to a date."
+          to="/online-timer"
+        />
+        <FeatureCard
+          title="Pomodoro Timer"
+          description="Focus sessions and breaks with fullscreen and a mini window."
+          to="/pomodoro-timer"
+        />
+        <FeatureCard
+          title="Typing Speed Test"
+          description="Check your words per minute and accuracy in English or Amharic."
+          to="/typing-speed-test"
+        />
+        <FeatureCard
+          title="Random Picker"
+          description="Spin the wheel, flip a coin, roll dice, random numbers and teams."
+          to="/random-tools"
         />
       </div>
 
@@ -189,16 +267,6 @@ function Index() {
           title="QR & Barcode Scanner"
           description="Scan QR codes and barcodes with your camera or from an image."
           to="/qr-barcode-scanner"
-        />
-        <FeatureCard
-          title="Image Tools"
-          description="Compress, resize, crop and convert images, or generate favicons."
-          to="/image-tools"
-        />
-        <FeatureCard
-          title="PDF Tools"
-          description="Merge, split, reorder and rotate PDFs, and convert images to PDF."
-          to="/pdf-tools"
         />
         <FeatureCard
           title="Business Card Generator"
