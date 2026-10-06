@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WeightConversionRouteImport } from './routes/weight-conversion'
 import { Route as VolumeConversionRouteImport } from './routes/volume-conversion'
+import { Route as VideoToolsRouteImport } from './routes/video-tools'
 import { Route as UuidGeneratorRouteImport } from './routes/uuid-generator'
 import { Route as UrlEncoderRouteImport } from './routes/url-encoder'
 import { Route as UnixTimestampRouteImport } from './routes/unix-timestamp'
@@ -46,6 +47,7 @@ import { Route as InternetSpeedTestRouteImport } from './routes/internet-speed-t
 import { Route as IntegerBaseConverterRouteImport } from './routes/integer-base-converter'
 import { Route as ImageToolsRouteImport } from './routes/image-tools'
 import { Route as ImageToTextRouteImport } from './routes/image-to-text'
+import { Route as HeicToJpgRouteImport } from './routes/heic-to-jpg'
 import { Route as HashGeneratorRouteImport } from './routes/hash-generator'
 import { Route as GradeCalculatorRouteImport } from './routes/grade-calculator'
 import { Route as FakeHackerSimulatorRouteImport } from './routes/fake-hacker-simulator'
@@ -68,6 +70,7 @@ import { Route as BarcodeGeneratorRouteImport } from './routes/barcode-generator
 import { Route as BackgroundRemoverRouteImport } from './routes/background-remover'
 import { Route as AsciiArtGeneratorRouteImport } from './routes/ascii-art-generator'
 import { Route as AreaConversionRouteImport } from './routes/area-conversion'
+import { Route as AppIconGeneratorRouteImport } from './routes/app-icon-generator'
 import { Route as AgeAndDateConvertorsRouteImport } from './routes/age-and-date-convertors'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -79,6 +82,11 @@ const WeightConversionRoute = WeightConversionRouteImport.update({
 const VolumeConversionRoute = VolumeConversionRouteImport.update({
   id: '/volume-conversion',
   path: '/volume-conversion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VideoToolsRoute = VideoToolsRouteImport.update({
+  id: '/video-tools',
+  path: '/video-tools',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UuidGeneratorRoute = UuidGeneratorRouteImport.update({
@@ -256,6 +264,11 @@ const ImageToTextRoute = ImageToTextRouteImport.update({
   path: '/image-to-text',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HeicToJpgRoute = HeicToJpgRouteImport.update({
+  id: '/heic-to-jpg',
+  path: '/heic-to-jpg',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HashGeneratorRoute = HashGeneratorRouteImport.update({
   id: '/hash-generator',
   path: '/hash-generator',
@@ -367,6 +380,11 @@ const AreaConversionRoute = AreaConversionRouteImport.update({
   path: '/area-conversion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIconGeneratorRoute = AppIconGeneratorRouteImport.update({
+  id: '/app-icon-generator',
+  path: '/app-icon-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AgeAndDateConvertorsRoute = AgeAndDateConvertorsRouteImport.update({
   id: '/age-and-date-convertors',
   path: '/age-and-date-convertors',
@@ -381,6 +399,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/age-and-date-convertors': typeof AgeAndDateConvertorsRoute
+  '/app-icon-generator': typeof AppIconGeneratorRoute
   '/area-conversion': typeof AreaConversionRoute
   '/ascii-art-generator': typeof AsciiArtGeneratorRoute
   '/background-remover': typeof BackgroundRemoverRoute
@@ -403,6 +422,7 @@ export interface FileRoutesByFullPath {
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/grade-calculator': typeof GradeCalculatorRoute
   '/hash-generator': typeof HashGeneratorRoute
+  '/heic-to-jpg': typeof HeicToJpgRoute
   '/image-to-text': typeof ImageToTextRoute
   '/image-tools': typeof ImageToolsRoute
   '/integer-base-converter': typeof IntegerBaseConverterRoute
@@ -438,12 +458,14 @@ export interface FileRoutesByFullPath {
   '/unix-timestamp': typeof UnixTimestampRoute
   '/url-encoder': typeof UrlEncoderRoute
   '/uuid-generator': typeof UuidGeneratorRoute
+  '/video-tools': typeof VideoToolsRoute
   '/volume-conversion': typeof VolumeConversionRoute
   '/weight-conversion': typeof WeightConversionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/age-and-date-convertors': typeof AgeAndDateConvertorsRoute
+  '/app-icon-generator': typeof AppIconGeneratorRoute
   '/area-conversion': typeof AreaConversionRoute
   '/ascii-art-generator': typeof AsciiArtGeneratorRoute
   '/background-remover': typeof BackgroundRemoverRoute
@@ -466,6 +488,7 @@ export interface FileRoutesByTo {
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/grade-calculator': typeof GradeCalculatorRoute
   '/hash-generator': typeof HashGeneratorRoute
+  '/heic-to-jpg': typeof HeicToJpgRoute
   '/image-to-text': typeof ImageToTextRoute
   '/image-tools': typeof ImageToolsRoute
   '/integer-base-converter': typeof IntegerBaseConverterRoute
@@ -501,6 +524,7 @@ export interface FileRoutesByTo {
   '/unix-timestamp': typeof UnixTimestampRoute
   '/url-encoder': typeof UrlEncoderRoute
   '/uuid-generator': typeof UuidGeneratorRoute
+  '/video-tools': typeof VideoToolsRoute
   '/volume-conversion': typeof VolumeConversionRoute
   '/weight-conversion': typeof WeightConversionRoute
 }
@@ -508,6 +532,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/age-and-date-convertors': typeof AgeAndDateConvertorsRoute
+  '/app-icon-generator': typeof AppIconGeneratorRoute
   '/area-conversion': typeof AreaConversionRoute
   '/ascii-art-generator': typeof AsciiArtGeneratorRoute
   '/background-remover': typeof BackgroundRemoverRoute
@@ -530,6 +555,7 @@ export interface FileRoutesById {
   '/fake-hacker-simulator': typeof FakeHackerSimulatorRoute
   '/grade-calculator': typeof GradeCalculatorRoute
   '/hash-generator': typeof HashGeneratorRoute
+  '/heic-to-jpg': typeof HeicToJpgRoute
   '/image-to-text': typeof ImageToTextRoute
   '/image-tools': typeof ImageToolsRoute
   '/integer-base-converter': typeof IntegerBaseConverterRoute
@@ -565,6 +591,7 @@ export interface FileRoutesById {
   '/unix-timestamp': typeof UnixTimestampRoute
   '/url-encoder': typeof UrlEncoderRoute
   '/uuid-generator': typeof UuidGeneratorRoute
+  '/video-tools': typeof VideoToolsRoute
   '/volume-conversion': typeof VolumeConversionRoute
   '/weight-conversion': typeof WeightConversionRoute
 }
@@ -573,6 +600,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/age-and-date-convertors'
+    | '/app-icon-generator'
     | '/area-conversion'
     | '/ascii-art-generator'
     | '/background-remover'
@@ -595,6 +623,7 @@ export interface FileRouteTypes {
     | '/fake-hacker-simulator'
     | '/grade-calculator'
     | '/hash-generator'
+    | '/heic-to-jpg'
     | '/image-to-text'
     | '/image-tools'
     | '/integer-base-converter'
@@ -630,12 +659,14 @@ export interface FileRouteTypes {
     | '/unix-timestamp'
     | '/url-encoder'
     | '/uuid-generator'
+    | '/video-tools'
     | '/volume-conversion'
     | '/weight-conversion'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/age-and-date-convertors'
+    | '/app-icon-generator'
     | '/area-conversion'
     | '/ascii-art-generator'
     | '/background-remover'
@@ -658,6 +689,7 @@ export interface FileRouteTypes {
     | '/fake-hacker-simulator'
     | '/grade-calculator'
     | '/hash-generator'
+    | '/heic-to-jpg'
     | '/image-to-text'
     | '/image-tools'
     | '/integer-base-converter'
@@ -693,12 +725,14 @@ export interface FileRouteTypes {
     | '/unix-timestamp'
     | '/url-encoder'
     | '/uuid-generator'
+    | '/video-tools'
     | '/volume-conversion'
     | '/weight-conversion'
   id:
     | '__root__'
     | '/'
     | '/age-and-date-convertors'
+    | '/app-icon-generator'
     | '/area-conversion'
     | '/ascii-art-generator'
     | '/background-remover'
@@ -721,6 +755,7 @@ export interface FileRouteTypes {
     | '/fake-hacker-simulator'
     | '/grade-calculator'
     | '/hash-generator'
+    | '/heic-to-jpg'
     | '/image-to-text'
     | '/image-tools'
     | '/integer-base-converter'
@@ -756,6 +791,7 @@ export interface FileRouteTypes {
     | '/unix-timestamp'
     | '/url-encoder'
     | '/uuid-generator'
+    | '/video-tools'
     | '/volume-conversion'
     | '/weight-conversion'
   fileRoutesById: FileRoutesById
@@ -763,6 +799,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AgeAndDateConvertorsRoute: typeof AgeAndDateConvertorsRoute
+  AppIconGeneratorRoute: typeof AppIconGeneratorRoute
   AreaConversionRoute: typeof AreaConversionRoute
   AsciiArtGeneratorRoute: typeof AsciiArtGeneratorRoute
   BackgroundRemoverRoute: typeof BackgroundRemoverRoute
@@ -785,6 +822,7 @@ export interface RootRouteChildren {
   FakeHackerSimulatorRoute: typeof FakeHackerSimulatorRoute
   GradeCalculatorRoute: typeof GradeCalculatorRoute
   HashGeneratorRoute: typeof HashGeneratorRoute
+  HeicToJpgRoute: typeof HeicToJpgRoute
   ImageToTextRoute: typeof ImageToTextRoute
   ImageToolsRoute: typeof ImageToolsRoute
   IntegerBaseConverterRoute: typeof IntegerBaseConverterRoute
@@ -820,6 +858,7 @@ export interface RootRouteChildren {
   UnixTimestampRoute: typeof UnixTimestampRoute
   UrlEncoderRoute: typeof UrlEncoderRoute
   UuidGeneratorRoute: typeof UuidGeneratorRoute
+  VideoToolsRoute: typeof VideoToolsRoute
   VolumeConversionRoute: typeof VolumeConversionRoute
   WeightConversionRoute: typeof WeightConversionRoute
 }
@@ -838,6 +877,13 @@ declare module '@tanstack/react-router' {
       path: '/volume-conversion'
       fullPath: '/volume-conversion'
       preLoaderRoute: typeof VolumeConversionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/video-tools': {
+      id: '/video-tools'
+      path: '/video-tools'
+      fullPath: '/video-tools'
+      preLoaderRoute: typeof VideoToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/uuid-generator': {
@@ -1085,6 +1131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ImageToTextRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/heic-to-jpg': {
+      id: '/heic-to-jpg'
+      path: '/heic-to-jpg'
+      fullPath: '/heic-to-jpg'
+      preLoaderRoute: typeof HeicToJpgRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hash-generator': {
       id: '/hash-generator'
       path: '/hash-generator'
@@ -1239,6 +1292,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AreaConversionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app-icon-generator': {
+      id: '/app-icon-generator'
+      path: '/app-icon-generator'
+      fullPath: '/app-icon-generator'
+      preLoaderRoute: typeof AppIconGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/age-and-date-convertors': {
       id: '/age-and-date-convertors'
       path: '/age-and-date-convertors'
@@ -1259,6 +1319,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgeAndDateConvertorsRoute: AgeAndDateConvertorsRoute,
+  AppIconGeneratorRoute: AppIconGeneratorRoute,
   AreaConversionRoute: AreaConversionRoute,
   AsciiArtGeneratorRoute: AsciiArtGeneratorRoute,
   BackgroundRemoverRoute: BackgroundRemoverRoute,
@@ -1281,6 +1342,7 @@ const rootRouteChildren: RootRouteChildren = {
   FakeHackerSimulatorRoute: FakeHackerSimulatorRoute,
   GradeCalculatorRoute: GradeCalculatorRoute,
   HashGeneratorRoute: HashGeneratorRoute,
+  HeicToJpgRoute: HeicToJpgRoute,
   ImageToTextRoute: ImageToTextRoute,
   ImageToolsRoute: ImageToolsRoute,
   IntegerBaseConverterRoute: IntegerBaseConverterRoute,
@@ -1316,6 +1378,7 @@ const rootRouteChildren: RootRouteChildren = {
   UnixTimestampRoute: UnixTimestampRoute,
   UrlEncoderRoute: UrlEncoderRoute,
   UuidGeneratorRoute: UuidGeneratorRoute,
+  VideoToolsRoute: VideoToolsRoute,
   VolumeConversionRoute: VolumeConversionRoute,
   WeightConversionRoute: WeightConversionRoute,
 }

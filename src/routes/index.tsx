@@ -192,13 +192,28 @@ function Index() {
         />
         <FeatureCard
           title="Image Tools"
-          description="Compress, resize, crop and convert images, or generate favicons."
+          description="Compress, resize, crop and convert images to JPG, PNG or WebP."
           to="/image-tools"
         />
         <FeatureCard
           title="PDF Tools"
-          description="Merge, split, convert JPG ↔ PDF, add page numbers or a watermark."
+          description="Merge, compress, split, convert JPG ↔ PDF, add page numbers or a watermark."
           to="/pdf-tools"
+        />
+        <FeatureCard
+          title="Video & Audio Tools"
+          description="Video to MP3, compress video, trim, make GIFs and convert MOV/MKV to MP4."
+          to="/video-tools"
+        />
+        <FeatureCard
+          title="HEIC to JPG"
+          description="Convert iPhone HEIC photos to JPG, PNG or WebP in bulk."
+          to="/heic-to-jpg"
+        />
+        <FeatureCard
+          title="App Icon & Favicon Generator"
+          description="One logo → favicon.ico, PWA, iOS AppIcon and Android mipmap icons."
+          to="/app-icon-generator"
         />
       </div>
 
