@@ -11,6 +11,7 @@ import { useSEO } from "@/hooks/use-seo";
 import { baseName, downloadBytes, downloadZip, formatBytes } from "@/lib/files";
 import { loadPdfJs, renderPdfPages } from "@/lib/pdfjs";
 import { cn } from "@/lib/utils";
+import type { CompressLevel } from "@/lib/pdf-compress";
 
 export const Route = createFileRoute("/pdf-tools")({
   component: RouteComponent,
@@ -19,10 +20,11 @@ export const Route = createFileRoute("/pdf-tools")({
 // pdf-lib edits PDFs; pdf.js only draws page thumbnails. Both load on first use.
 const loadPdfLib = () => import("pdf-lib");
 
-type Tab = "merge" | "organize" | "images" | "toimages" | "stamp";
+type Tab = "merge" | "compress" | "organize" | "images" | "toimages" | "stamp";
 
 const TABS: { key: Tab; label: string }[] = [
   { key: "merge", label: "Merge" },
+  { key: "compress", label: "Compress" },
   { key: "organize", label: "Organize & Split" },
   { key: "images", label: "Images → PDF" },
   { key: "toimages", label: "PDF → JPG/PNG" },
@@ -35,14 +37,15 @@ function RouteComponent() {
   const [tab, setTab] = useState<Tab>("merge");
 
   useSEO({
-    title: "PDF Tools: Merge, Split, PDF to JPG, JPG to PDF, Page Numbers & Watermark | Utility Hub",
+    title: "PDF Tools: Merge, Compress, Split, PDF to JPG, JPG to PDF, Page Numbers & Watermark | Utility Hub",
     description:
-      "Merge PDFs, split or extract pages, reorder, rotate and delete pages, convert JPG/PNG to PDF and PDF to JPG/PNG, and add page numbers or a watermark. Free and private: files are processed in your browser and never uploaded.",
+      "Merge and compress PDFs, split or extract pages, reorder, rotate and delete pages, convert JPG/PNG to PDF and PDF to JPG/PNG, and add page numbers or a watermark. Free and private: files are processed in your browser and never uploaded.",
     path: "/pdf-tools",
-    keywords: "merge pdf, split pdf, extract pdf pages, rotate pdf, reorder pdf pages, delete pdf pages, jpg to pdf, images to pdf, pdf to jpg, pdf to png, add page numbers to pdf, watermark pdf",
+    keywords: "merge pdf, compress pdf, reduce pdf size, split pdf, extract pdf pages, rotate pdf, reorder pdf pages, delete pdf pages, jpg to pdf, images to pdf, pdf to jpg, pdf to png, add page numbers to pdf, watermark pdf",
     applicationCategory: "BusinessApplication",
     featureList: [
       "Merge PDFs and images into one PDF",
+      "Compress PDFs by shrinking images, keeping text selectable",
       "Reorder, rotate and delete pages with thumbnails",
       "Extract selected pages or split by ranges or every N pages",
       "Convert images to PDF with page size and margins",
@@ -57,7 +60,7 @@ function RouteComponent() {
       <div className="text-center">
         <h1 className="mb-2 text-3xl font-bold text-foreground sm:text-4xl">PDF Tools</h1>
         <p className="text-muted-foreground">
-          Merge, split, reorder, rotate, convert and stamp PDFs. Your files stay on your device.
+          Merge, compress, split, reorder, rotate, convert and stamp PDFs. Your files stay on your device.
         </p>
       </div>
 
@@ -77,6 +80,7 @@ function RouteComponent() {
       </div>
 
       {tab === "merge" && <MergeTool />}
+      {tab === "compress" && <CompressTool />}
       {tab === "organize" && <OrganizeTool />}
       {tab === "images" && <ImagesToPdfTool />}
       {tab === "toimages" && <PdfToImagesTool />}
@@ -170,6 +174,153 @@ function MergeTool() {
             </Button>
           </div>
         </>
+      ) : null}
+      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+    </Panel>
+  );
+}
+
+// ---------------- Compress ----------------
+
+type CompressMode = "images" | "scan";
+
+const COMPRESS_LEVELS: { key: CompressLevel; label: string; desc: string }[] = [
+  { key: "low", label: "Light", desc: "Best quality" },
+  { key: "medium", label: "Recommended", desc: "Good quality, smaller" },
+  { key: "high", label: "Strong", desc: "Smallest, lower quality" },
+];
+
+const COMPRESS_MODES: { key: CompressMode; title: string; desc: string }[] = [
+  { key: "images", title: "Normal PDF (keeps text)", desc: "Shrinks the pictures inside. Text stays sharp, selectable and searchable." },
+  { key: "scan", title: "Scanned / photo PDF", desc: "Re-saves every page as a picture. Smallest file, but text can no longer be selected." },
+];
+
+function CompressTool() {
+  const [file, setFile] = useState<File | null>(null);
+  const [mode, setMode] = useState<CompressMode>("images");
+  const [level, setLevel] = useState<CompressLevel>("medium");
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+  const [result, setResult] = useState<{ bytes: Uint8Array; note?: string } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const compress = async () => {
+    if (!file) return;
+    setError(null);
+    setResult(null);
+    setProgress({ done: 0, total: 0 });
+    try {
+      const { compressPdfImages, compressPdfAsImages } = await import("@/lib/pdf-compress");
+      const onProgress = (done: number, total: number) => setProgress({ done, total });
+      if (mode === "images") {
+        const out = await compressPdfImages(new Uint8Array(await file.arrayBuffer()), level, onProgress);
+        setResult({
+          bytes: out.bytes,
+          note: out.images === 0 ? "This PDF has no pictures to shrink. Try “Scanned / photo PDF” for a smaller file." : undefined,
+        });
+      } else {
+        setResult({ bytes: await compressPdfAsImages(file, level, onProgress) });
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "";
+      setError(/encrypt|password/i.test(msg) ? "This PDF is password-protected. Remove the password first." : msg || "Could not compress this PDF.");
+    } finally {
+      setProgress(null);
+    }
+  };
+
+  const saved = file && result ? 1 - result.bytes.length / file.size : 0;
+
+  return (
+    <Panel>
+      <FileDropArea
+        accept="application/pdf,.pdf"
+        onFiles={(f) => {
+          setFile(f[0]);
+          setResult(null);
+          setError(null);
+        }}
+        hint="Choose a PDF to make smaller. It never leaves your device."
+      />
+      {file ? (
+        <div className="text-sm">
+          <b>{file.name}</b> · {formatBytes(file.size)}
+        </div>
+      ) : null}
+
+      <Field label="Type of PDF">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {COMPRESS_MODES.map((m) => (
+            <button
+              key={m.key}
+              type="button"
+              onClick={() => {
+                setMode(m.key);
+                setResult(null);
+              }}
+              className={cn(
+                "rounded-lg border p-3 text-left transition",
+                mode === m.key ? "border-blue-600 ring-2 ring-blue-200" : "border-border hover:bg-accent/40"
+              )}
+            >
+              <div className="text-sm font-medium">{m.title}</div>
+              <div className="text-xs text-muted-foreground">{m.desc}</div>
+            </button>
+          ))}
+        </div>
+      </Field>
+
+      <Field label="Compression">
+        <div className="inline-flex flex-wrap gap-1 rounded-lg border border-border p-1">
+          {COMPRESS_LEVELS.map((l) => (
+            <button
+              key={l.key}
+              type="button"
+              title={l.desc}
+              onClick={() => {
+                setLevel(l.key);
+                setResult(null);
+              }}
+              className={cn(
+                "rounded-md px-3 py-1.5 text-sm font-medium transition",
+                level === l.key ? "bg-blue-600 text-white" : "text-muted-foreground hover:bg-accent/50"
+              )}
+            >
+              {l.label}
+            </button>
+          ))}
+        </div>
+      </Field>
+
+      <Button className="bg-blue-600 hover:bg-blue-700" disabled={!file || !!progress} onClick={compress}>
+        <FileText className="h-4 w-4" />
+        {progress
+          ? progress.total
+            ? `Compressing ${Math.min(progress.done + 1, progress.total)} / ${progress.total}…`
+            : "Compressing…"
+          : "Compress PDF"}
+      </Button>
+
+      {result && file ? (
+        <div className="space-y-3 rounded-lg border border-border p-4" data-testid="compress-result">
+          {saved > 0.01 ? (
+            <div className="text-sm">
+              {formatBytes(file.size)} → <b>{formatBytes(result.bytes.length)}</b>{" "}
+              <span className="font-semibold text-green-600">({saved > 0.99 ? (saved * 100).toFixed(1) : Math.round(saved * 100)}% smaller)</span>
+            </div>
+          ) : (
+            <div className="text-sm">
+              This PDF is already well compressed ({formatBytes(file.size)} → {formatBytes(result.bytes.length)}).
+              {mode === "images" ? " Try “Scanned / photo PDF” or a stronger level." : " Try a stronger level."}
+            </div>
+          )}
+          {result.note ? <p className="text-xs text-muted-foreground">{result.note}</p> : null}
+          <Button
+            variant={saved > 0.01 ? "default" : "secondary"}
+            onClick={() => downloadBytes(result.bytes, `${baseName(file.name)}-compressed.pdf`, "application/pdf")}
+          >
+            <Download className="h-4 w-4" /> Download compressed PDF
+          </Button>
+        </div>
       ) : null}
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
     </Panel>

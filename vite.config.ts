@@ -18,8 +18,8 @@ export default defineConfig({
       injectRegister: 'auto',
       includeAssets: ['logo.png', 'apple-touch-icon.png'],
       workbox: {
-        // onnxruntime's 27 MB wasm (background remover) is emitted by the bundler but loaded on demand, so don't precache it
-        globIgnores: ['**/node_modules/**/*', '**/ort-wasm*'],
+        // Large on-demand files aren't precached: onnxruntime's 27 MB wasm (background remover) and the 3 MB HEIC decoder
+        globIgnores: ['**/node_modules/**/*', '**/ort-wasm*', '**/heic-to-*'],
       },
       manifest: {
         name: 'Utility Hub',

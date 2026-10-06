@@ -291,13 +291,30 @@ export const navigationGroups: NavGroup[] = [
         title: "Image Tools",
         url: "/image-tools",
         description:
-          "Compress, resize, crop, rotate and convert images to JPG, PNG or WebP in bulk, or generate a favicon set.",
+          "Compress, resize, crop, rotate and convert images to JPG, PNG or WebP in bulk.",
       },
       {
         title: "PDF Tools",
         url: "/pdf-tools",
         description:
-          "Merge, split, reorder and rotate PDFs, convert JPG to PDF and PDF to JPG/PNG, and add page numbers or a watermark.",
+          "Merge, compress, split, reorder and rotate PDFs, convert JPG to PDF and PDF to JPG/PNG, and add page numbers or a watermark.",
+      },
+      {
+        title: "Video & Audio Tools",
+        url: "/video-tools",
+        description:
+          "Video to MP3, compress video to a target size, trim and cut, video to GIF, and convert MOV/MKV/WebM to MP4. No uploads.",
+      },
+      {
+        title: "HEIC to JPG",
+        url: "/heic-to-jpg",
+        description: "Convert iPhone HEIC/HEIF photos to JPG, PNG or WebP in bulk, in your browser.",
+      },
+      {
+        title: "App Icon & Favicon Generator",
+        url: "/app-icon-generator",
+        description:
+          "Generate favicon.ico, PWA/maskable icons, the iOS AppIcon set and Android mipmap/adaptive icons from one logo.",
       },
       {
         title: "Background Remover",
