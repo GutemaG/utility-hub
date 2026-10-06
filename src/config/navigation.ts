@@ -142,7 +142,19 @@ export const navigationGroups: NavGroup[] = [
         title: "Barcode Generator",
         url: "/barcode-generator",
         description:
-          "Generate 1D barcodes (CODE128, CODE39, EAN, UPC, ITF-14, MSI, Pharmacode, Codabar) and 2D barcodes (Data Matrix, PDF417, Aztec Code).",
+          "Generate 1D barcodes (Code 128 A/B/C, GS1-128, Code 39/LOGMARS, Code 93, EAN/UPC, ITF-14, MSI, Codabar) and 2D barcodes (QR, Data Matrix, GS1 DataMatrix, MIL-STD-130 IUID, PDF417, Aztec, MaxiCode).",
+      },
+      {
+        title: "QR & Barcode Scanner",
+        url: "/qr-barcode-scanner",
+        description:
+          "Scan QR codes and barcodes with your camera or from an image. Understands Wi-Fi, contact, link, GS1 and IUID codes.",
+      },
+      {
+        title: "Cron Expression Generator",
+        url: "/cron-expression",
+        description:
+          "Build cron schedules, read them in plain English, and see the next run times in any time zone.",
       },
       {
         title: "Markdown Editor",
@@ -247,9 +259,33 @@ export const navigationGroups: NavGroup[] = [
     ],
   },
   {
+    title: "Files & Media",
+    url: "#",
+    items: [
+      {
+        title: "Image Tools",
+        url: "/image-tools",
+        description:
+          "Compress, resize, crop, rotate and convert images to JPG, PNG or WebP in bulk, or generate a favicon set.",
+      },
+      {
+        title: "PDF Tools",
+        url: "/pdf-tools",
+        description:
+          "Merge PDFs, split or extract pages, reorder, rotate and delete pages, and convert images to PDF.",
+      },
+    ],
+  },
+  {
     title: "Design",
     url: "#",
     items: [
+      {
+        title: "Business Card Generator",
+        url: "/business-card-generator",
+        description:
+          "Design a business card with your logo and a contact QR code, then download print-ready PNG, SVG or an A4 PDF sheet.",
+      },
       {
         title: "Color Tools",
         url: "/color-tools",
